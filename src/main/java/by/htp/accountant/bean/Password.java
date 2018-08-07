@@ -14,7 +14,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
-//import org.apache.log4j.Logger;
 
 import by.htp.accountant.exception.PasswordClassBeanException;
 
