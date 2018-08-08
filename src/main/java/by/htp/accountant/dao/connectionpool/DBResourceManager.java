@@ -2,7 +2,7 @@ package by.htp.accountant.dao.connectionpool;
 
 import java.util.ResourceBundle;
 
-public class DBResourceManager {
+public class DBResourceManager {	
 	
 private final static DBResourceManager instance = new DBResourceManager();
 	

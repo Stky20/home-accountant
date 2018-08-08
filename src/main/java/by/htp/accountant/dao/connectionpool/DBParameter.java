@@ -1,6 +1,6 @@
 package by.htp.accountant.dao.connectionpool;
 
-public class DBParameter {
+public class DBParameter {	
 	
 	public static final String DB_DRIVER = "db.driver";
 	public static final String DB_URL = "db.url";

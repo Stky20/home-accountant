@@ -1,6 +1,6 @@
 package by.htp.accountant.exception;
 
-public class DAOException extends Exception{
+public class DAOException extends Exception{	
 
 	private static final long serialVersionUID = 1L;
 	

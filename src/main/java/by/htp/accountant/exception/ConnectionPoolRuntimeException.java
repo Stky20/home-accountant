@@ -1,6 +1,6 @@
 package by.htp.accountant.exception;
 
-public class ConnectionPoolRuntimeException extends RuntimeException{
+public class ConnectionPoolRuntimeException extends RuntimeException{	
 	
 	private static final long serialVersionUID = 1L;
 	

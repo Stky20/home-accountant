@@ -6,11 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import by.htp.accountant.bean.Password;
 import by.htp.accountant.bean.User;
 import by.htp.accountant.dao.UserDAO;
 import by.htp.accountant.dao.connectionpool.ConnectionPool;
-import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.SQLUserDAOException;
 
 
@@ -46,47 +44,28 @@ public class MySQLUserDAO implements UserDAO{
 		try {
 			
 			connection = connectionPool.takeConnection();
-			prepareStatement = connection.prepareStatement(CHECK_LOGIN_QUERY);                             								//поиск юзера по логину
+			prepareStatement = connection.prepareStatement(CHECK_LOGIN_QUERY);                             								//checking login in DB
 			prepareStatement.setString(1, login);
 			resultSet = prepareStatement.executeQuery();	
 			
 			if(resultSet.next()) {
-				return true;                                                                               								// логин в базе есть
+				return true;                                                                               								// if login is in DB - true
 			}
 			
 		} catch (InterruptedException e) {
 			throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO to check login", e);
 		} catch (SQLException e) {
 			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO checkLogin() method", e);
-		}finally {	
-			
-				if(resultSet != null) {
-					try {
-						resultSet.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException("Can`t close result set in UserDAO checkLogin() method",e);
-					}		
-				}
-				if(prepareStatement != null) {
-					try {
-						prepareStatement.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException("Can`t close statement in UserDAO checkLogin() method",e);
-					}					
-				}
-				if(connection != null) {
-					try {
-						connection.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException("Can`t close connection  in UserDAO checkLogin() method",e);
-					}			
-				}
-			
+		}finally {				
+			closeMethod(resultSet, prepareStatement, connection);			
 		}
 			
-		return false;                                                                                        //логина в базе нет
+		return false;                                                                                        //if login is not in DB - false
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean checkPassword(String login, String hashPasswordFromUser) throws SQLUserDAOException {
 		
@@ -98,15 +77,15 @@ public class MySQLUserDAO implements UserDAO{
 			try {
 				
 				connection = connectionPool.takeConnection();
-				prepareStatement = connection.prepareStatement(CHECK_PASSWORD_QUERY);                             // поиск юзера по логину
+				prepareStatement = connection.prepareStatement(CHECK_PASSWORD_QUERY);                             // checking user password
 				prepareStatement.setString(1, login);
 				resultSet = prepareStatement.executeQuery();
 				
 				resultSet.next();
-				hashPasswordFromDB = resultSet.getString(1);													// получили хэш пароля из базы
+				hashPasswordFromDB = resultSet.getString(1);													// hashPassword from DB
 				
 				if(hashPasswordFromUser.equals(hashPasswordFromDB)) {
-					return true;                                                                                // пароль из базы соответствует паролю от юзера
+					return true;                                                                                // if passwords are equals - true
 				}
 				
 			} catch (InterruptedException e) {
@@ -114,30 +93,15 @@ public class MySQLUserDAO implements UserDAO{
 			} catch (SQLException e) {
 				throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO checkPassword() method", e);
 			}finally {
-				                                         
-					if(resultSet != null)
-						try {
-							resultSet.close();
-						} catch (SQLException e) {
-							throw new SQLUserDAOException("Can`t close result set in UserDAO checkPassword() method", e);
-						}			
-					if(prepareStatement != null)
-						try {
-							prepareStatement.close();
-						} catch (SQLException e) {
-							throw new SQLUserDAOException("Can`t close statement in UserDAO checkPassword() method", e);
-						}						
-					if(connection != null)
-						try {
-							connection.close();
-						} catch (SQLException e) {
-							throw new SQLUserDAOException("Can`t close connection  in UserDAO checkPassword() method", e);
-						}					
+				closeMethod(resultSet, prepareStatement, connection);
 			}		
 		
-		return false;                                                                                             //пароль из базы не соотв паролю от юзера
+		return false;                                                                                             //if passwords are not equals - false
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean checkLoginAndPassword(String login, String hashPasswordFromUser) throws SQLUserDAOException {
 		if(checkLogin(login) && checkPassword(login, hashPasswordFromUser)) return true;
@@ -157,7 +121,7 @@ public class MySQLUserDAO implements UserDAO{
 			try {
 				
 				connection = connectionPool.takeConnection();
-				prepareStatement = connection.prepareStatement(LOGINATION_QUERY);                             //достаем юзера по логину
+				prepareStatement = connection.prepareStatement(LOGINATION_QUERY);                             //getting user from DB by login and password
 				prepareStatement.setString(1, login);
 				resultSet = prepareStatement.executeQuery();
 				
@@ -177,26 +141,8 @@ public class MySQLUserDAO implements UserDAO{
 				throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO to login", e);
 			} catch (SQLException e) {
 				throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO logination() method", e);
-			}finally {
-				                                         
-					if(resultSet != null)
-						try {
-							resultSet.close();
-						} catch (SQLException e) {
-							throw new SQLUserDAOException("Can`t close result set in UserDAO logination() method", e);
-						}			
-					if(prepareStatement != null)
-						try {
-							prepareStatement.close();
-						} catch (SQLException e) {
-							throw new SQLUserDAOException("Can`t close statement in UserDAO logination() method", e);
-						}						
-					if(connection != null)
-						try {
-							connection.close();
-						} catch (SQLException e) {
-							throw new SQLUserDAOException("Can`t close connection  in UserDAO logination() method", e);
-						}	
+			}finally {				
+				closeMethod(resultSet, prepareStatement, connection);				
 			}		
 			
 			return null;		
@@ -222,20 +168,8 @@ public class MySQLUserDAO implements UserDAO{
 			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO to create user", e);
 		} catch (SQLException e) {
 			throw new SQLUserDAOException ("Can`t create statement or execute query in UserDAO createUser() method", e);
-		}finally {
-			                                        
-				if(preparedStatement != null)
-					try {
-						preparedStatement.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException ("Can`t close statement in UserDAO createUser() method", e);
-					}						
-				if(connection != null)
-					try {
-						connection.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException ("Can`t close connection  in UserDAO createUser() method", e);
-					}	
+		}finally {		
+			closeMethod(preparedStatement, connection);				
 		}		
 		
 		if(addedRowsInBase == 1) return true;
@@ -253,7 +187,7 @@ public class MySQLUserDAO implements UserDAO{
 			connection = connectionPool.takeConnection();
 			preparedStatement = connection.prepareStatement(USER_CHANGING_QUERY);
 			
-			if (newUser.getName() == null || newUser.getName().trim().isEmpty()) {         //проверяем какие даные изменены а какие нет
+			if (newUser.getName() == null || newUser.getName().trim().isEmpty()) {         //checking what information changed, should be in service!!!!!!!!
 				preparedStatement.setString(1, user.getName().trim());
 			}else{
 				preparedStatement.setString(1, newUser.getName().trim());
@@ -278,26 +212,11 @@ public class MySQLUserDAO implements UserDAO{
 			throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO to edit user", e);
 		} catch (SQLException e) {
 			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO editUser() method", e);
-		}finally {
-			                                        
-				if(preparedStatement != null)
-					try {
-						preparedStatement.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException ("Can`t close statement in UserDAO editUser() method", e);
-					}						
-				if(connection != null)
-					try {
-						connection.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException ("Can`t close connection  in UserDAO editUser() method", e);
-					}				
-//			}catch(SQLException e) {
-//				throw new SQLUserDAOException("Can`t close statement or connection  in UserDAO editUser() method", e);				
-//			}
+		}finally {			
+			closeMethod(preparedStatement, connection);			
 		}		
 		
-		if (newUser.getName() != null || !(newUser.getName().trim().isEmpty())) {                //для возвращаемого юзера тоже проверяем, чт опоменять, а что взять старое
+		if (newUser.getName() != null || !(newUser.getName().trim().isEmpty())) {                //also check which information need to be returned, should be in service
 			user.setName(newUser.getName());
 		}
 		
@@ -331,20 +250,8 @@ public class MySQLUserDAO implements UserDAO{
 			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO to delete user", e);
 		} catch (SQLException e) {
 			throw new SQLUserDAOException ("Can`t create statement or execute query in UserDAO deleteUser() method", e);
-		}finally {
-			                                         
-				if(preparedStatement != null)
-					try {
-						preparedStatement.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException("Can`t close statement in UserDAO deleteUser() method", e);
-					}						
-				if(connection != null)
-					try {
-						connection.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException("Can`t close connection in UserDAO deleteUser() method", e);
-					}	
+		}finally {		
+			closeMethod(preparedStatement, connection);				
 		}		
 		
 		return false;
@@ -371,20 +278,7 @@ public class MySQLUserDAO implements UserDAO{
 		} catch (SQLException e) {
 			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO, can`t update user login", e);
 		}finally {
-			                                       
-				if(preparedStatement != null)
-					try {
-						preparedStatement.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException("Can`t close statement in UserDAO cahngeLogin() method", e);
-					}						
-				if(connection != null)
-					try {
-						connection.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException("Can`t close connection  in UserDAO cahngeLogin() method", e);
-					}	
-
+			closeMethod(preparedStatement, connection);
 		}		
 		
 		return false;
@@ -411,23 +305,54 @@ public class MySQLUserDAO implements UserDAO{
 		} catch (SQLException e) {
 			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO, can`t update user password", e);
 		}finally {
-			                                         
-				if(preparedStatement != null)
-					try {
-						preparedStatement.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException("Can`t close statement in UserDAO cahngePassword() method", e);
-					}						
-				if(connection != null)
-					try {
-						connection.close();
-					} catch (SQLException e) {
-						throw new SQLUserDAOException("Can`t close connection  in UserDAO cahngePassword() method", e);
-					}				
-
+			closeMethod(preparedStatement, connection);
 		}		
 		
 		return false;
 	}
+	
+	private void closeMethod(ResultSet resultSet, PreparedStatement preparedStatement, Connection connection) throws SQLUserDAOException {
+		if(resultSet != null) {
+			try {
+				resultSet.close();
+			} catch (SQLException e) {
+				throw new SQLUserDAOException("Can`t close result set in UserDAO",e);
+			}		
+		}
+		if(preparedStatement != null) {
+			try {
+				preparedStatement.close();
+			} catch (SQLException e) {
+				throw new SQLUserDAOException("Can`t close statement in UserDAO",e);
+			}					
+		}
+		if(connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new SQLUserDAOException("Can`t close connection  in UserDAO",e);
+			}			
+		}
+	}
+	
+	private void closeMethod(PreparedStatement preparedStatement, Connection connection) throws SQLUserDAOException {
+	
+		if(preparedStatement != null) {
+			try {
+				preparedStatement.close();
+			} catch (SQLException e) {
+				throw new SQLUserDAOException("Can`t close statement in UserDAO", e);
+			}	
+		}
+		if(connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				throw new SQLUserDAOException("Can`t close connection  in UserDAO", e);
+			}		
+		}
+		
+	}
+	
 	
 }

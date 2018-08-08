@@ -19,7 +19,7 @@ public class GoToLoginPageCommand implements Command{
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(JSPPath.LOGIN_PAGE);
-//		logger.info("log in command Gotologinpage");
+//		logger.info("log in command Go to login page");
 				
 		try {
 			dispatcher.forward(request, response);

@@ -1,6 +1,6 @@
 package by.htp.accountant.exception;
 
-public class PasswordClassBeanException extends BeanException{
+public class PasswordClassBeanException extends BeanException{	
 
 	private static final long serialVersionUID = 1L;
 
