@@ -4,9 +4,12 @@ import java.io.Serializable;
 
 import by.htp.accountant.exception.BeanException;
 
+
 public class User implements Serializable{
 		
 	private static final long serialVersionUID = 1L;
+	
+	Password passwordMaker = Password.getInstance();
 	
 	private int id;
 	private String nickName;
@@ -14,6 +17,9 @@ public class User implements Serializable{
 	private String name;
 	private String surname;
 	private String eMail;
+	/**
+	 * 3 role 1 administrator, 2 user, guest without number
+	 */
 	private int role;
 	
 	
@@ -24,17 +30,18 @@ public class User implements Serializable{
 	public User(String nickName, String passwordFromUser) throws BeanException {
 		
 		this.nickName = nickName;
-		this.hashPassword = Password.getHashPassword(passwordFromUser);
+		this.hashPassword = passwordMaker.getHashPassword(passwordFromUser);
 		this.name = null;
 		this.surname = null;
 		this.eMail = null;
-		this.role = 2;															//3 роли 1 админ, 2 юзер, 3 гость
+		
+		this.role = 2;															//
 	}
 	
 	public User(String nickName, String passwordFromUser, String name, String surname, String eMail) throws BeanException {  
 		
 		this.nickName = nickName;
-		this.hashPassword = Password.getHashPassword(passwordFromUser);
+		this.hashPassword = passwordMaker.getHashPassword(passwordFromUser);
 		this.name = name;
 		this.surname = surname;
 		this.eMail = eMail;

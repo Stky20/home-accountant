@@ -13,16 +13,17 @@ import by.htp.accountant.dao.connectionpool.ConnectionPool;
 import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.SQLUserDAOException;
 
+
 public class MySQLUserDAO implements UserDAO{
 	
 	private ConnectionPool connectionPool;
 	
-//	private static final Logger logger = Logger.getLogger(MySQLUserDAO.class);														 //логировать будем в контроллере
+//	private static final Logger logger = Logger.getLogger(MySQLUserDAO.class);														 //log will be in service or in controller
 	
-	private final static String CHECK_LOGIN_QUERY = "SELECT nickName FROM users WHERE (nickName = ?);";                              // проверка логинов
-	private final static String CHECK_PASSWORD_QUERY = "SELECT hashPassword FROM users WHERE (nickName = ?);";                       //пароль для логина
-	private final static String LOGINATION_QUERY = "SELECT * FROM users WHERE (nickName = ?);";                                      //достаем юзера из бызы по логину
-	private final static String USER_CREATION_QUERY = "INSERT INTO users (nickName, hashPassword, name, surname, e_mail) VALUES (?, ?, ?, ?, ?, ?);"; //пхаем юзера
+	private final static String CHECK_LOGIN_QUERY = "SELECT nickName FROM users WHERE (nickName = ?);";                              
+	private final static String CHECK_PASSWORD_QUERY = "SELECT hashPassword FROM users WHERE (nickName = ?);";                       
+	private final static String LOGINATION_QUERY = "SELECT * FROM users WHERE (nickName = ?);";                                      
+	private final static String USER_CREATION_QUERY = "INSERT INTO users (nickName, hashPassword, name, surname, e_mail) VALUES (?, ?, ?, ?, ?, ?);"; 
 	private final static String USER_CHANGING_QUERY = "UPDATE users SET name=?, surname=?, e_mail=? WHERE id=?;";
 	private final static String USER_DELETE_QUERY = "DELETE FROM users WHERE id = ?;";
 	private final static String USER_LOGIN_CHANGING_QUERY = "UPDATE users SET nickName=? WHERE id=?;";
@@ -32,8 +33,11 @@ public class MySQLUserDAO implements UserDAO{
 		connectionPool = ConnectionPool.getInstance();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public boolean checkLogin(String login) throws SQLUserDAOException {   																	//логин есть возвращает тру, нет - фолс
+	public boolean checkLogin(String login) throws SQLUserDAOException {   																	
 		
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
@@ -101,7 +105,7 @@ public class MySQLUserDAO implements UserDAO{
 				resultSet.next();
 				hashPasswordFromDB = resultSet.getString(1);													// получили хэш пароля из базы
 				
-				if(Password.checkPassword(hashPasswordFromUser, hashPasswordFromDB)) {
+				if(hashPasswordFromUser.equals(hashPasswordFromDB)) {
 					return true;                                                                                // пароль из базы соответствует паролю от юзера
 				}
 				

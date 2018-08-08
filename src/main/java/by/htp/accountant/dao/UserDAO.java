@@ -5,6 +5,10 @@ import by.htp.accountant.exception.DAOException;
 
 public interface UserDAO {
 
+	/**
+	 * If login exist returns true
+	 * if not returns false
+	 */
 	boolean checkLogin(String login) throws DAOException;
 	boolean checkPassword(String login, String hashPasswordFromUser) throws DAOException;
 	boolean checkLoginAndPassword(String login, String hashPasswordFromUser) throws DAOException;

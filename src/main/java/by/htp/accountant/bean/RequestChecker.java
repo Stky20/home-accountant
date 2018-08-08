@@ -14,7 +14,7 @@ public class RequestChecker {
 		
 	}
 	
-	public static boolean isItForLocalization(ServletRequest request) {   							//проверяем этот запрос - не на смену локализации ли он
+	public static boolean isItForLocalization(ServletRequest request) {   							//checking request if it to chenge locale
 				
 		parametrValue = ((HttpServletRequest)request).getParameter(PARAMETR_LOCALIZATION);
 		
@@ -26,23 +26,21 @@ public class RequestChecker {
 	}
 		
 	
-	public static String makeUriWithParams(ServletRequest request) {               // делаем строку из ури и параметров
+	public static String makeUriWithParams(ServletRequest request) {               					// making String  uri?params
 		
 		String userRequest;		
 		String uri = ((HttpServletRequest)request).getRequestURI();
 		Map<String, String[]> parameters = ((HttpServletRequest)request).getParameterMap();
 		
 		userRequest = uri + "?";
-		
+				
 		for (Map.Entry<String, String[]> entry: parameters.entrySet()) { 
 			String key = entry.getKey(); 
 			String[] value = entry.getValue(); 
 			userRequest = userRequest + key + "=" + value[0] + "&";
 		} 
 		
-		userRequest = userRequest.substring(0, (userRequest.length() - 1));
-		
-		System.out.println(userRequest);
+		userRequest = userRequest.substring(0, (userRequest.length() - 1));		
 		
 		return userRequest;		
 	}
