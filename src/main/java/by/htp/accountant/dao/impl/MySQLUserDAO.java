@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
+
 import by.htp.accountant.bean.User;
 import by.htp.accountant.dao.UserDAO;
 import by.htp.accountant.dao.connectionpool.ConnectionPool;
@@ -16,7 +18,7 @@ public class MySQLUserDAO implements UserDAO{
 	
 	private ConnectionPool connectionPool;
 	
-//	private static final Logger logger = Logger.getLogger(MySQLUserDAO.class);														 //log will be in service or in controller
+	private static final Logger logger = Logger.getLogger(MySQLUserDAO.class);														 //we need to log statements closing
 	
 	private final static String CHECK_LOGIN_QUERY = "SELECT nickName FROM users WHERE (nickName = ?);";                              
 	private final static String CHECK_PASSWORD_QUERY = "SELECT hashPassword FROM users WHERE (nickName = ?);";                       
@@ -57,7 +59,7 @@ public class MySQLUserDAO implements UserDAO{
 		} catch (SQLException e) {
 			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO checkLogin() method", e);
 		}finally {				
-			closeMethod(resultSet, prepareStatement, connection);			
+			closeConnection(resultSet, prepareStatement, connection);			
 		}
 			
 		return false;                                                                                        //if login is not in DB - false
@@ -93,7 +95,7 @@ public class MySQLUserDAO implements UserDAO{
 			} catch (SQLException e) {
 				throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO checkPassword() method", e);
 			}finally {
-				closeMethod(resultSet, prepareStatement, connection);
+				closeConnection(resultSet, prepareStatement, connection);
 			}		
 		
 		return false;                                                                                             //if passwords are not equals - false
@@ -142,7 +144,7 @@ public class MySQLUserDAO implements UserDAO{
 			} catch (SQLException e) {
 				throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO logination() method", e);
 			}finally {				
-				closeMethod(resultSet, prepareStatement, connection);				
+				closeConnection(resultSet, prepareStatement, connection);				
 			}		
 			
 			return null;		
@@ -169,7 +171,7 @@ public class MySQLUserDAO implements UserDAO{
 		} catch (SQLException e) {
 			throw new SQLUserDAOException ("Can`t create statement or execute query in UserDAO createUser() method", e);
 		}finally {		
-			closeMethod(preparedStatement, connection);				
+			closeConnection(preparedStatement, connection);				
 		}		
 		
 		if(addedRowsInBase == 1) return true;
@@ -213,7 +215,7 @@ public class MySQLUserDAO implements UserDAO{
 		} catch (SQLException e) {
 			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO editUser() method", e);
 		}finally {			
-			closeMethod(preparedStatement, connection);			
+			closeConnection(preparedStatement, connection);			
 		}		
 		
 		if (newUser.getName() != null || !(newUser.getName().trim().isEmpty())) {                //also check which information need to be returned, should be in service
@@ -251,7 +253,7 @@ public class MySQLUserDAO implements UserDAO{
 		} catch (SQLException e) {
 			throw new SQLUserDAOException ("Can`t create statement or execute query in UserDAO deleteUser() method", e);
 		}finally {		
-			closeMethod(preparedStatement, connection);				
+			closeConnection(preparedStatement, connection);				
 		}		
 		
 		return false;
@@ -278,7 +280,7 @@ public class MySQLUserDAO implements UserDAO{
 		} catch (SQLException e) {
 			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO, can`t update user login", e);
 		}finally {
-			closeMethod(preparedStatement, connection);
+			closeConnection(preparedStatement, connection);
 		}		
 		
 		return false;
@@ -305,49 +307,56 @@ public class MySQLUserDAO implements UserDAO{
 		} catch (SQLException e) {
 			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO, can`t update user password", e);
 		}finally {
-			closeMethod(preparedStatement, connection);
+			closeConnection(preparedStatement, connection);
 		}		
 		
 		return false;
 	}
 	
-	private void closeMethod(ResultSet resultSet, PreparedStatement preparedStatement, Connection connection) throws SQLUserDAOException {
+	private void closeConnection(ResultSet resultSet, PreparedStatement preparedStatement, Connection connection) throws SQLUserDAOException {
 		if(resultSet != null) {
 			try {
 				resultSet.close();
+				logger.info("resultSet closed in UserDAOimpl");		
 			} catch (SQLException e) {
-				throw new SQLUserDAOException("Can`t close result set in UserDAO",e);
+				logger.info("resultSet did not close in UserDAOimpl");
 			}		
 		}
 		if(preparedStatement != null) {
 			try {
 				preparedStatement.close();
+				logger.info("preparedStatement closed in UserDAOimpl");
 			} catch (SQLException e) {
-				throw new SQLUserDAOException("Can`t close statement in UserDAO",e);
+				logger.info("preparedStatement did not close in UserDAOimpl");
 			}					
 		}
 		if(connection != null) {
 			try {
 				connection.close();
+				logger.info("connection closed in UserDAOimpl");
 			} catch (SQLException e) {
+				logger.info("connection did not close in UserDAOimpl");
 				throw new SQLUserDAOException("Can`t close connection  in UserDAO",e);
 			}			
 		}
 	}
 	
-	private void closeMethod(PreparedStatement preparedStatement, Connection connection) throws SQLUserDAOException {
+	private void closeConnection(PreparedStatement preparedStatement, Connection connection) throws SQLUserDAOException {
 	
 		if(preparedStatement != null) {
 			try {
 				preparedStatement.close();
+				logger.info("preparedStatement closed in UserDAOimpl");
 			} catch (SQLException e) {
-				throw new SQLUserDAOException("Can`t close statement in UserDAO", e);
+				logger.info("preparedStatement did not close in UserDAOimpl");
 			}	
 		}
 		if(connection != null) {
 			try {
 				connection.close();
+				logger.info("connection closed in UserDAOimpl");
 			} catch (SQLException e) {
+				logger.info("connection did not close in UserDAOimpl");
 				throw new SQLUserDAOException("Can`t close connection  in UserDAO", e);
 			}		
 		}
