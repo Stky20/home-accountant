@@ -117,8 +117,7 @@ public class MySQLUserDAO implements UserDAO{
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
 		ResultSet resultSet = null;
-		User loggedUser = new User();		
-		
+		User loggedUser = new User();			
 			
 			try {
 				

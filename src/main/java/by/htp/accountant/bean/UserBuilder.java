@@ -27,7 +27,7 @@ public class UserBuilder {
 		return this;		
 	}
 	
-	public UserBuilder buildHashFromPassword(String password) throws PasswordClassBeanException {
+	public UserBuilder buildHashFromPassword(String password) {
 		
 		this.hashPassword = Password.getInstance().getHashPassword(password);
 		
