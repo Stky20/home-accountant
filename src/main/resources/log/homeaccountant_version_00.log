@@ -78,3 +78,6 @@ java.lang.ClassNotFoundException: by.htp.accountant.controller.comands.GoToMainP
 2018-07-20 09:28:31 INFO [http-nio-8080-exec-2]: FileNotFoundException while reading password from propertie in method readKeyFromPropertie()
 2018-07-20 09:28:46 INFO [http-nio-8080-exec-5]: FileNotFoundException while reading password from propertie in method readKeyFromPropertie()
 2018-07-20 09:28:54 INFO [http-nio-8080-exec-6]: FileNotFoundException while reading password from propertie in method readKeyFromPropertie()
+2018-08-09 14:06:06 INFO [http-nio-8080-exec-3]: resultSet closed in UserDAOimpl
+2018-08-09 14:06:06 INFO [http-nio-8080-exec-3]: preparedStatement closed in UserDAOimpl
+2018-08-09 14:06:06 INFO [http-nio-8080-exec-3]: connection closed in UserDAOimpl

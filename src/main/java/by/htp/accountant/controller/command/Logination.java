@@ -2,6 +2,7 @@ package by.htp.accountant.controller.command;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,25 +24,33 @@ public class Logination implements Command{
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		UserService userService = ServiceFactory.getInstance().getUserService();		
-			
+		RequestDispatcher dispatcher = null;	
 		User user = null;
 		
 		try {
 			user = userService.logination(request, response);
 		} catch (UserServiceException e1) {
 			logger.warn("ServiceException while making logination", e1);
-			request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE).forward(request, response);
+			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 		}
 			
 		if(user !=null) {
 			
 			request.getSession(true).setAttribute("user", user);
-			response.sendRedirect(RedirectPath.GO_TO_MAIN_PAGE);
 			
-		}else {
+				try {
+					response.sendRedirect(RedirectPath.GO_TO_MAIN_PAGE);
+				} catch (IOException e) {
+					logger.warn("Can`t do sendRedirect during loginstion", e);
+					e.printStackTrace();
+				}
 			
+		}else {			
+			dispatcher = request.getRequestDispatcher(JSPPath.LOGIN_PAGE);
+		}
+		
 			try {
-				request.getRequestDispatcher(JSPPath.LOGIN_PAGE).forward(request, response);
+				dispatcher.forward(request, response);
 			} catch (ServletException e) {	
 				logger.warn("Can`t do forward during loginstion", e);
 				throw e;
@@ -49,9 +58,6 @@ public class Logination implements Command{
 				logger.warn("Can`t do forward during loginstion", e);
 				throw e;
 			}	
-			
-		}			
-		
 	}
 
 }
