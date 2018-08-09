@@ -54,6 +54,10 @@ final public class Password implements Serializable{
 		
 		byte[] passwordInBytes;
 		
+		if (passwordFromUser == null) {
+			return null;
+		}
+		
 		try {
 			key = readKeyFromProperty();
 		} catch (PasswordClassBeanException e2) {
