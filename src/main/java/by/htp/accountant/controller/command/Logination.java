@@ -28,7 +28,7 @@ public class Logination implements Command{
 		User user = null;
 		
 		try {
-			user = userService.logination(request, response);
+			user = userService.logination(request);
 		} catch (UserServiceException e1) {
 			logger.warn("ServiceException while making logination", e1);
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
@@ -41,8 +41,7 @@ public class Logination implements Command{
 				try {
 					response.sendRedirect(RedirectPath.GO_TO_MAIN_PAGE);
 				} catch (IOException e) {
-					logger.warn("Can`t do sendRedirect during loginstion", e);
-					e.printStackTrace();
+					logger.warn("Can`t do sendRedirect during loginstion", e);					
 				}
 			
 		}else {			

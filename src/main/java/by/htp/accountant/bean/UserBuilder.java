@@ -29,7 +29,7 @@ public class UserBuilder {
 	
 	public UserBuilder buildHashFromPassword(String password) {
 		
-		this.hashPassword = Password.getInstance().getHashPassword(password);
+		this.hashPassword = HashPasswordMaker.getInstance().getHashPassword(password);
 		
 		return this;		
 	}

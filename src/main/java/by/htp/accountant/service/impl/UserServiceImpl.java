@@ -1,7 +1,6 @@
 package by.htp.accountant.service.impl;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
@@ -9,21 +8,24 @@ import by.htp.accountant.dao.DAOFactory;
 import by.htp.accountant.dao.UserDAO;
 import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.UserServiceException;
-import by.htp.accountant.bean.Password;
+import by.htp.accountant.bean.HashPasswordMaker;
 import by.htp.accountant.bean.User;
 import by.htp.accountant.service.UserService;
 
 public class UserServiceImpl implements UserService {	
 	
+	
 	public static final String LOGIN_PARAM = "login";
 	public static final String PASSWORD_PARAM = "password";
-	public static final String NULL_LOGIN_PASSWORD_ERROR_MESSAGE = "Login and password are null";
-	public static final String EMPTY_LOGIN_PASSWORD_ERROR_MESSAGE = "Login and password are null";
-	public static final String NULL_HASH_ERROR_MESSAGE = "hashPassword is null";
-	public static final String WRONG_LOGIN_PASSWORD_ERROR_MESSAGE = "Wrong login or password";
+
+	public static final String EMPTY_LOGIN_PASSWORD_ERROR_MESSAGE = "emptyLoginPasswordErrorMsg";
+	public static final String NULL_HASH_ERROR_MESSAGE = "nullHashErrorMsg";
+	public static final String WRONG_LOGIN_ERROR_MESSAGE = "wrongLoginErrorMsg";
+	public static final String WRONG_PASSWORD_ERROR_MESSAGE = "wrongPasswordErrorMsg";
+	
 
 	@Override
-	public User logination(HttpServletRequest request, HttpServletResponse response) throws UserServiceException {
+	public User logination(HttpServletRequest request) throws UserServiceException {
 		
 		DAOFactory factoryDAO = DAOFactory.getInstance();
 		UserDAO userDAO = factoryDAO.getUserDAO();
@@ -32,35 +34,34 @@ public class UserServiceImpl implements UserService {
 		String login = null;
 		String passwordFromUser = null;
 		String hashPassword = null;
-		Password hashPasswordMaker = Password.getInstance();
+		HashPasswordMaker hashPasswordMaker = HashPasswordMaker.getInstance();
 		
 		login = request.getParameter(LOGIN_PARAM);
 		passwordFromUser = request.getParameter(PASSWORD_PARAM);
 		
-			if (isLoginPasswordNull(login, passwordFromUser)){
-				request.setAttribute("nullErrorMsg", NULL_LOGIN_PASSWORD_ERROR_MESSAGE);
+			if (isLoginPasswordEmpty(login, passwordFromUser)){   											//simple  empty check				
+				request.setAttribute(EMPTY_LOGIN_PASSWORD_ERROR_MESSAGE, EMPTY_LOGIN_PASSWORD_ERROR_MESSAGE);
 				return null;
 			}
 		
-		hashPassword = hashPasswordMaker.getHashPassword(passwordFromUser);
+		hashPassword = hashPasswordMaker.getHashPassword(passwordFromUser);                                 //returns null if there are problem/exception while making hash
 		
-			if (isLoginPasswordNull(login, hashPassword)){
-				request.setAttribute("nullHashErrorMsg", NULL_HASH_ERROR_MESSAGE);
+			if (hashPassword == null){																		//check again because of hashPassword can be null
+				request.setAttribute(NULL_HASH_ERROR_MESSAGE, NULL_HASH_ERROR_MESSAGE);
 				return null;
 			}
 			
-			if(isLoginPasswordEmpty(login, hashPassword)) {
-				request.setAttribute("emptyLoginPasswordErrorMsg", EMPTY_LOGIN_PASSWORD_ERROR_MESSAGE);
-				return null;
-			}
-				
 				try {					
+						if(!userDAO.checkLogin(login)) {													//check login in DB for error msg					
+							request.setAttribute(WRONG_LOGIN_ERROR_MESSAGE, WRONG_LOGIN_ERROR_MESSAGE);
+						} 
+						else if(!userDAO.checkPassword(login, hashPassword)){									//check password in DB for error msg
+							request.setAttribute(WRONG_PASSWORD_ERROR_MESSAGE, WRONG_PASSWORD_ERROR_MESSAGE);	
+						}	
 						if(userDAO.checkLoginAndPassword(login, hashPassword)) {
 							user = userDAO.logination(login, hashPassword);
 							return user;
-						} else {
-							request.setAttribute("wrongLoginPasswordErrorMsg", WRONG_LOGIN_PASSWORD_ERROR_MESSAGE);					
-						}			
+						}
 						
 				} catch (DAOException e) {				
 						throw new UserServiceException(e);
@@ -69,15 +70,8 @@ public class UserServiceImpl implements UserService {
 				
 		return null;
 			
-	}	
-	
-	
-	public boolean isLoginPasswordNull(String login, String password) {		
-		if(login == null || password == null) {			
-			return true;
-		}		
-		return false;
 	}
+	
 	
 	public boolean isLoginPasswordEmpty(String login, String hashPassword) {		
 		if(login.trim().isEmpty() || hashPassword.trim().isEmpty()) {			

@@ -45,32 +45,38 @@
                             <fieldset>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="${login_placeholder}" name="login" type="text" value ="" autofocus>
-                                </div>
+                                </div>                                
+	                                							
                                 <div class="form-group">
                                     <input class="form-control" placeholder="${password_placeholder}" name="password" type="password" value="">
                                 </div>
-
-								<i class="error"> 
-									<c:if test="${not empty requestScope.nullErrorMsg}">
-										<c:out value="${null_login_password}" />
-									</c:if>
-									
-									<c:if test="${not empty requestScope.nullHashErrorMsg}">
-										<c:out value="${hash_password_problem}" />
-									</c:if>
-									
-									<c:if test="${not empty requestScope.emptyLoginPasswordErrorMsg}">
-										<c:out value="${empty_login_password}" />
-									</c:if>
-									
-									<c:if test="${not empty requestScope.wrongLoginPasswordErrorMsg}">
-										<c:out value="${wrong_login_password}" />
-									</c:if>
+								<i>
+									<font color="red">
+										<c:if test="${not empty requestScope.nullErrorMsg}">
+											<c:out value="${null_login_password}" />
+										</c:if>
+										
+										<c:if test="${not empty requestScope.nullHashErrorMsg}">
+											<c:out value="${hash_password_problem}" />
+										</c:if>
+										
+										<c:if test="${not empty requestScope.emptyLoginPasswordErrorMsg}">
+											<c:out value="${empty_login_password}" />
+										</c:if>
+										
+										<c:if test="${not empty requestScope.wrongLoginErrorMsg}">
+											<c:out value="${wrong_login}" />
+										</c:if>
+										
+										<c:if test="${not empty requestScope.wrongPasswordErrorMsg}">
+											<c:out value="${wrong_password}" />
+										</c:if>
+									</font> 
 								</i>
 								
-								<div class="checkbox">
+								<div class="checkbox disabled">
                                     <label>
-                                        <input name="remember" type="checkbox" value="Remember Me">${loginpage_checkbox}
+                                        <input name="remember" type="checkbox" value="Remember Me" disabled>${loginpage_checkbox}
                                     </label>
                                 </div>
                                 

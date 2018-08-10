@@ -1,12 +1,16 @@
-2018-07-19 13:03:26 WARN [http-nio-8080-exec-4]: CommandProvider couldn`t find class wich came from bundle
-java.lang.ClassNotFoundException: by.htp.accountant.controller.comands.GoToMainPageCommand
-	at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1292)
-	at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1121)
-	at java.lang.Class.forName0(Native Method)
-	at java.lang.Class.forName(Unknown Source)
-	at by.htp.accountant.controller.PropertieCommandProvider.getCommand(PropertieCommandProvider.java:25)
-	at by.htp.accountant.controller.Controller.doGet(Controller.java:27)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634)
+2018-08-11 00:53:45 INFO [http-nio-8080-exec-27]: resultSet closed in UserDAOimpl
+2018-08-11 00:53:45 INFO [http-nio-8080-exec-27]: preparedStatement closed in UserDAOimpl
+2018-08-11 00:53:45 INFO [http-nio-8080-exec-27]: connection closed in UserDAOimpl
+2018-08-11 00:53:45 INFO [http-nio-8080-exec-27]: resultSet closed in UserDAOimpl
+2018-08-11 00:53:45 INFO [http-nio-8080-exec-27]: preparedStatement closed in UserDAOimpl
+2018-08-11 00:53:45 INFO [http-nio-8080-exec-27]: connection closed in UserDAOimpl
+2018-08-11 00:53:45 WARN [http-nio-8080-exec-27]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:71)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
 	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
 	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
 	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
@@ -36,15 +40,33 @@ java.lang.ClassNotFoundException: by.htp.accountant.controller.comands.GoToMainP
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.lang.Thread.run(Unknown Source)
-2018-07-19 13:05:33 WARN [http-nio-8080-exec-8]: CommandProvider couldn`t find class wich came from bundle
-java.lang.ClassNotFoundException: by.htp.accountant.controller.comands.GoToMainPageCommand
-	at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1292)
-	at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1121)
-	at java.lang.Class.forName0(Native Method)
-	at java.lang.Class.forName(Unknown Source)
-	at by.htp.accountant.controller.PropertieCommandProvider.getCommand(PropertieCommandProvider.java:25)
-	at by.htp.accountant.controller.Controller.doGet(Controller.java:27)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:62)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:00:07 INFO [http-nio-8080-exec-35]: resultSet closed in UserDAOimpl
+2018-08-11 01:00:07 INFO [http-nio-8080-exec-35]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:00:07 INFO [http-nio-8080-exec-35]: connection closed in UserDAOimpl
+2018-08-11 01:00:07 INFO [http-nio-8080-exec-35]: resultSet closed in UserDAOimpl
+2018-08-11 01:00:07 INFO [http-nio-8080-exec-35]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:00:07 INFO [http-nio-8080-exec-35]: connection closed in UserDAOimpl
+2018-08-11 01:00:07 WARN [http-nio-8080-exec-35]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:71)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
 	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
 	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
 	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
@@ -74,10 +96,657 @@ java.lang.ClassNotFoundException: by.htp.accountant.controller.comands.GoToMainP
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.lang.Thread.run(Unknown Source)
-2018-07-20 09:28:16 INFO [http-nio-8080-exec-3]: FileNotFoundException while reading password from propertie in method readKeyFromPropertie()
-2018-07-20 09:28:31 INFO [http-nio-8080-exec-2]: FileNotFoundException while reading password from propertie in method readKeyFromPropertie()
-2018-07-20 09:28:46 INFO [http-nio-8080-exec-5]: FileNotFoundException while reading password from propertie in method readKeyFromPropertie()
-2018-07-20 09:28:54 INFO [http-nio-8080-exec-6]: FileNotFoundException while reading password from propertie in method readKeyFromPropertie()
-2018-08-09 14:06:06 INFO [http-nio-8080-exec-3]: resultSet closed in UserDAOimpl
-2018-08-09 14:06:06 INFO [http-nio-8080-exec-3]: preparedStatement closed in UserDAOimpl
-2018-08-09 14:06:06 INFO [http-nio-8080-exec-3]: connection closed in UserDAOimpl
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:62)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:07:21 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
+2018-08-11 01:07:21 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:07:21 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-11 01:07:21 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
+2018-08-11 01:07:21 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:07:21 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-11 01:07:21 WARN [http-nio-8080-exec-2]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:71)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:62)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:07:27 INFO [http-nio-8080-exec-4]: resultSet closed in UserDAOimpl
+2018-08-11 01:07:27 INFO [http-nio-8080-exec-4]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:07:27 INFO [http-nio-8080-exec-4]: connection closed in UserDAOimpl
+2018-08-11 01:07:27 INFO [http-nio-8080-exec-4]: resultSet closed in UserDAOimpl
+2018-08-11 01:07:27 INFO [http-nio-8080-exec-4]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:07:27 INFO [http-nio-8080-exec-4]: connection closed in UserDAOimpl
+2018-08-11 01:07:27 WARN [http-nio-8080-exec-4]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:71)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:62)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:10:32 INFO [http-nio-8080-exec-4]: resultSet closed in UserDAOimpl
+2018-08-11 01:10:32 INFO [http-nio-8080-exec-4]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:10:32 INFO [http-nio-8080-exec-4]: connection closed in UserDAOimpl
+2018-08-11 01:10:32 INFO [http-nio-8080-exec-4]: resultSet closed in UserDAOimpl
+2018-08-11 01:10:32 INFO [http-nio-8080-exec-4]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:10:32 INFO [http-nio-8080-exec-4]: connection closed in UserDAOimpl
+2018-08-11 01:10:32 WARN [http-nio-8080-exec-4]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:73)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:62)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:18:36 INFO [http-nio-8080-exec-6]: resultSet closed in UserDAOimpl
+2018-08-11 01:18:36 INFO [http-nio-8080-exec-6]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:18:36 INFO [http-nio-8080-exec-6]: connection closed in UserDAOimpl
+2018-08-11 01:18:36 INFO [http-nio-8080-exec-6]: resultSet closed in UserDAOimpl
+2018-08-11 01:18:36 INFO [http-nio-8080-exec-6]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:18:36 INFO [http-nio-8080-exec-6]: connection closed in UserDAOimpl
+2018-08-11 01:18:36 WARN [http-nio-8080-exec-6]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:83)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:70)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:19:16 INFO [http-nio-8080-exec-8]: resultSet closed in UserDAOimpl
+2018-08-11 01:19:16 INFO [http-nio-8080-exec-8]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:19:16 INFO [http-nio-8080-exec-8]: connection closed in UserDAOimpl
+2018-08-11 01:19:16 INFO [http-nio-8080-exec-8]: resultSet closed in UserDAOimpl
+2018-08-11 01:19:16 INFO [http-nio-8080-exec-8]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:19:16 INFO [http-nio-8080-exec-8]: connection closed in UserDAOimpl
+2018-08-11 01:19:16 WARN [http-nio-8080-exec-8]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:83)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:70)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:19:20 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-11 01:19:20 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:19:20 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-11 01:19:20 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-11 01:19:20 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:19:20 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-11 01:19:20 WARN [http-nio-8080-exec-9]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:83)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:70)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:19:28 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
+2018-08-11 01:19:28 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:19:28 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-11 01:19:28 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
+2018-08-11 01:19:28 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:19:28 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-11 01:19:28 WARN [http-nio-8080-exec-2]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:83)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:70)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:21:50 INFO [http-nio-8080-exec-8]: resultSet closed in UserDAOimpl
+2018-08-11 01:21:50 INFO [http-nio-8080-exec-8]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:21:50 INFO [http-nio-8080-exec-8]: connection closed in UserDAOimpl
+2018-08-11 01:21:50 INFO [http-nio-8080-exec-8]: resultSet closed in UserDAOimpl
+2018-08-11 01:21:50 INFO [http-nio-8080-exec-8]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:21:50 INFO [http-nio-8080-exec-8]: connection closed in UserDAOimpl
+2018-08-11 01:21:50 WARN [http-nio-8080-exec-8]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:83)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:70)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:28:16 INFO [http-nio-8080-exec-13]: resultSet closed in UserDAOimpl
+2018-08-11 01:28:16 INFO [http-nio-8080-exec-13]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:28:16 INFO [http-nio-8080-exec-13]: connection closed in UserDAOimpl
+2018-08-11 01:28:17 INFO [http-nio-8080-exec-13]: resultSet closed in UserDAOimpl
+2018-08-11 01:28:17 INFO [http-nio-8080-exec-13]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:28:17 INFO [http-nio-8080-exec-13]: connection closed in UserDAOimpl
+2018-08-11 01:28:17 WARN [http-nio-8080-exec-13]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:72)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:59)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:30:38 INFO [http-nio-8080-exec-8]: resultSet closed in UserDAOimpl
+2018-08-11 01:30:38 INFO [http-nio-8080-exec-8]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:30:38 INFO [http-nio-8080-exec-8]: connection closed in UserDAOimpl
+2018-08-11 01:30:38 INFO [http-nio-8080-exec-8]: resultSet closed in UserDAOimpl
+2018-08-11 01:30:38 INFO [http-nio-8080-exec-8]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:30:38 INFO [http-nio-8080-exec-8]: connection closed in UserDAOimpl
+2018-08-11 01:30:38 WARN [http-nio-8080-exec-8]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:71)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:58)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:31:31 INFO [http-nio-8080-exec-17]: resultSet closed in UserDAOimpl
+2018-08-11 01:31:31 INFO [http-nio-8080-exec-17]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:31:31 INFO [http-nio-8080-exec-17]: connection closed in UserDAOimpl
+2018-08-11 01:31:31 INFO [http-nio-8080-exec-17]: resultSet closed in UserDAOimpl
+2018-08-11 01:31:31 INFO [http-nio-8080-exec-17]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:31:31 INFO [http-nio-8080-exec-17]: connection closed in UserDAOimpl
+2018-08-11 01:31:31 WARN [http-nio-8080-exec-17]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:71)
+	at by.htp.accountant.controller.command.Logination.execute(Logination.java:31)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO checkPassword() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:96)
+	at by.htp.accountant.service.impl.UserServiceImpl.logination(UserServiceImpl.java:58)
+	... 33 more
+Caused by: java.sql.SQLException: Illegal operation on empty result set.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:790)
+	at com.mysql.jdbc.ResultSetImpl.getStringInternal(ResultSetImpl.java:5215)
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5138)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.checkPassword(MySQLUserDAO.java:87)
+	... 34 more
+2018-08-11 01:35:12 INFO [http-nio-8080-exec-26]: resultSet closed in UserDAOimpl
+2018-08-11 01:35:12 INFO [http-nio-8080-exec-26]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:35:12 INFO [http-nio-8080-exec-26]: connection closed in UserDAOimpl
+2018-08-11 01:35:12 INFO [http-nio-8080-exec-26]: resultSet closed in UserDAOimpl
+2018-08-11 01:35:12 INFO [http-nio-8080-exec-26]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:35:12 INFO [http-nio-8080-exec-26]: connection closed in UserDAOimpl
+2018-08-11 01:36:50 INFO [http-nio-8080-exec-28]: resultSet closed in UserDAOimpl
+2018-08-11 01:36:50 INFO [http-nio-8080-exec-28]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:36:50 INFO [http-nio-8080-exec-28]: connection closed in UserDAOimpl
+2018-08-11 01:36:50 INFO [http-nio-8080-exec-28]: resultSet closed in UserDAOimpl
+2018-08-11 01:36:50 INFO [http-nio-8080-exec-28]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:36:50 INFO [http-nio-8080-exec-28]: connection closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: resultSet closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: connection closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: resultSet closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: connection closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: resultSet closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: connection closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: resultSet closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: preparedStatement closed in UserDAOimpl
+2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: connection closed in UserDAOimpl

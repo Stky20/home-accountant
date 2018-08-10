@@ -20,7 +20,7 @@ public class Localization implements Command{
 	private static final String PREVIOS_PAGE_SESSION_PARAM ="previousPage";
 
 	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
 		String local = request.getParameter(LOCALIZATION_PARAM_FROM_REQUEST);
 		
@@ -32,7 +32,15 @@ public class Localization implements Command{
 			response.sendRedirect(pageToLocale);
 		} catch (IOException e) {
 			logger.warn("sendRedirect() method of response in Localization command, threw IOException", e);
-			request.getRequestDispatcher(JSPPath.MAIN_PAGE).forward(request, response);
+			try {
+				request.getRequestDispatcher(JSPPath.MAIN_PAGE).forward(request, response);
+			} catch (ServletException e1) {
+				logger.warn("sendRedirect() method of response in Localization command, threw IOException", e);
+				throw e1;
+			} catch (IOException e1) {
+				logger.warn("sendRedirect() method of response in Localization command, threw IOException", e);
+				throw e1;
+			}
 		}
 		
 		

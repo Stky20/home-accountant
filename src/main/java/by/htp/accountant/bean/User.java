@@ -9,7 +9,7 @@ public class User implements Serializable{
 		
 	private static final long serialVersionUID = 1L;
 	
-	Password passwordMaker = Password.getInstance();
+	HashPasswordMaker passwordMaker = HashPasswordMaker.getInstance();
 	
 	private int id;
 	private String nickName;
