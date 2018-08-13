@@ -3,6 +3,7 @@ package by.htp.accountant.service;
 import javax.servlet.http.HttpServletRequest;
 
 import by.htp.accountant.bean.User;
+import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.UserServiceException;
 
 
@@ -16,5 +17,7 @@ public interface UserService {
 	 * @throws UserServiceException 
 	 */
 	public User logination(HttpServletRequest request) throws UserServiceException;
+	
+	public User registration(HttpServletRequest request) throws UserServiceException;
 
 }

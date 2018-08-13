@@ -750,3 +750,99 @@ Caused by: java.sql.SQLException: Illegal operation on empty result set.
 2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: resultSet closed in UserDAOimpl
 2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: preparedStatement closed in UserDAOimpl
 2018-08-11 01:37:54 INFO [http-nio-8080-exec-31]: connection closed in UserDAOimpl
+2018-08-13 22:54:26 INFO [http-nio-8080-exec-116]: preparedStatement closed in UserDAOimpl
+2018-08-13 22:54:26 INFO [http-nio-8080-exec-116]: connection closed in UserDAOimpl
+2018-08-13 22:54:26 WARN [http-nio-8080-exec-116]: ServiceException while making logination
+by.htp.accountant.exception.UserServiceException: DAO Exception during registration user occured
+	at by.htp.accountant.service.impl.UserServiceImpl.registration(UserServiceImpl.java:169)
+	at by.htp.accountant.controller.command.Registration.execute(Registration.java:30)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:32)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO createUser() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.createUser(MySQLUserDAO.java:175)
+	at by.htp.accountant.service.impl.UserServiceImpl.registration(UserServiceImpl.java:165)
+	... 33 more
+Caused by: java.sql.SQLException: Column count doesn't match value count at row 1
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3976)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3912)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2486)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1858)
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2079)
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2013)
+	at com.mysql.jdbc.PreparedStatement.executeLargeUpdate(PreparedStatement.java:5104)
+	at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:1998)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.createUser(MySQLUserDAO.java:171)
+	... 34 more
+2018-08-13 22:59:45 INFO [http-nio-8080-exec-124]: preparedStatement closed in UserDAOimpl
+2018-08-13 22:59:45 INFO [http-nio-8080-exec-124]: connection closed in UserDAOimpl
+2018-08-13 22:59:45 INFO [http-nio-8080-exec-124]: resultSet closed in UserDAOimpl
+2018-08-13 22:59:45 INFO [http-nio-8080-exec-124]: preparedStatement closed in UserDAOimpl
+2018-08-13 22:59:45 INFO [http-nio-8080-exec-124]: connection closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:04:16 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:09:56 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:12:02 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:12:02 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl
+2018-08-13 23:12:02 INFO [http-nio-8080-exec-9]: resultSet closed in UserDAOimpl
+2018-08-13 23:12:02 INFO [http-nio-8080-exec-9]: preparedStatement closed in UserDAOimpl
+2018-08-13 23:12:02 INFO [http-nio-8080-exec-9]: connection closed in UserDAOimpl

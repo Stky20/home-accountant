@@ -23,7 +23,7 @@ public class MySQLUserDAO implements UserDAO{
 	private final static String CHECK_LOGIN_QUERY = "SELECT nickName FROM users WHERE (nickName = ?);";                              
 	private final static String CHECK_PASSWORD_QUERY = "SELECT hashPassword FROM users WHERE (nickName = ?);";                       
 	private final static String LOGINATION_QUERY = "SELECT * FROM users WHERE (nickName = ?);";                                      
-	private final static String USER_CREATION_QUERY = "INSERT INTO users (nickName, hashPassword, name, surname, e_mail) VALUES (?, ?, ?, ?, ?, ?);"; 
+	private final static String USER_CREATION_QUERY = "INSERT INTO users (nickName, hashPassword, name, surname, e_mail, role) VALUES (?, ?, ?, ?, ?, ?);"; 
 	private final static String USER_CHANGING_QUERY = "UPDATE users SET name=?, surname=?, e_mail=? WHERE id=?;";
 	private final static String USER_DELETE_QUERY = "DELETE FROM users WHERE id = ?;";
 	private final static String USER_LOGIN_CHANGING_QUERY = "UPDATE users SET nickName=? WHERE id=?;";
@@ -32,6 +32,7 @@ public class MySQLUserDAO implements UserDAO{
 	public MySQLUserDAO() {
 		connectionPool = ConnectionPool.getInstance();
 	}
+	
 
 	/**
 	 * {@inheritDoc}
@@ -64,6 +65,7 @@ public class MySQLUserDAO implements UserDAO{
 			
 		return false;                                                                                        //if login is not in DB - false
 	}
+	
 
 	/**
 	 * {@inheritDoc}
@@ -100,6 +102,7 @@ public class MySQLUserDAO implements UserDAO{
 		
 		return false;                                                                                             //if passwords are not equals - false
 	}
+	
 	
 	/**
 	 * {@inheritDoc}
@@ -148,6 +151,7 @@ public class MySQLUserDAO implements UserDAO{
 			
 			return null;		
 	}
+	
 
 	@Override
 	public boolean createUser(User user) throws SQLUserDAOException {
@@ -158,11 +162,11 @@ public class MySQLUserDAO implements UserDAO{
 		try {
 			connection = connectionPool.takeConnection();
 			preparedStatement = connection.prepareStatement(USER_CREATION_QUERY);
-			preparedStatement.setString(1, user.getNickName().trim());
-			preparedStatement.setString(2, user.getHashPassword().trim());
-			preparedStatement.setString(3, user.getName().trim());
-			preparedStatement.setString(4, user.getSurname().trim());
-			preparedStatement.setString(5, user.geteMail().trim());
+			preparedStatement.setString(1, user.getNickName());
+			preparedStatement.setString(2, user.getHashPassword());
+			preparedStatement.setString(3, user.getName());
+			preparedStatement.setString(4, user.getSurname());
+			preparedStatement.setString(5, user.geteMail());
 			preparedStatement.setInt(6, user.getRole());
 			addedRowsInBase = preparedStatement.executeUpdate();
 		} catch (InterruptedException e) {
@@ -176,6 +180,7 @@ public class MySQLUserDAO implements UserDAO{
 		if(addedRowsInBase == 1) return true;
 		else return false;
 	}
+	
 
 	@Override
 	public User editUser(User user, User newUser) throws SQLUserDAOException {

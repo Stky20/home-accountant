@@ -1,7 +1,5 @@
 package by.htp.accountant.bean;
 
-import by.htp.accountant.exception.PasswordClassBeanException;
-
 public class UserBuilder {
 	
 	private int id;
@@ -56,13 +54,13 @@ public class UserBuilder {
 	
 	public User buildUser() {
 		User user = new User();
-		user.setId(id);
-		user.setNickName(nickName);
-		user.setHashPassword(hashPassword);
-		user.setName(name);
-		user.setSurname(surname);
-		user.seteMail(eMail);
-		user.setRole(role);
+		if (id != 0) user.setId(id);
+		if (nickName != null) user.setNickName(nickName);
+		if (hashPassword != null) user.setHashPassword(hashPassword);
+		if (name != null) user.setName(name);
+		if (surname != null) user.setSurname(surname);
+		if (eMail != null) user.seteMail(eMail);
+		if (role != 0) user.setRole(role);
 		return user;
 	}	
 

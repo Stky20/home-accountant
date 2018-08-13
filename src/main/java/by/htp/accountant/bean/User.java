@@ -17,6 +17,7 @@ public class User implements Serializable{
 	private String name;
 	private String surname;
 	private String eMail;
+	
 	/**
 	 * 3 role 1 administrator, 2 user, guest without number
 	 */
@@ -35,7 +36,7 @@ public class User implements Serializable{
 		this.surname = null;
 		this.eMail = null;
 		
-		this.role = 2;															//
+		this.role = 2;
 	}
 	
 	public User(String nickName, String passwordFromUser, String name, String surname, String eMail) throws BeanException {  

@@ -8,6 +8,7 @@ import by.htp.accountant.controller.command.GoToMainPageCommand;
 import by.htp.accountant.controller.command.GoToRegistrationPageCommand;
 import by.htp.accountant.controller.command.Localization;
 import by.htp.accountant.controller.command.Logination;
+import by.htp.accountant.controller.command.Registration;
 
 public class CommandProvider {
 	
@@ -19,6 +20,7 @@ private Map<CommandName, Command> commands = new HashMap<CommandName, Command>()
 		commands.put(CommandName.GO_TO_REGISTRATION_PAGE, new GoToRegistrationPageCommand());
 		commands.put(CommandName.LOCALIZATION, new Localization());
 		commands.put(CommandName.LOGINATION, new Logination());
+		commands.put(CommandName.REGISTRATION, new Registration());
 //		commands.put(ComandName.);
 //		commands.put(ComandName.);
 //		commands.put(ComandName.);

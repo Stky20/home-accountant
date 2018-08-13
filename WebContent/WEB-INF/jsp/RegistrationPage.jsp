@@ -40,13 +40,13 @@
 			<div class="form-group">
 				<label for="login" class="col-sm-2 control-label">${login_placeholder}:*</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="login" placeholder="${login_placeholder}">
+					<input type="text" class="form-control" name="login" placeholder="${login_placeholder}">
 				</div>
-			</div>
+			</div>			
 			<div class="form-group">
 				<label for="password" class="col-sm-2 control-label">${password_placeholder}:*</label>
 				<div class="col-sm-10">
-					<input type="password" class="form-control" id="password" placeholder="${password_placeholder}">
+					<input type="password" class="form-control" name="password" placeholder="${password_placeholder}">
 				</div>
 			</div>
 			<div class="form-group">
@@ -58,13 +58,13 @@
 			<div class="form-group">
 				<label for="surname" class="col-sm-2 control-label">${surname}:</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="surname" placeholder="${surname}">
+					<input type="text" class="form-control"name="surname" placeholder="${surname}">
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="email" class="col-sm-2 control-label">Email:</label>
 				<div class="col-sm-10">
-					<input type="email" class="form-control" id="email" placeholder="Email">
+					<input type="email" class="form-control" name="email" placeholder="Email">
 				</div>
 			</div>
 			<div class="form-group">
@@ -84,7 +84,7 @@
 					<input type="submit" name="login_page" value="<-- ${nav_link_home}" class="btn btn-link" style="margin:0;"/>
 				</form>
 			</div>
-			<div class="col-sm-offset-2 col-sm-10 col-md-3" style="margin:0; padding:0;"">
+			<div class="col-sm-offset-2 col-sm-10 col-md-3" style="margin:0; padding:0;">
 				<form action="Controller" method="post">
 					<input type="hidden" name="command" value="go_to_login_page" /> 
 					<input type="submit" name="login_page" value=" ${login_button}-->" class="btn btn-link" style="margin:0;"/>
