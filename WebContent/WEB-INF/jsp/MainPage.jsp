@@ -32,100 +32,7 @@
 
 <body>
 
-	<nav class="navbar navbar-default navbar-fixed-top">                                         														<!--наша панель/ менюшка, всегда на месте -->
-      <div class="container">																															<!-- это ширина нашего проиложения -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">         <!--кнопка - появл при уменьшении экрана и прячет все меню -->
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/home-accountant-version-00/Controller?command=go_to_main_page" title="Main Page">
-          	<h4 style="margin:0; padding:0;"><font color="red">H</font>A <small>v0.0</small></h4>																					<!--наше лого переход на главную страницу -->
-          </a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">																								<!--и есть все меню, которое прячется в кнопку -->
-          <ul class="nav navbar-nav">																													<!--спец список для менюшки -->
-            <li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_main_page">${nav_link_home}</a></li>
-            <c:choose>
-				<c:when test="${not empty sessionScope.user}">																							<!--если юзер в системе, то видна ссылка на свои расходы, если нет, то нет-->	
-					<li><a href="/home-accountant-version-00/Controller?command=go_to_user_account_page">${nav_link_users}</a></li>
-				</c:when>
-				<c:otherwise>
-					<li class="disabled"><a href="#" title="${nav_link_users_title}">${nav_link_users}</a></li>	
-				</c:otherwise>
-			</c:choose>             
-            <li><a href="/home-accountant-version-00/Controller?command=go_to_about_page">${nav_link_about}</a></li>
-            <li><a href="/home-accountant-version-00/Controller?command=go_to_contacts_page">${nav_link_contacts}</a></li>
-            <li class="dropdown">																														<!--пункт менюшки, содержащий выпадающий список -->
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${nav_link_staff} 				<!--на ссылку нужно нажать для выпаданиявлож списка -->
-              	<span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <li><a href="/home-accountant-version-00/Controller?command=go_to_slogon_page">${nav_link_slogan}</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">${nav_link_header}</li>
-                <li><a href="https://www.google.com">Google</a></li>
-                <li><a href="https://www.youtube.com/">YouTube</a></li>
-                <li><a href="https://www.it-academy.by/">IT academy</a></li>
-              </ul>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">           																							<!--часть менюшки, список располож в правой части экрана -->
-            <c:choose>																							
-				<c:when test="${not empty sessionScope.user}">																							<!--если юзер зарегистрирован,-->
-					<li class="dropdown">																												<!--то виден этот выпадающий список -->
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-							<c:choose>
-								<c:when test="${not empty sessionScope.user.name}">																		<!--если юзер указывал имя, то в менюшке будет имя, если нет, то никнэйм-->
-									<c:out value="${sessionScope.user.name} "/>							
-								</c:when>
-								<c:otherwise>
-									<c:out value="${sessionScope.user.nickName} "/>	
-								</c:otherwise>
-							</c:choose> 
-              				<span class="caret"></span>
-              			</a>
-              			<ul class="dropdown-menu">
-                			<li><a href="#">${nav_link_edit}</a></li>
-                			<li role="separator" class="divider"></li>
-                			<li><a href="#">${nav_link_exit}</a></li>
-              			</ul>						
-					</li>
-				</c:when>
-				<c:otherwise>																																<!--если юзер не зарег-н то видна кнопка перехода на страницу логинации -->
-					<li>
-						<form action="Controller" method="post">
-							<input type="hidden" name="command" value="go_to_login_page" /> 
-							<input type="submit" name="login_page" value="${login_button}" class="btn btn-link" style="padding:0; margin:14px 20px 0 14px;"/>
-						</form>
-					</li>				
-				</c:otherwise>
-			</c:choose>
-			
-            <li class="dropdown">																															<!--дропдаун для смены языка -->
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${nav_link_language}<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-              	<li><form action="Controller" method="get">
-						<input type="hidden" name="command" value="localization" /> 
-						<input type="hidden" name="localization" value="ru" /> 
-						<input type="submit" class="btn btn-link" name="login" value="${ru_button}" />
-					</form>
-				</li>
-                <li role="separator" class="divider"></li>
-                <li><form action="Controller" method="get">
-						<input type="hidden" name="command" value="localization" /> 
-						<input type="hidden" name="localization" value="en" /> 
-						<input type="submit" class="btn btn-link" name="login" value="${en_button}" />
-					</form>
-				</li>                
-              </ul>
-            </li>            
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+<%@ include file="inclusion/NavigationBar.jsp"%> 
     
     <div class="row" style="margin-top:150px;">
 	    
@@ -203,15 +110,9 @@
 
 		</div>	
 	</div>
-	
-	
-	
-	<footer style="margin:100px 0 0 0; padding:0;">
-      <div class="container">
-        <p class="text-muted text-center">© 2018 Economy Group Corporation Inc.</p>
-      </div>
-    </footer>
 
+<!-- Footer -->
+	<%@ include file="inclusion/Footer.jsp"%> 
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

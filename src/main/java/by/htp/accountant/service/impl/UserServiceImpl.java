@@ -113,14 +113,12 @@ public class UserServiceImpl implements UserService {
 			if(Validator.loginRegularCheck(login)) {				
 				builder = builder.buildHashFromPassword(passwordFromUser);				
 					if (builder.buildUser().getHashPassword() == null){																		//one more check because of hashPassword can be null
-						request.setAttribute(NULL_HASH_ERROR_MESSAGE, NULL_HASH_ERROR_MESSAGE);						
+						request.setAttribute(NULL_HASH_ERROR_MESSAGE, NULL_HASH_ERROR_MESSAGE);							
 					}					
 			} else {
 				request.setAttribute(WRONG_PASSWORD_ERROR_MESSAGE, WRONG_PASSWORD_ERROR_MESSAGE);
 			}
-		}
-		
-		
+		}		
 		
 		if(!isParameterEmpty(name)) {																	//name check it matches pattern, error msg setting
 			if(Validator.nameRegularCheck(name)) {
@@ -148,16 +146,11 @@ public class UserServiceImpl implements UserService {
 		
 		user = builder.buildUser();
 		
-		
-		
 		if(isLoginPasswordEmpty(user.getNickName(), user.getHashPassword())) {			
 			return null;			
-		} else if ((name != null && !Validator.nameRegularCheck(name)) || 								//check if name or surname or email are not null and are not match patterns
-				(surname != null && !Validator.surnameRegularCheck(surname)) || 
-				(email != null && !Validator.emailRegularCheck(email))) {
-			
-				System.out.println((email != null) + " " + (Validator.emailRegularCheck(email)));
-				
+		} else if ((!isParameterEmpty(name)&& !Validator.nameRegularCheck(name)) || 								//check if name or surname or email are not null and are not match patterns
+				(!isParameterEmpty(surname) && !Validator.surnameRegularCheck(surname)) || 
+				(!isParameterEmpty(email) && !Validator.emailRegularCheck(email))) {					
 			return null;
 		}		
 		
@@ -168,12 +161,15 @@ public class UserServiceImpl implements UserService {
 		} catch (DAOException e) {			
 			throw new UserServiceException("DAO Exception during registration user occured", e);
 		}
-		System.out.println(user);
+		
 		return user;
 	}
 	
 	
 	public boolean isLoginPasswordEmpty(String login, String hashPassword) {		
+		if (login == null || hashPassword == null) {
+			return true;
+		}
 		if(login.trim().isEmpty() || hashPassword.trim().isEmpty()) {			
 			return true;
 		}		

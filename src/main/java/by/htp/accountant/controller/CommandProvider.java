@@ -9,6 +9,7 @@ import by.htp.accountant.controller.command.GoToRegistrationPageCommand;
 import by.htp.accountant.controller.command.Localization;
 import by.htp.accountant.controller.command.Logination;
 import by.htp.accountant.controller.command.Registration;
+import by.htp.accountant.controller.command.SignOut;
 
 public class CommandProvider {
 	
@@ -21,7 +22,7 @@ private Map<CommandName, Command> commands = new HashMap<CommandName, Command>()
 		commands.put(CommandName.LOCALIZATION, new Localization());
 		commands.put(CommandName.LOGINATION, new Logination());
 		commands.put(CommandName.REGISTRATION, new Registration());
-//		commands.put(ComandName.);
+		commands.put(CommandName.SIGN_OUT, new SignOut());
 //		commands.put(ComandName.);
 //		commands.put(ComandName.);
 	}

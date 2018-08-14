@@ -9,7 +9,7 @@ public class Validator {
 	public final static String PASSWORD_PATTERN = "[\\w]{6,10}";
 	public final static String NAME_PATTERN = "[\\w-&&[^\\d]]{1,20}";
 	public final static String SURNAME_PATTERN = "[\\w-&&[^\\d]]{1,25}";
-	public final static String EMAIL_PATTERN = "^[\\w\\+]+@" + "[A-Za-z0-9]+(\\.[A-Za-z]{2,7})$";
+	public final static String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,7})$";
 	
 	public final static String LOGIN_ERROR_MSG = "wrong login";
 	public final static String PASSWORD_ERROR_MSG = "wromg password";

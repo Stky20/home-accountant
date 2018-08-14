@@ -36,3 +36,12 @@
 <fmt:message bundle="${loc}" key="wrong.login.message.error" var="wrong_login" />
 <fmt:message bundle="${loc}" key="wrong.password.message.error" var="wrong_password" />
 <fmt:message bundle="${loc}" key="null.hash.password.message.error" var="hash_password_problem" />
+
+<!-- Error messages for registration page -->
+<fmt:message bundle="${loc}" key="null.login.msg" var="null_login_msg" />
+<fmt:message bundle="${loc}" key="wrong.login.msg" var="wrong_login_msg" />
+<fmt:message bundle="${loc}" key="null.password.msg" var="null_password_msg" />
+<fmt:message bundle="${loc}" key="wrong.password.msg" var="wrong_password_msg" />
+<fmt:message bundle="${loc}" key="wrong.name.msg" var="wrong_name_msg" />
+<fmt:message bundle="${loc}" key="wrong.surname.msg" var="wrong_surname_msg" />
+<fmt:message bundle="${loc}" key="wrong.email.msg" var="wrong_email_msg" />

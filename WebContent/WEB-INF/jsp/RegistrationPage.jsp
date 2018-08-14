@@ -36,45 +36,103 @@
 
 	<div class="container" style="margin-top:200px;">
 		<form class="form-horizontal" action="Controller" method="post">
-			<input type="hidden" name="command" value="registration" />
-			<div class="form-group">
-				<label for="login" class="col-sm-2 control-label">${login_placeholder}:*</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" name="login" placeholder="${login_placeholder}">
+				<input type="hidden" name="command" value="registration" />
+				<div class="form-group">
+						<label for="login" class="col-sm-2 control-label">${login_placeholder}:*</label>
+						<div class="col-sm-10">
+								<input type="text" class="form-control" name="login" placeholder="${login_placeholder}">
+						</div>
+						<div>
+							<c:choose>
+								 <c:when test="${not empty requestScope.emptyLoginErrorMsg}">
+								     	<c:out value="${null_login_msg}" />
+								 </c:when>
+								 <c:when test="${not empty requestScope.wrongLoginErrorMsg}">
+								     	<c:out value="${wrong_login_msg}" />							     	
+								 </c:when>
+								 <c:otherwise>
+								 		</br></br>
+								 </c:otherwise>
+							</c:choose>
+						</div>
+				</div>	
+					
+				<div class="form-group">
+					<label for="password" class="col-sm-2 control-label">${password_placeholder}:*</label>
+					<div class="col-sm-10">
+						<input type="password" class="form-control" name="password" placeholder="${password_placeholder}">
+					</div>
+					<div>
+							<c:choose>
+								 <c:when test="${not empty requestScope.emptyPasswordErrorMsg}">
+								     	<c:out value="${null_password_msg}" />
+								 </c:when>
+								 <c:when test="${not empty requestScope.wrongPasswordErrorMsg}">
+								     	<c:out value="${wrong_password_msg}" />							     	
+								 </c:when>
+								 <c:otherwise>
+								 		</br></br>
+								 </c:otherwise>
+							</c:choose>
+					</div>
 				</div>
-			</div>			
-			<div class="form-group">
-				<label for="password" class="col-sm-2 control-label">${password_placeholder}:*</label>
-				<div class="col-sm-10">
-					<input type="password" class="form-control" name="password" placeholder="${password_placeholder}">
+				
+				<div class="form-group">
+					<label for="name" class="col-sm-2 control-label">${name}:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" name="name" placeholder="${name}">				
+					</div>
+					<div>
+							<c:choose>								 
+								 <c:when test="${not empty requestScope.wrongNameErrorMsg}">
+								     	<c:out value="${wrong_name_msg}" />							     	
+								 </c:when>
+								 <c:otherwise>
+								 		</br></br>
+								 </c:otherwise>
+							</c:choose>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<label for="name" class="col-sm-2 control-label">${name}:</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" name="name" placeholder="${name}">				
+				<div class="form-group">
+					<label for="surname" class="col-sm-2 control-label">${surname}:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control"name="surname" placeholder="${surname}">
+					</div>
+					<div>
+							<c:choose>								 
+								 <c:when test="${not empty requestScope.wrongSurnameErrorMsg}">
+								     	<c:out value="${wrong_surname_msg}" />							     	
+								 </c:when>
+								 <c:otherwise>
+								 		</br></br>
+								 </c:otherwise>
+							</c:choose>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<label for="surname" class="col-sm-2 control-label">${surname}:</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control"name="surname" placeholder="${surname}">
+				<div class="form-group">
+					<label for="email" class="col-sm-2 control-label">Email:</label>
+					<div class="col-sm-10">
+						<input type="email" class="form-control" name="email" placeholder="Email">
+					</div>
+					<div>
+							<c:choose>								 
+								 <c:when test="${not empty requestScope.wrongEmailErrorMsg}">
+								     	<c:out value="${wrong_email_msg}" />							     	
+								 </c:when>
+								 <c:otherwise>
+								 		</br></br>
+								 </c:otherwise>
+							</c:choose>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<label for="email" class="col-sm-2 control-label">Email:</label>
-				<div class="col-sm-10">
-					<input type="email" class="form-control" name="email" placeholder="Email">
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-offset-2 col-sm-10 col-md-1" style="margin-right:80px;">
+							<button type="submit" class="btn btn-success" style="margin:0;">${registration_button}</button>
+						</div>					
+					</div>
+					<p class="text-danger" style="margin:20px 0 0 200px;">*- ${registration_error}</p>
 				</div>
-			</div>
-			<div class="form-group">
-				<div class="row">
-					<div class="col-sm-offset-2 col-sm-10 col-md-1" style="margin-right:80px;">
-						<button type="submit" class="btn btn-success" style="margin:0;">${registration_button}</button>
-					</div>					
-				</div>
-				<p class="text-danger" style="margin:20px 0 0 200px;">*- ${registration_error}</p>
-			</div>
 		</form>
 		<div class="row">
 			<div class="col-sm-offset-2 col-sm-10 col-md-3"></div>
