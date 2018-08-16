@@ -2209,3 +2209,23 @@ org.apache.jasper.JasperException: /WEB-INF/jsp/RegistrationPage.jsp (line: [50]
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.lang.Thread.run(Unknown Source)
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-14 21:37:41 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-14 22:05:13 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-14 22:05:13 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-14 22:05:13 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
+2018-08-14 22:05:13 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-14 22:05:13 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
