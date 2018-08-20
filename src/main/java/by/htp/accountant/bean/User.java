@@ -2,7 +2,8 @@ package by.htp.accountant.bean;
 
 import java.io.Serializable;
 
-import by.htp.accountant.exception.BeanException;
+import by.htp.accountant.exception.UtilException;
+import by.htp.accountant.util.HashPasswordMaker;
 
 
 public class User implements Serializable{
@@ -28,7 +29,7 @@ public class User implements Serializable{
 		this.role = 2;
 	}	
 	
-	public User(String nickName, String passwordFromUser) throws BeanException {
+	public User(String nickName, String passwordFromUser) throws UtilException {
 		
 		this.nickName = nickName;
 		this.hashPassword = passwordMaker.getHashPassword(passwordFromUser);
@@ -39,7 +40,7 @@ public class User implements Serializable{
 		this.role = 2;
 	}
 	
-	public User(String nickName, String passwordFromUser, String name, String surname, String eMail) throws BeanException {  
+	public User(String nickName, String passwordFromUser, String name, String surname, String eMail) throws UtilException {  
 		
 		this.nickName = nickName;
 		this.hashPassword = passwordMaker.getHashPassword(passwordFromUser);

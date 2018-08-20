@@ -21,7 +21,7 @@ public class SignOut implements Command {
 		request.getSession().removeAttribute(USER_PARAMETER);
 		
 		try {
-			response.sendRedirect(RedirectPath.GO_TO_MAIN_PAGE);
+			response.sendRedirect(JSPPath.GO_TO_MAIN_PAGE);
 		} catch (IOException e) {
 			logger.warn("IOException in SignOut command", e);
 			throw e;

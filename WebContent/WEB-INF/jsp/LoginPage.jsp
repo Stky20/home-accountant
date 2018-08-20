@@ -54,11 +54,7 @@
 									<font color="red">
 										<c:if test="${not empty requestScope.nullErrorMsg}">
 											<c:out value="${null_login_password}" />
-										</c:if>
-										
-										<c:if test="${not empty requestScope.nullHashErrorMsg}">
-											<c:out value="${hash_password_problem}" />
-										</c:if>
+										</c:if>									
 										
 										<c:if test="${not empty requestScope.emptyLoginPasswordErrorMsg}">
 											<c:out value="${empty_login_password}" />

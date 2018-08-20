@@ -2,6 +2,8 @@ package by.htp.accountant.controller.command;
 
 public class JSPPath {
 	
+	public final static String GO_TO_MAIN_PAGE = "Controller?command=go_to_main_page";
+	
 	public final static String MAIN_PAGE = "/WEB-INF/jsp/MainPage.jsp";
 	public final static String LOGIN_PAGE = "/WEB-INF/jsp/LoginPage.jsp";
 	public final static String REGISTRATION_PAGE = "/WEB-INF/jsp/RegistrationPage.jsp";

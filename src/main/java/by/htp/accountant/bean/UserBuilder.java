@@ -1,5 +1,8 @@
 package by.htp.accountant.bean;
 
+import by.htp.accountant.exception.PasswordClassUtilException;
+import by.htp.accountant.util.HashPasswordMaker;
+
 public class UserBuilder {
 	
 	private int id;
@@ -25,7 +28,7 @@ public class UserBuilder {
 		return this;		
 	}
 	
-	public UserBuilder buildHashFromPassword(String password) {
+	public UserBuilder buildHashFromPassword(String password) throws PasswordClassUtilException {
 		
 		this.hashPassword = HashPasswordMaker.getInstance().getHashPassword(password);
 		

@@ -35,7 +35,6 @@
 <fmt:message bundle="${loc}" key="empty.login.password.message.error" var="empty_login_password" />
 <fmt:message bundle="${loc}" key="wrong.login.message.error" var="wrong_login" />
 <fmt:message bundle="${loc}" key="wrong.password.message.error" var="wrong_password" />
-<fmt:message bundle="${loc}" key="null.hash.password.message.error" var="hash_password_problem" />
 
 <!-- Error messages for registration page -->
 <fmt:message bundle="${loc}" key="null.login.msg" var="null_login_msg" />

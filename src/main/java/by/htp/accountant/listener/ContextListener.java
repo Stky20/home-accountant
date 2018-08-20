@@ -11,12 +11,12 @@ import by.htp.accountant.dao.connectionpool.ConnectionPool;
  * Application Lifecycle Listener implementation class ContestListener
  *
  */
-public class ContestListener implements ServletContextListener {	
+public class ContextListener implements ServletContextListener {	
 
     /**
      * Default constructor. 
      */
-    public ContestListener() {
+    public ContextListener() {
         
     }
 

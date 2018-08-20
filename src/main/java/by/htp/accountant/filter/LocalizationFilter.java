@@ -9,7 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import by.htp.accountant.bean.RequestChecker;
+import by.htp.accountant.util.RequestChecker;
 
 public class LocalizationFilter implements Filter{
 	

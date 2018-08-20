@@ -44,6 +44,6 @@
     <servlet-name>Controller</servlet-name>
   </filter-mapping>
   <listener>
-    <listener-class>by.htp.accountant.listener.ContestListener</listener-class>
+    <listener-class>by.htp.accountant.listener.ContextListener</listener-class>
   </listener>
 </web-app>

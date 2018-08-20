@@ -1,4 +1,4 @@
-package by.htp.accountant.bean;
+package by.htp.accountant.util;
 
 import java.util.Map;
 import javax.servlet.ServletRequest;

@@ -2229,3 +2229,286 @@ org.apache.jasper.JasperException: /WEB-INF/jsp/RegistrationPage.jsp (line: [50]
 2018-08-14 22:05:13 INFO [http-nio-8080-exec-2]: resultSet closed in UserDAOimpl
 2018-08-14 22:05:13 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
 2018-08-14 22:05:13 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-20 17:00:32 INFO [http-nio-8080-exec-4]: preparedStatement closed in UserDAOimpl
+2018-08-20 17:00:32 INFO [http-nio-8080-exec-4]: connection closed in UserDAOimpl
+2018-08-20 17:00:32 WARN [http-nio-8080-exec-4]: Cant registrate user
+by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO createUser() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.createUser(MySQLUserDAO.java:175)
+	at by.htp.accountant.service.impl.UserServiceImpl.registration(UserServiceImpl.java:127)
+	at by.htp.accountant.controller.command.Registration.execute(Registration.java:24)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'nickName' cannot be null
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:936)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3976)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3912)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2486)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1858)
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2079)
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2013)
+	at com.mysql.jdbc.PreparedStatement.executeLargeUpdate(PreparedStatement.java:5104)
+	at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:1998)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.createUser(MySQLUserDAO.java:171)
+	... 34 more
+2018-08-20 17:00:32 WARN [http-nio-8080-exec-4]: ServiceException while making logination
+2018-08-20 17:01:09 INFO [http-nio-8080-exec-10]: resultSet closed in UserDAOimpl
+2018-08-20 17:01:09 INFO [http-nio-8080-exec-10]: preparedStatement closed in UserDAOimpl
+2018-08-20 17:01:09 INFO [http-nio-8080-exec-10]: connection closed in UserDAOimpl
+2018-08-20 17:01:20 INFO [http-nio-8080-exec-5]: resultSet closed in UserDAOimpl
+2018-08-20 17:01:20 INFO [http-nio-8080-exec-5]: preparedStatement closed in UserDAOimpl
+2018-08-20 17:01:20 INFO [http-nio-8080-exec-5]: connection closed in UserDAOimpl
+2018-08-20 17:03:59 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-20 17:03:59 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-20 17:03:59 WARN [http-nio-8080-exec-2]: Cant registrate user
+by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO createUser() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.createUser(MySQLUserDAO.java:175)
+	at by.htp.accountant.service.impl.UserServiceImpl.registration(UserServiceImpl.java:127)
+	at by.htp.accountant.controller.command.Registration.execute(Registration.java:24)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'nickName' cannot be null
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:936)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3976)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3912)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2486)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1858)
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2079)
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2013)
+	at com.mysql.jdbc.PreparedStatement.executeLargeUpdate(PreparedStatement.java:5104)
+	at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:1998)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.createUser(MySQLUserDAO.java:171)
+	... 34 more
+2018-08-20 17:03:59 WARN [http-nio-8080-exec-2]: ServiceException while making logination
+2018-08-20 17:06:14 INFO [http-nio-8080-exec-2]: preparedStatement closed in UserDAOimpl
+2018-08-20 17:06:14 INFO [http-nio-8080-exec-2]: connection closed in UserDAOimpl
+2018-08-20 17:06:14 WARN [http-nio-8080-exec-2]: Cant registrate user
+by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO createUser() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.createUser(MySQLUserDAO.java:175)
+	at by.htp.accountant.service.impl.UserServiceImpl.registration(UserServiceImpl.java:127)
+	at by.htp.accountant.controller.command.Registration.execute(Registration.java:24)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'nickName' cannot be null
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:936)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3976)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3912)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2486)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1858)
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2079)
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2013)
+	at com.mysql.jdbc.PreparedStatement.executeLargeUpdate(PreparedStatement.java:5104)
+	at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:1998)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.createUser(MySQLUserDAO.java:171)
+	... 34 more
+2018-08-20 17:06:14 WARN [http-nio-8080-exec-2]: ServiceException while making logination
+2018-08-20 17:07:22 INFO [http-nio-8080-exec-13]: preparedStatement closed in UserDAOimpl
+2018-08-20 17:07:22 INFO [http-nio-8080-exec-13]: connection closed in UserDAOimpl
+2018-08-20 17:07:22 INFO [http-nio-8080-exec-13]: resultSet closed in UserDAOimpl
+2018-08-20 17:07:22 INFO [http-nio-8080-exec-13]: preparedStatement closed in UserDAOimpl
+2018-08-20 17:07:22 INFO [http-nio-8080-exec-13]: connection closed in UserDAOimpl
+2018-08-20 17:07:22 WARN [http-nio-8080-exec-13]: ServiceException while making logination
+2018-08-20 17:07:41 INFO [http-nio-8080-exec-13]: preparedStatement closed in UserDAOimpl
+2018-08-20 17:07:41 INFO [http-nio-8080-exec-13]: connection closed in UserDAOimpl
+2018-08-20 17:07:41 WARN [http-nio-8080-exec-13]: Cant registrate user
+by.htp.accountant.exception.SQLUserDAOException: Can`t create statement or execute query in UserDAO createUser() method
+	at by.htp.accountant.dao.impl.MySQLUserDAO.createUser(MySQLUserDAO.java:175)
+	at by.htp.accountant.service.impl.UserServiceImpl.registration(UserServiceImpl.java:127)
+	at by.htp.accountant.controller.command.Registration.execute(Registration.java:24)
+	at by.htp.accountant.controller.Controller.doGet(Controller.java:38)
+	at by.htp.accountant.controller.Controller.doPost(Controller.java:47)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.LocalizationFilter.doFilter(LocalizationFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at by.htp.accountant.filter.RquestResponseEncodingFilter.doFilter(RquestResponseEncodingFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:199)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:494)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:651)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:412)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:754)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1385)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Column 'nickName' cannot be null
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:425)
+	at com.mysql.jdbc.Util.getInstance(Util.java:408)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:936)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3976)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3912)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2530)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2683)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2486)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1858)
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2079)
+	at com.mysql.jdbc.PreparedStatement.executeUpdateInternal(PreparedStatement.java:2013)
+	at com.mysql.jdbc.PreparedStatement.executeLargeUpdate(PreparedStatement.java:5104)
+	at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:1998)
+	at by.htp.accountant.dao.impl.MySQLUserDAO.createUser(MySQLUserDAO.java:171)
+	... 34 more
+2018-08-20 17:07:41 WARN [http-nio-8080-exec-13]: ServiceException while making logination
+2018-08-20 19:31:59 WARN [http-nio-8080-exec-5]: ServiceException while making logination
+2018-08-20 19:32:24 INFO [http-nio-8080-exec-8]: resultSet closed in UserDAOimpl
+2018-08-20 19:32:24 INFO [http-nio-8080-exec-8]: preparedStatement closed in UserDAOimpl
+2018-08-20 19:32:24 INFO [http-nio-8080-exec-8]: connection closed in UserDAOimpl
+2018-08-20 19:32:24 INFO [http-nio-8080-exec-8]: resultSet closed in UserDAOimpl
+2018-08-20 19:32:24 INFO [http-nio-8080-exec-8]: preparedStatement closed in UserDAOimpl
+2018-08-20 19:32:24 INFO [http-nio-8080-exec-8]: connection closed in UserDAOimpl
+2018-08-20 19:32:30 INFO [http-nio-8080-exec-10]: resultSet closed in UserDAOimpl
+2018-08-20 19:32:30 INFO [http-nio-8080-exec-10]: preparedStatement closed in UserDAOimpl
+2018-08-20 19:32:30 INFO [http-nio-8080-exec-10]: connection closed in UserDAOimpl
+2018-08-20 19:32:30 INFO [http-nio-8080-exec-10]: resultSet closed in UserDAOimpl
+2018-08-20 19:32:30 INFO [http-nio-8080-exec-10]: preparedStatement closed in UserDAOimpl
+2018-08-20 19:32:30 INFO [http-nio-8080-exec-10]: connection closed in UserDAOimpl
+2018-08-20 19:32:30 INFO [http-nio-8080-exec-10]: resultSet closed in UserDAOimpl
+2018-08-20 19:32:30 INFO [http-nio-8080-exec-10]: preparedStatement closed in UserDAOimpl
+2018-08-20 19:32:30 INFO [http-nio-8080-exec-10]: connection closed in UserDAOimpl
+2018-08-20 19:32:54 INFO [http-nio-8080-exec-7]: preparedStatement closed in UserDAOimpl
+2018-08-20 19:32:54 INFO [http-nio-8080-exec-7]: connection closed in UserDAOimpl
+2018-08-20 19:32:54 INFO [http-nio-8080-exec-7]: resultSet closed in UserDAOimpl
+2018-08-20 19:32:54 INFO [http-nio-8080-exec-7]: preparedStatement closed in UserDAOimpl
+2018-08-20 19:32:54 INFO [http-nio-8080-exec-7]: connection closed in UserDAOimpl
+2018-08-20 19:32:54 WARN [http-nio-8080-exec-7]: ServiceException while making logination
+2018-08-20 19:33:45 WARN [http-nio-8080-exec-7]: ServiceException while making logination
+2018-08-20 19:36:07 WARN [http-nio-8080-exec-7]: ServiceException while making logination
+2018-08-20 19:38:43 WARN [http-nio-8080-exec-4]: ServiceException while making logination
+2018-08-20 19:40:41 INFO [http-nio-8080-exec-18]: preparedStatement closed in UserDAOimpl
+2018-08-20 19:40:41 INFO [http-nio-8080-exec-18]: connection closed in UserDAOimpl
+2018-08-20 19:40:41 INFO [http-nio-8080-exec-18]: resultSet closed in UserDAOimpl
+2018-08-20 19:40:41 INFO [http-nio-8080-exec-18]: preparedStatement closed in UserDAOimpl
+2018-08-20 19:40:41 INFO [http-nio-8080-exec-18]: connection closed in UserDAOimpl
+2018-08-20 19:40:41 WARN [http-nio-8080-exec-18]: ServiceException while making logination

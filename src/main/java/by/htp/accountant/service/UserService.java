@@ -1,10 +1,10 @@
 package by.htp.accountant.service;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
-import by.htp.accountant.bean.User;
-import by.htp.accountant.exception.DAOException;
-import by.htp.accountant.exception.UserServiceException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 public interface UserService {	
@@ -13,11 +13,12 @@ public interface UserService {
 	/**
 	 * Method makes logination
 	 * @param HttpServletRequest 
-	 * @return User
-	 * @throws UserServiceException 
+	 * @param HttpServletResponse
+	 * @throws IOException 
+	 * @throws ServletException 
 	 */
-	public User logination(HttpServletRequest request) throws UserServiceException;
+	public void logination(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 	
-	public User registration(HttpServletRequest request) throws UserServiceException;
+	public void registration(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
 }
