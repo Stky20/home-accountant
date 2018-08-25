@@ -28,13 +28,20 @@
 		            <!--если юзер в системе, то видна ссылка на свои расходы, если нет, то нет-->
 		            <c:choose>
 							<c:when test="${not empty sessionScope.user}">																								
-									<li><a href="/home-accountant-version-00/Controller?command=go_to_user_account_page">${nav_link_users}</a></li>
+									<c:choose>
+										<c:when test="${sessionScope.user.role != 0}">
+												<li><a href="/home-accountant-version-00/Controller?command=go_to_user_account_page">${nav_link_users}</a></li>
+										</c:when>
+										<c:otherwise>
+												<li class="disabled"><a href="#" title="${nav_link_users_title}">${nav_link_users}</a></li>	
+										</c:otherwise>
+									</c:choose>
 							</c:when>
 							<c:otherwise>
 									<li class="disabled"><a href="#" title="${nav_link_users_title}">${nav_link_users}</a></li>	
 							</c:otherwise>
 					</c:choose>             
-		            <li><a href="/home-accountant-version-00/Controller?command=go_to_about_page">${nav_link_about}</a></li>
+		            <li><a href="/home-accountant-version-00/Controller?command=go_to_about_us_page">${nav_link_about}</a></li>
 		            <li><a href="/home-accountant-version-00/Controller?command=go_to_contacts_page">${nav_link_contacts}</a></li>
 		            
 		            <!--пункт менюшки, содержащий выпадающий список -->
@@ -45,7 +52,7 @@
 			              		<span class="caret"></span>
 			              </a>
 			              <ul class="dropdown-menu">
-				                <li><a href="/home-accountant-version-00/Controller?command=go_to_slogon_page">${nav_link_slogan}</a></li>
+				                <li><a href="/home-accountant-version-00/Controller?command=go_to_slogan_page">${nav_link_slogan}</a></li>
 				                <li role="separator" class="divider"></li>
 				                <li class="dropdown-header">${nav_link_header}</li>
 				                <li><a href="https://www.google.com">Google</a></li>
@@ -61,31 +68,80 @@
 		            <!--если юзер зарегистрирован,-->          																							
 		            <c:choose>																							
 							<c:when test="${not empty sessionScope.user}">
-																														
-									<!--то виден этот выпадающий список -->
-									<li class="dropdown">																												
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-												
-												<!--если юзер указывал имя, то в менюшке будет имя, если нет, то никнэйм -->
-													<c:choose>
-															<c:when test="${not empty sessionScope.user.name}">																		
-																	<c:out value="${sessionScope.user.name} "/>							
-															</c:when>
-															<c:otherwise>
-																	<c:out value="${sessionScope.user.nickName} "/>	
-															</c:otherwise>
-													</c:choose> 
-						              				<span class="caret"></span>
-					              			</a>
-					              			<ul class="dropdown-menu">
-						                			<li><a href="#">${nav_link_edit}</a></li>
-						                			<li role="separator" class="divider"></li>
-						                			<li><a href="/home-accountant-version-00/Controller?command=sign_out">${nav_link_exit}</a></li>
-					              			</ul>						
-									</li>
+									<c:choose>																							
+											<c:when test="${sessionScope.user.role == 2}">																	
+													<!--то виден этот выпадающий список -->
+													<li class="dropdown">																												
+															<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+																
+																<!--если юзер указывал имя, то в менюшке будет имя, если нет, то никнэйм -->
+																	<c:choose>
+																			<c:when test="${not empty sessionScope.user.name}">																		
+																					<c:out value="${sessionScope.user.name} "/>							
+																			</c:when>
+																			<c:otherwise>
+																					<c:out value="${sessionScope.user.nickName} "/>	
+																			</c:otherwise>
+																	</c:choose> 
+										              				<span class="caret"></span>
+									              			</a>
+									              			<ul class="dropdown-menu">
+										                			<li><a href="/home-accountant-version-00/Controller?command=go_to_profile">${nav_link_edit}</a></li>
+										                			<li role="separator" class="divider"></li>
+										                			<li><a href="/home-accountant-version-00/Controller?command=sign_out">${nav_link_exit}</a></li>
+									              			</ul>						
+													</li>
+											</c:when>
+											
+											<c:when test="${sessionScope.user.role == 1}"><!--если админ зарегистрирован, то виден этот выпадающий список -->
+													<li class="dropdown">																												
+															<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+																
+																<!--если юзер указывал имя, то в менюшке будет имя, если нет, то никнэйм -->
+																	<c:choose>
+																			<c:when test="${not empty sessionScope.user.name}">																		
+																					<c:out value="${sessionScope.user.name} (admin)"/>							
+																			</c:when>
+																			<c:otherwise>
+																					<c:out value="${sessionScope.user.nickName} (admin)"/>	
+																			</c:otherwise>
+																	</c:choose> 
+										              				<span class="caret"></span>
+									              			</a>
+									              			<ul class="dropdown-menu">
+										                			<li><a href="/home-accountant-version-00/Controller?command=go_to_profile">${nav_link_edit}</a></li>
+										                			<li><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page">Administration of Users</a></li>
+										                			<li role="separator" class="divider"></li>
+										                			<li><a href="/home-accountant-version-00/Controller?command=sign_out">${nav_link_exit}</a></li>
+									              			</ul>						
+													</li>
+											</c:when>
+											<c:otherwise>
+													<li class="dropdown">																												
+															<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+																
+																<!--если юзер указывал имя, то в менюшке будет имя, если нет, то никнэйм -->
+																	<c:choose>
+																			<c:when test="${not empty sessionScope.user.name}">																		
+																					<c:out value="${sessionScope.user.name}(Deleted)"/>							
+																			</c:when>
+																			<c:otherwise>
+																					<c:out value="${sessionScope.user.nickName} (Deleted)"/>	
+																			</c:otherwise>
+																	</c:choose> 
+										              				<span class="caret"></span>
+									              			</a>
+									              			<ul class="dropdown-menu">
+										                			<li><a href="#">Restore</a></li>
+										                			<li role="separator" class="divider"></li>
+										                			<li><a href="/home-accountant-version-00/Controller?command=sign_out">${nav_link_exit}</a></li>										                			
+									              			</ul>						
+													</li>
+											</c:otherwise>
+									</c:choose>
 							</c:when>							
 							<c:otherwise>	
-							<!-- if user unlogin then on panel you see login button -->																															
+									<!-- if user unlogin then on panel you see login button -->																															
 									<li>
 											<form action="Controller" method="post">
 													<input type="hidden" name="command" value="go_to_login_page" /> 

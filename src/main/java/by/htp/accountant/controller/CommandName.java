@@ -1,13 +1,51 @@
 package by.htp.accountant.controller;
 
+import by.htp.accountant.bean.User;
+
 public enum CommandName {
 	
-	GO_TO_MAIN_PAGE,
-	GO_TO_REGISTRATION_PAGE,
-	GO_TO_LOGIN_PAGE,
-	LOCALIZATION,
-	LOGINATION,
-	REGISTRATION,
-	SIGN_OUT;
+	GO_TO_MAIN_PAGE(),
+	GO_TO_REGISTRATION_PAGE(),
+	GO_TO_LOGIN_PAGE(),
+	LOCALIZATION(0,1,2,3),
+	LOGINATION(0,1,2,3),
+	REGISTRATION(0,1,2,3),
+	SIGN_OUT(0,1,2),
+	GO_TO_PROFILE(1,2),
+	GO_TO_CONTACTS_PAGE(),
+	GO_TO_ABOUT_US_PAGE(),
+	GO_TO_SLOGAN_PAGE(),
+	GO_TO_USER_ADMINISTRATION_PAGE(1);
+	
+	int[] roles = null;
+	
+	private CommandName() {
+		
+	}
+	
+	private CommandName(int...roles) {
+	
+		this.roles = roles;
+		
+	}
+	
+	public boolean containsRole(User user) {
+		
+		if(roles == null) return true;
+		
+		if(user == null && roles.length == 4) {			
+			return true;
+		}else if(user == null && roles.length < 4) {
+			return false;
+		}
+		
+		for(int role: roles) {
+			if(role == user.getRole()) { 
+				return true;
+			}
+		}
+		
+		return false;		
+	}
 	
 }

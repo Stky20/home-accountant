@@ -20,5 +20,7 @@ public interface UserService {
 	public void logination(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 	
 	public void registration(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	
+	public void showUsers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
 }

@@ -46,4 +46,13 @@
   <listener>
     <listener-class>by.htp.accountant.listener.ContextListener</listener-class>
   </listener>
+  <filter>
+    <display-name>RoleCheckFilter</display-name>
+    <filter-name>RoleCheckFilter</filter-name>
+    <filter-class>by.htp.accountant.filter.RoleCheckFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>RoleCheckFilter</filter-name>
+    <url-pattern>/RoleCheckFilter</url-pattern>
+  </filter-mapping>
 </web-app>

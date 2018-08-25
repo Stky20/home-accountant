@@ -32,86 +32,75 @@
 
 <body>
 
-<%@ include file="inclusion/NavigationBar.jsp"%> 
-    
-    <div class="row" style="margin-top:150px;">
+<%@ include file="inclusion/NavigationBar.jsp"%>     
 	    
-	    <c:if test="${not empty requestScope.user}" >																								<!--панель ниже видня только когда юзер в системе -->											
-		    <div class="col-xs-6 col-md-3 col-lg-2 sidebar-offcanvas" id="sidebar" style="width:190px; margin:0 0 0 15px; padding:0;">				<!--доп панель, нужно сделать только на странице просмотра счетов -->
-		          <div class="list-group">
-		            <a href="#" class="list-group-item active">Период времени</a>
-		            <a href="#" class="list-group-item">День</a>
-		            <a href="#" class="list-group-item">Месяц</a>
-		            <a href="#" class="list-group-item">3 месяца</a>
-		            <a href="#" class="list-group-item">6 месяцев</a>
-		            <a href="#" class="list-group-item">Год</a>
-		            <a href="#" class="list-group-item">за все время</a>
-		          </div>
-		    </div><!--/.sidebar-offcanvas-->
-	    </c:if>
-		
-		<div class="container" >																														<!-- основная часть экрана, все будет в ней -->
-			<div class="jumbotron" style="text-align: center; padding: 10px;">																										<!-- джамботрон с текстом на клавной странице -->
-	        	
-		        	<h2>Добро пожаловать в Вашу личную бухгалтерию!</h2><br>
-		        	<p><font size="4">Используйте Домашнего бухгалтера – программу для ведения и контроля финансов как личного, так и семейного бюджета. Доступно на любом устройстве при наличии доступа в интернет.</font></p>
-					<p><font size="4">Кроме учета личных финансов и контроля семейного бюджета, Домашняя бухгалтерия поможет вести финансовый учет индивидуальным предпринимателям и небольшим компаниям.</font></p>
-					<p><font size="4">Программа позволит создать эффективный финансовый план, рассчитать доходы и расходы.</font></p>
-		        	<p><form action="Controller" method="get">
-							<input type="hidden" name="command" value="localization" /> 
-							<input type="hidden" name="localization" value="en" /> 
-							<input type="submit" class="btn btn-success btn-lg" name="login" value="Приступить!" />
-						</form></p>
-			</div>
-			
-			<div class="container" style="text-align: center; margin-bottom: 50px;"><h3>Причины начать пользоваться Домашним бухгалтером уже сегодня:</h3></div>
-			
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-3" >
-						<h4>Простота и практичность</h4>
-						<p class="text-danger">Не нужно обладать никакими специальными бухгалтерскими знаниями.</p>
-						<p>Полный набор функций, необходимых для контроля семейного бюджета.</p>
-						<p>
-							<a class="btn btn-primary" href="#" role="button">Подробней
-								&raquo;</a>
-						</p>
-					</div>
-					<div class="col-lg-3">
-						<h4>Польза</h4>
-						<p>Ведение учета домашних финансов поможет в достижении целей.</p>
-						<p>
-							<a class="btn btn-primary" href="#" role="button">View details
-								&raquo;</a>
-						</p>
-					</div>
-					<div class="col-lg-3">
-						<h4>Выгода</h4>
-						<p>Анализируя свой бюджет, можно избежать излишних расходов.</p>
-						<p>
-							<a class="btn btn-primary" href="#" role="button">View details
-								&raquo;</a>
-						</p>
-					</div>
-					<div class="col-lg-3">
-						<h4>Безопасность</h4>
-						<p>Защита записей паролем и функция резервного копирования базы данных.</p>
-						<p>
-							<a class="btn btn-primary" href="#" role="button">View details
-								&raquo;</a>
-						</p>
-					</div>
-				</div>
-			</div>
+	    <c:choose>
+				<c:when test="${sessionScope.user.role == 0}">
+						<div class="container" style="margin-top: 100px; text-align: center; font-size: 20px;">
+						    	<p class="bg-warning">Вы удалили свой аккаунт, в течении 5 дней он будет безвозвратно удален администратором. 
+						    	До истечения этого срока вы можете восстановить доступ к своему аккаунту. </p>
+				    	</div>
+				</c:when>
+				<c:otherwise>
+						<div class="container" style="margin-top: 100px;">																														<!-- основная часть экрана, все будет в ней -->
+								<div class="jumbotron" style="text-align: center; padding: 10px;">																										<!-- джамботрон с текстом на клавной странице -->
+						        	
+							        	<h2>Добро пожаловать в Вашу личную бухгалтерию!</h2><br>
+							        	<p><font size="4">Используйте Домашнего бухгалтера – программу для ведения и контроля финансов как личного, так и семейного бюджета. Доступно на любом устройстве при наличии доступа в интернет.</font></p>
+										<p><font size="4">Кроме учета личных финансов и контроля семейного бюджета, Домашняя бухгалтерия поможет вести финансовый учет индивидуальным предпринимателям и небольшим компаниям.</font></p>
+										<p><font size="4">Программа позволит создать эффективный финансовый план, рассчитать доходы и расходы.</font></p>
+							        	<p><form action="Controller" method="get">
+												<input type="hidden" name="command" value="localization" /> 
+												<input type="hidden" name="localization" value="en" /> 
+												<input type="submit" class="btn btn-success btn-lg" name="login" value="Приступить!" />
+											</form></p>
+								</div>
+								
+								<div class="container" style="text-align: center; margin-bottom: 50px;"><h3>Причины начать пользоваться Домашним бухгалтером уже сегодня:</h3></div>
+								
+								<div class="container">
+									<div class="row">
+										<div class="col-lg-3" >
+											<h4>Простота и практичность</h4>
+											<p class="text-danger">Не нужно обладать никакими специальными бухгалтерскими знаниями.</p>
+											<p>Полный набор функций, необходимых для контроля семейного бюджета.</p>
+											<p>
+												<a class="btn btn-primary" href="#" role="button">Подробней
+													&raquo;</a>
+											</p>
+										</div>
+										<div class="col-lg-3">
+											<h4>Польза</h4>
+											<p>Ведение учета домашних финансов поможет в достижении целей.</p>
+											<p>
+												<a class="btn btn-primary" href="#" role="button">View details
+													&raquo;</a>
+											</p>
+										</div>
+										<div class="col-lg-3">
+											<h4>Выгода</h4>
+											<p>Анализируя свой бюджет, можно избежать излишних расходов.</p>
+											<p>
+												<a class="btn btn-primary" href="#" role="button">View details
+													&raquo;</a>
+											</p>
+										</div>
+										<div class="col-lg-3">
+											<h4>Безопасность</h4>
+											<p>Защита записей паролем и функция резервного копирования базы данных.</p>
+											<p>
+												<a class="btn btn-primary" href="#" role="button">View details
+													&raquo;</a>
+											</p>
+										</div>
+									</div>
+								</div>
+						</div>		
+				</c:otherwise>
+		</c:choose>
+	    		
 
-
-
-
-
-		</div>	
-	</div>
-
-<!-- Footer -->
+	<!-- Footer -->
 	<%@ include file="inclusion/Footer.jsp"%> 
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

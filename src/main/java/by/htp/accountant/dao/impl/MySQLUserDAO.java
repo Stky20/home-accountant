@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -28,6 +30,8 @@ public class MySQLUserDAO implements UserDAO{
 	private final static String USER_DELETE_QUERY = "DELETE FROM users WHERE id = ?;";
 	private final static String USER_LOGIN_CHANGING_QUERY = "UPDATE users SET nickName=? WHERE id=?;";
 	private final static String USER_PASSWORD_CHANGING_QUERY = "UPDATE users SET password=? WHERE id=?;";
+	private final static String COUNT_ALL_USERS_QUERY = "SELECT count(*) FROM homeaccountant.users WHERE role=?;";
+	private final static String SHOW_USERS_QUERY = "SELECT * FROM homeaccountant.users WHERE role=? LIMIT ?,?;";
 	
 	public MySQLUserDAO() {
 		connectionPool = ConnectionPool.getInstance();
@@ -264,7 +268,7 @@ public class MySQLUserDAO implements UserDAO{
 	}
 
 	@Override
-	public boolean changeLogin(User user, String newLogin) throws SQLUserDAOException {
+	public boolean changeLogin(int userId, String newLogin) throws SQLUserDAOException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		int updatedRows = 0;
@@ -274,7 +278,7 @@ public class MySQLUserDAO implements UserDAO{
 			connection = connectionPool.takeConnection();
 			preparedStatement = connection.prepareStatement(USER_LOGIN_CHANGING_QUERY);
 			preparedStatement.setString(1, newLogin);
-			preparedStatement.setInt(2, user.getId());
+			preparedStatement.setInt(2, userId);
 			updatedRows = preparedStatement.executeUpdate();
 			
 			if(updatedRows == 1) return true;
@@ -291,7 +295,7 @@ public class MySQLUserDAO implements UserDAO{
 	}
 
 	@Override
-	public boolean changePassword(User user, String newHashPasswordFromUser) throws SQLUserDAOException {
+	public boolean changePassword(int userId, String newHashPasswordFromUser) throws SQLUserDAOException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		int updatedRows = 0;
@@ -301,7 +305,7 @@ public class MySQLUserDAO implements UserDAO{
 			connection = connectionPool.takeConnection();
 			preparedStatement = connection.prepareStatement(USER_PASSWORD_CHANGING_QUERY);
 			preparedStatement.setString(1, newHashPasswordFromUser);
-			preparedStatement.setInt(2, user.getId());
+			preparedStatement.setInt(2, userId);
 			updatedRows = preparedStatement.executeUpdate();
 			
 			if(updatedRows == 1) return true;
@@ -365,6 +369,78 @@ public class MySQLUserDAO implements UserDAO{
 			}		
 		}
 		
+	}
+
+
+	@Override
+	public List<User> showUsers(int role, int usersAmount, int startingFrom) throws SQLUserDAOException {
+		
+		List<User> usersList = new ArrayList<User>();
+		
+		try (Connection connection = connectionPool.takeConnection(); 
+				PreparedStatement prepareStatement = connection.prepareStatement(SHOW_USERS_QUERY)){
+				
+				prepareStatement.setInt(1, role);
+				prepareStatement.setInt(2, startingFrom);
+				prepareStatement.setInt(3, usersAmount);
+				
+				try(ResultSet resultSet = prepareStatement.executeQuery()){				
+					while(resultSet.next())	{
+						User user = new User();
+						user.setId(resultSet.getInt(1));  		
+						user.setNickName(resultSet.getString(2)); 
+						user.setHashPassword(resultSet.getString(3));
+						user.setName(resultSet.getString(4));
+						user.setSurname(resultSet.getString(5));
+						user.seteMail(resultSet.getString(6));
+						user.setRole(resultSet.getInt(7));
+						usersList.add(user);
+					}
+				}
+		} catch (SQLException e) {
+			throw new SQLUserDAOException ("Can`t take Prepeared Statement or Result Set in UserDAO showUsers() method", e);
+		} catch (InterruptedException e) {
+			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO showUsers() method", e);			
+		}
+				
+		return usersList;
+	}
+
+
+	@Override
+	public int countAmountOfPages(int role, int recordingsAmountInTable) throws SQLUserDAOException {
+		
+		int amountOfAllUsers = 0;
+		
+		try (Connection connection = connectionPool.takeConnection(); 
+			PreparedStatement prepareStatement = connection.prepareStatement(COUNT_ALL_USERS_QUERY)){
+			
+			prepareStatement.setInt(1, role);
+			
+			try(ResultSet resultSet = prepareStatement.executeQuery()){
+				resultSet.next();
+				
+				amountOfAllUsers = resultSet.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			throw new SQLUserDAOException ("Can`t take Prepeared Statement or Result Set in UserDAO amountOfPages() method", e);
+		} catch (InterruptedException e) {
+			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO amountOfPages() method", e);
+		}
+		
+		int amountOfPages = amountOfAllUsers/recordingsAmountInTable;
+		
+		if((amountOfAllUsers%recordingsAmountInTable) != 0) amountOfPages++;
+		
+		return amountOfPages;
+	}
+
+
+	@Override
+	public boolean deactivateUser(int usetId) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	

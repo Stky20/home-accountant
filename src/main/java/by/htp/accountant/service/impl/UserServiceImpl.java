@@ -1,6 +1,8 @@
 package by.htp.accountant.service.impl;
 
+
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import by.htp.accountant.dao.DAOFactory;
 import by.htp.accountant.dao.UserDAO;
 import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.PasswordClassUtilException;
+import by.htp.accountant.exception.SQLUserDAOException;
 import by.htp.accountant.bean.User;
 import by.htp.accountant.bean.UserBuilder;
 import by.htp.accountant.controller.command.JSPPath;
@@ -32,10 +35,18 @@ public class UserServiceImpl implements UserService {
 	public static final String NAME_PARAM = "name";
 	public static final String SURNAME_PARAM = "surname";	
 	public static final String EMAIL_PARAM = "email";
+	public static final String ROLE_PARAM = "role";
+	public static final String PAGE_NUMBER_PARAM = "pageNumber";
+	public static final String AMOUNT_OF_PAGES_PARAM = "amountOfPages";
+	public static final String USERS_LIST_PARAM = "usersList";
 
 	public static final String EMPTY_LOGIN_PASSWORD_ERROR_MESSAGE = "emptyLoginPasswordErrorMsg";
 	public static final String WRONG_LOGIN_ERROR_MESSAGE = "wrongLoginErrorMsg";
 	public static final String WRONG_PASSWORD_ERROR_MESSAGE = "wrongPasswordErrorMsg";
+	
+	public static final int DEFAULT_ROLE = 2;
+	public static final int DEFAULT_PAGE_NUMBER = 1;
+	public static final int DEFAULT_RECORDINGS_AMOUNT = 10;
 	
 	
 	/**
@@ -146,6 +157,60 @@ public class UserServiceImpl implements UserService {
 		
 		doSendRedirectOrForward(request, response, dispatcher);
 	}		
+	
+	
+	
+	@Override
+	public void showUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		int role;
+		int pageNumber;
+		RequestDispatcher dispatcher = null;
+		String roleFromRequest =request.getParameter(ROLE_PARAM);
+		String pageNumberInString = request.getParameter(PAGE_NUMBER_PARAM);
+		
+		if(roleFromRequest != null) {
+			role = Integer.parseInt(roleFromRequest);
+		}else {
+			role = DEFAULT_ROLE;
+		}
+		
+		if(pageNumberInString != null) {
+			pageNumber = Integer.parseInt(pageNumberInString);
+		}else {
+			pageNumber = DEFAULT_PAGE_NUMBER;
+		}
+		
+		int amountOfPages = 0;
+		
+		try {
+			amountOfPages = userDAO.countAmountOfPages(role, DEFAULT_RECORDINGS_AMOUNT);
+		} catch (SQLUserDAOException e) {
+			logger.warn("Cant show Users beacorse of Exception in showUsers() method", e);
+			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
+		} 
+		
+		int startingFrom = (pageNumber - 1) * 20;		
+		
+		List<User> usersList = null;
+		
+		try {
+			usersList = userDAO.showUsers(role, DEFAULT_RECORDINGS_AMOUNT, startingFrom);
+		} catch (SQLUserDAOException e) {
+			logger.warn("Cant show Users beacorse of Exception in showUsers() method", e);
+			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
+		}
+		
+		request.setAttribute(PAGE_NUMBER_PARAM, pageNumber);
+		request.setAttribute(AMOUNT_OF_PAGES_PARAM, amountOfPages);
+		request.setAttribute(USERS_LIST_PARAM, usersList);
+		
+		if(dispatcher == null) {
+			dispatcher = request.getRequestDispatcher(JSPPath.USER_ADMINISTRATION_PAGE);
+		}
+		
+		dispatcher.forward(request, response);
+	}	
 
 	
 	/**
@@ -180,6 +245,9 @@ public class UserServiceImpl implements UserService {
 					throw e;
 				}
 		}			
-	}	
+	}
+
+
+	
 
 }
