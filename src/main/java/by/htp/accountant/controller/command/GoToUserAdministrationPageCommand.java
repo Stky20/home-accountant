@@ -2,12 +2,12 @@ package by.htp.accountant.controller.command;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import by.htp.accountant.controller.Command;
 import by.htp.accountant.service.ServiceFactory;
@@ -15,7 +15,7 @@ import by.htp.accountant.service.UserService;
 
 public class GoToUserAdministrationPageCommand implements Command{
 	
-	private static final Logger logger = Logger.getLogger(GoToUserAdministrationPageCommand.class);
+	private static final Logger logger = LoggerFactory.getLogger(GoToUserAdministrationPageCommand.class);
 	
 	private static final String MODAL_ATTRIBUTE = "modal";
 

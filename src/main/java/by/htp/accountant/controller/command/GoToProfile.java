@@ -7,13 +7,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import by.htp.accountant.controller.Command;
 
 public class GoToProfile implements Command{
 	
-	private static final Logger logger = Logger.getLogger(GoToProfile.class);
+	private static final Logger logger = LoggerFactory.getLogger(GoToProfile.class);
 	private static final String MODAL_ATTRIBUTE = "modal";
 
 	@Override

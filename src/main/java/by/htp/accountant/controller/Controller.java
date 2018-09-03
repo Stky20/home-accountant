@@ -6,7 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import by.htp.accountant.controller.command.JSPPath;
 import by.htp.accountant.exception.ConnectionPoolRuntimeException;
@@ -21,7 +22,7 @@ public class Controller extends HttpServlet {
 	
 	private static final CommandProvider commandProvider = new CommandProvider();
 	
-	private static final Logger logger = Logger.getLogger("Controller.class");
+	private static final Logger logger = LoggerFactory.getLogger("Controller.class");
        
     
     public Controller() {

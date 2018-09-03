@@ -9,7 +9,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import by.htp.accountant.bean.DefaultOperationTypes;
 import by.htp.accountant.bean.Operation;
@@ -23,7 +24,7 @@ public class MySQLOperationDAO implements OperationDAO{
 	
 	private ConnectionPool connectionPool;
 	
-	private static final Logger logger = Logger.getLogger(MySQLOperationDAO.class);	
+	private static final Logger logger = LoggerFactory.getLogger(MySQLOperationDAO.class);	
 	
 	private final static String CREATE_OPERATION_QUERY = "INSERT INTO operations (role, operationTypeId, amount, remark, operationDate, user_id) VALUES (?, ?, ?, ?, ?, ?);";
 	private final static String EDIT_OPERATION_QUERY = "UPDATE operations SET role=?, operationTypeId=?, amount=?, remark=?, operationDate=?, user_id=? WHERE id=?;";

@@ -25,7 +25,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import by.htp.accountant.exception.ConnectionPoolRuntimeException;
 
@@ -34,7 +35,7 @@ public class ConnectionPool {
 	
 	public static final ConnectionPool instance = new ConnectionPool();
 	
-	private static final Logger logger = Logger.getLogger(ConnectionPool.class);
+	private static final Logger logger = LoggerFactory.getLogger(ConnectionPool.class);
 	
 	
 	static{		

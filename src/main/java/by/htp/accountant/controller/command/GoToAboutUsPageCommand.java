@@ -7,13 +7,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import by.htp.accountant.controller.Command;
 
 public class GoToAboutUsPageCommand implements Command{
 	
-	private static final Logger logger = Logger.getLogger(GoToAboutUsPageCommand.class);
+	private static final Logger logger = LoggerFactory.getLogger(GoToAboutUsPageCommand.class);
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

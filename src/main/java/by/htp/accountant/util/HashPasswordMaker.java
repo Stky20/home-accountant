@@ -14,7 +14,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import by.htp.accountant.exception.PasswordClassUtilException;
 
@@ -29,7 +30,7 @@ final public class HashPasswordMaker implements Serializable{
 	private static final String ENCRYPTION_TYPE = "AES";
 	
 //	private static final String KEY_PATH = "d:/Workspace/home-accountant-version-00/src/main/resources/password.properties";
-	private static final Logger logger = Logger.getLogger("Password.class");                                               		
+	private static final Logger logger = LoggerFactory.getLogger("Password.class");                                               		
 	
 	private HashPasswordMaker() {
 		

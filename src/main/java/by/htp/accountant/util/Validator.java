@@ -6,17 +6,17 @@ import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import by.htp.accountant.bean.User;
 import by.htp.accountant.bean.UserBuilder;
 import by.htp.accountant.controller.command.JSPPath;
-import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.PasswordClassUtilException;
 
 public class Validator {
 	
-	private static final Logger logger = Logger.getLogger(Validator.class);
+	private static final Logger logger = LoggerFactory.getLogger(Validator.class);
 	
 	HashPasswordMaker passwordMaker = HashPasswordMaker.getInstance();
 	

@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import by.htp.accountant.bean.User;
 import by.htp.accountant.dao.UserDAO;
@@ -18,7 +19,7 @@ public class MySQLUserDAO implements UserDAO{
 	
 	private ConnectionPool connectionPool;
 	
-	private static final Logger logger = Logger.getLogger(MySQLUserDAO.class);														 
+	private static final Logger logger = LoggerFactory.getLogger(MySQLUserDAO.class);														 
 	
 	private final static String CHECK_LOGIN_QUERY = "SELECT nickName FROM users WHERE (nickName = ?);";                              
 	private final static String CHECK_PASSWORD_QUERY = "SELECT hashPassword FROM users WHERE (nickName = ?);";                       
