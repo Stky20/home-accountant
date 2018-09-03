@@ -132,7 +132,7 @@
 										              				<span class="caret"></span>
 									              			</a>
 									              			<ul class="dropdown-menu">
-										                			<li><a href="#">Restore</a></li>
+										                			<li><a href="/home-accountant-version-00/Controller?command=restore_user&id=${sessionScope.user.id}">Restore</a></li>
 										                			<li role="separator" class="divider"></li>
 										                			<li><a href="/home-accountant-version-00/Controller?command=sign_out">${nav_link_exit}</a></li>										                			
 									              			</ul>						

@@ -8,13 +8,17 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import by.htp.accountant.bean.User;
 import by.htp.accountant.bean.UserBuilder;
 import by.htp.accountant.controller.command.JSPPath;
+import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.PasswordClassUtilException;
 
 public class Validator {
 	
 	private static final Logger logger = Logger.getLogger(Validator.class);
+	
+	HashPasswordMaker passwordMaker = HashPasswordMaker.getInstance();
 	
 	public final static String LOGIN_PATTERN = "[\\wА-Яа-я-_]{1,25}";	
 	public final static String PASSWORD_PATTERN = "[\\wА-Яа-я]{6,10}";
@@ -29,6 +33,13 @@ public class Validator {
 	public static final String WRONG_NAME_ERROR_MESSAGE = "wrongNameErrorMsg";
 	public static final String WRONG_SURNAME_ERROR_MESSAGE = "wrongSurnameErrorMsg";
 	public static final String WRONG_EMAIL_ERROR_MESSAGE = "wrongEmailErrorMsg";
+	public static final String DIFFERENT_NEW_PASSWORDS_ERROR_MESSAGE = "differentNewPasswordErrorMsg";
+	public static final String PASSWORD_MATCHER_ERROR_MESSAGE = "passwordDoNotMatches";
+	public static final String NO_CHANGES_MSG = "noChangesMsg";
+	
+	public static final String PASSWORD_PARAM = "password";
+	public static final String NEW_PASSWORD_PARAM = "new_password";
+	public static final String NEW_PASSWORD_AGAIN_PARAM = "new_password_again";	
 	
 	/**
 	 * Checks two Strings if some of it is null or empty returns true
@@ -44,6 +55,27 @@ public class Validator {
 			return true;
 		}		
 		return false;
+	}
+	
+	public static boolean simpleNullEmptyParamsCheck(String... params) {
+		
+		for(int i = 0; i < params.length; i++) {
+			if(params[i] == null) return true;
+			if(params[i].trim().isEmpty()) return true;
+		}
+		
+		return false;
+	}
+	
+	public static boolean ifAllParamsNullOrEmpty(String... params) {
+		
+		for(int i = 0; i < params.length; i++) {
+			if(params[i] != null) {
+				if(!params[i].trim().isEmpty()) return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -153,6 +185,28 @@ public class Validator {
 		}		
 	}
 	
+	public static boolean validateNewPassword(HttpServletRequest request) {
+		
+		String oldPassword = request.getParameter(PASSWORD_PARAM);
+		String newPassword = request.getParameter(NEW_PASSWORD_PARAM);
+		String newPasswordAgain = request.getParameter(NEW_PASSWORD_AGAIN_PARAM);
+		
+		if(simpleNullEmptyParamsCheck(oldPassword, newPassword, newPasswordAgain)) {	
+			System.out.println("simpleNullEmptyParamsCheck в валидаторе");
+			request.setAttribute(EMPTY_PASSWORD_ERROR_MESSAGE, EMPTY_PASSWORD_ERROR_MESSAGE);			
+			return false;
+		} else if (!newPassword.equals(newPasswordAgain)) {
+			request.setAttribute(DIFFERENT_NEW_PASSWORDS_ERROR_MESSAGE, DIFFERENT_NEW_PASSWORDS_ERROR_MESSAGE);
+			return false;			
+		} else if(!passwordRegularCheck(newPassword)) {
+			request.setAttribute(PASSWORD_MATCHER_ERROR_MESSAGE, PASSWORD_MATCHER_ERROR_MESSAGE);
+			return false;
+		}
+		return true;		
+		
+	}
+	
+	
 	public static void validateName(HttpServletRequest request, UserBuilder builder, String name) {
 		if(!simpleOneParameterNullEmptyCheck(name)) {																	//name check it matches pattern, error msg setting
 			if(nameRegularCheck(name)) {
@@ -161,7 +215,8 @@ public class Validator {
 				request.setAttribute(WRONG_NAME_ERROR_MESSAGE, WRONG_NAME_ERROR_MESSAGE);
 			}
 		}		
-	}
+	}	
+	
 	
 	public static void validateSurname(HttpServletRequest request, UserBuilder builder, String surname) {
 		if(!simpleOneParameterNullEmptyCheck(surname)) {																//surname check it matches pattern, error msg setting
@@ -182,5 +237,58 @@ public class Validator {
 			}
 		}	
 	}
+	
+	
+	public static boolean validateUserInfo(HttpServletRequest request, User user, String name, String surname, String email) {
+		
+		if(Validator.ifAllParamsNullOrEmpty(name, surname, email)) {			
+			request.setAttribute(NO_CHANGES_MSG, NO_CHANGES_MSG);			
+			return false;
+		}
+		
+		if(!simpleOneParameterNullEmptyCheck(name)) {
+			if(!Validator.nameRegularCheck(name)) {
+				request.setAttribute(WRONG_NAME_ERROR_MESSAGE, WRONG_NAME_ERROR_MESSAGE);
+			}else {
+				user.setName(name);
+			}
+		}
+		
+		if(!simpleOneParameterNullEmptyCheck(surname)) {
+			if(!Validator.surnameRegularCheck(surname)) {
+				request.setAttribute(WRONG_SURNAME_ERROR_MESSAGE, WRONG_SURNAME_ERROR_MESSAGE);
+			}else {
+				user.setSurname(surname);
+			}
+		}
+		
+		if(!simpleOneParameterNullEmptyCheck(email)) {
+			if(!Validator.emailRegularCheck(email)) {
+				request.setAttribute(WRONG_EMAIL_ERROR_MESSAGE, WRONG_EMAIL_ERROR_MESSAGE);
+			} else {
+				user.seteMail(email);
+			}
+		}
+		
+		if(!simpleOneParameterNullEmptyCheck(name)) {
+			if(!nameRegularCheck(name)) {
+				return false;
+			}
+		}
+		
+		if(!simpleOneParameterNullEmptyCheck(surname)) {
+			if(!surnameRegularCheck(surname)) {
+				return false;
+			}
+		}
+		
+		if(!simpleOneParameterNullEmptyCheck(email)) {
+			if(!emailRegularCheck(email)) {
+				return false;
+			}
+		}		
+		
+		return true;
+	}	
 
 }

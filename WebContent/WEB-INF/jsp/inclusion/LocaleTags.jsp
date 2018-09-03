@@ -44,3 +44,10 @@
 <fmt:message bundle="${loc}" key="wrong.name.msg" var="wrong_name_msg" />
 <fmt:message bundle="${loc}" key="wrong.surname.msg" var="wrong_surname_msg" />
 <fmt:message bundle="${loc}" key="wrong.email.msg" var="wrong_email_msg" />
+
+<!-- Error messages for user profile page -->
+<fmt:message bundle="${loc}" key="profile.null.msg" var="profile_null_msg" />
+<fmt:message bundle="${loc}" key="profile.password.null.msg" var="profile_password_null_msg" />
+<fmt:message bundle="${loc}" key="profile.different.password.null.msg" var="different_msg" />
+
+<fmt:message bundle="${loc}" key="profile.info.no.changes.msg" var="no_changes_msg" />

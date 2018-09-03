@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import by.htp.accountant.bean.User;
 import by.htp.accountant.controller.CommandName;
@@ -20,9 +21,12 @@ public class RoleCheckFilter implements Filter {
 	public final static String ATTRIBUTE_USER = "user";
 	private static final String COMMAND_PARAM_NAME = "command";
 	
+	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		
 		User user = null;
+		
+		HttpServletRequest httpRequest = (HttpServletRequest)request;
 		
 		String commandFromRequest = ((HttpServletRequest)request).getParameter(COMMAND_PARAM_NAME).toUpperCase();
 		
@@ -33,9 +37,10 @@ public class RoleCheckFilter implements Filter {
 		}
 		
 		CommandName command = CommandName.valueOf(commandFromRequest);
-		
-		if(!command.containsRole(user)) {
-			((HttpServletRequest)request).getRequestDispatcher(JSPPath.SORRY_PAGE).forward(request, response);
+				
+		if(!command.containsRole(user)) {			
+			((HttpServletResponse)response).sendRedirect(JSPPath.GO_TO_SORRY_PAGE);
+			return;			
 		}
 		
 		chain.doFilter(request, response);
