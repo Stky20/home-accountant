@@ -25,15 +25,23 @@ public interface UserDAO {
 	 * if some of this conditions failed returns false
 	 */
 	boolean checkLoginAndPassword(String login, String hashPasswordFromUser) throws DAOException;
+	
 	User logination(String login, String hashPasswordFromUser) throws DAOException;
+	
 	boolean createUser(User user) throws DAOException;
-	User editUser (User user, User newUser) throws DAOException;
+	
+	boolean editUser (int userId, String name, String surname, String email) throws DAOException;
+	
 	boolean removeUser (int userId) throws DAOException;
+	
 	boolean changeLogin(int userId, String newLogin) throws DAOException;
+	
 	boolean changePassword(int userId, String newHashPasswordFromUser) throws DAOException;
 	
 	List<User> showUsers(int role, int usersAmount, int startingFrom) throws SQLUserDAOException;
+	
 	int countAmountOfPages(int role, int recordingsAmountInTable) throws SQLUserDAOException;
-	boolean deactivateUser(int usetId);	
+		
+	boolean changeUsersRole(int userId, int role) throws SQLUserDAOException;
 	
 }

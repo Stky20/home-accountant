@@ -22,5 +22,19 @@ public interface UserService {
 	public void registration(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 	
 	public void showUsers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	
+	public void restoreUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	
+	public void diactivateUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	
+	public void makeAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	
+	public void changeLogin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	
+	public void changePassword(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	
+	public void changeUserInfo(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	
+	public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
 }

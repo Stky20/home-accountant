@@ -14,11 +14,18 @@ import by.htp.accountant.controller.Command;
 public class GoToProfile implements Command{
 	
 	private static final Logger logger = Logger.getLogger(GoToProfile.class);
+	private static final String MODAL_ATTRIBUTE = "modal";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher(JSPPath.PROFILE_PAGE);		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(JSPPath.PROFILE_PAGE);
+		
+		String modalAttribute = request.getParameter(MODAL_ATTRIBUTE);
+		
+		if(modalAttribute != null) {
+			request.setAttribute(MODAL_ATTRIBUTE, modalAttribute);
+		}
 		
 		try {
 			dispatcher.forward(request, response);

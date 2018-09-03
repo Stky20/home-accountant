@@ -24,12 +24,21 @@
 		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
 		integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
 		crossorigin="anonymous">	
+		
+		<script type="text/javascript">		
+						
+			function openModal(modal){
+				if(modal != null)$('#myModal').modal();
+			}			
+								
+			
+		</script>
 	
 	<!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
 	<link rel="stylesheet" href="css/main.css">
 </head>
 
-<body>
+<body onload="openModal(${requestScope.modal})">
 <%@ include file="inclusion/NavigationBar.jsp"%> 
 	
 	<div class="container" style="margin-top: 100px;">
@@ -46,29 +55,30 @@
 										<div class="panel-heading">Логин</div>
 										<div class="panel-body">
 											<form class="form-inline" action="Controller" method="post">
-												<input type="hidden" name="command" value="change_login" />
+												<input type="hidden" name="command" value="change_login" />												
 											  	<div class="form-group">
 											    	<label for="exampleInputName2">Логин</label>
-											    	<input type="text" class="form-control" id="exampleInputName2" placeholder="${sessionScope.user.nickName} ">
+											    	<input type="text" class="form-control" name="login" placeholder="${sessionScope.user.nickName}">
 											  	</div>											  	
 											  	<button type="submit" class="btn btn-default">Изменить</button>
 											</form>											
 										</div>
-										<c:choose>
-											<c:when test="${not empty requestScope.emptyLoginErrorMsg}">
-												<div class="panel-footer">
-													<font color="red"><c:out value="${null_login_msg}" /></font>
-												</div>
-											</c:when>
-											<c:when test="${not empty requestScope.wrongLoginErrorMsg}">
-												<div class="panel-footer">
-													<font color="red"><c:out value="${wrong_login_msg}" />	</font>	
-												</div>					     	
-											</c:when>
-											<c:otherwise>												
-											</c:otherwise>
-										</c:choose>
-										
+										<div class="panel-footer">
+											<c:choose>
+												<c:when test="${not empty requestScope.emptyLoginErrorMsg}">
+													<div class="panel-footer">
+														<font color="red"><c:out value="${profile_null_msg}" /></font>
+													</div>
+												</c:when>
+												<c:when test="${not empty requestScope.wrongLoginErrorMsg}">
+													<div class="panel-footer">
+														<font color="red"><c:out value="${wrong_login_msg}" />	</font>	
+													</div>					     	
+												</c:when>
+												<c:otherwise>												
+												</c:otherwise>
+											</c:choose>
+										</div>
 								</div>
 							</div>
 						</div>
@@ -79,13 +89,13 @@
 										    	<!-- Button trigger modal -->
 												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal1">
 												  Изменить пароль
-												</button>
+												</button>												
 												
 												<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal2">
-												  Удалить профиль
+												  	Удалить профиль
 												</button>
 												
-												<!-- Modal -->
+												<!-- Modal1 -->
 												<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 												  <div class="modal-dialog" role="document">
 												    <div class="modal-content">
@@ -96,82 +106,46 @@
 												      
 													      <form class="form-horizontal" action="Controller" method="post">
 													      	  <input type="hidden" name="command" value="change_password" />
+													      	  <input type="hidden" name="id" value="${sessionScope.user.id}"/>
 														      <div class="modal-body">
 														      		<div class="form-group">
 																			<label for="login" class="col-sm-2 control-label">Старый пароль</label>
 																			<div class="col-sm-10">
 																					<input type="password" class="form-control" name="password" placeholder="Введите старый пароль">
-																			</div>
-																			<div class="row">
-																					<div class="col-md-9 col-md-push-3">
-																						<c:choose>
-																							 <c:when test="${not empty requestScope.emptyLoginErrorMsg}">
-																							     	<font color="red"><c:out value="${null_login_msg}" /></font>
-																							 </c:when>
-																							 <c:when test="${not empty requestScope.wrongLoginErrorMsg}">
-																							     	<font color="red"><c:out value="${wrong_login_msg}" />	</font>						     	
-																							 </c:when>
-																							 <c:otherwise>
-																							 		</br></br>
-																							 </c:otherwise>
-																						</c:choose>
-																					</div>
-																			</div>
+																			</div>																																						
 																	</div>	
 																	<div class="form-group">
 																			<label for="login" class="col-sm-2 control-label">Новый пароль</label>
 																			<div class="col-sm-10">
 																					<input type="password" class="form-control" name="new_password" placeholder="Введите новый пароль">
-																			</div>
-																			<div class="row">
-																					<div class="col-md-9 col-md-push-3">
-																						<c:choose>
-																							 <c:when test="${not empty requestScope.emptyLoginErrorMsg}">
-																							     	<font color="red"><c:out value="${null_login_msg}" /></font>
-																							 </c:when>
-																							 <c:when test="${not empty requestScope.wrongLoginErrorMsg}">
-																							     	<font color="red"><c:out value="${wrong_login_msg}" />	</font>						     	
-																							 </c:when>
-																							 <c:otherwise>
-																							 		</br></br>
-																							 </c:otherwise>
-																						</c:choose>
-																					</div>
-																			</div>
+																			</div>																			
 																	</div>	
 																	<div class="form-group">
 																			<label for="login" class="col-sm-2 control-label">Новый пароль</label>
 																			<div class="col-sm-10">
 																					<input type="password" class="form-control" name="new_password_again" placeholder="Повторите новый пароль">
 																			</div>
-																			<div class="row">
-																					<div class="col-md-9 col-md-push-3">
-																						<c:choose>
-																							 <c:when test="${not empty requestScope.emptyLoginErrorMsg}">
-																							     	<font color="red"><c:out value="${null_login_msg}" /></font>
-																							 </c:when>
-																							 <c:when test="${not empty requestScope.wrongLoginErrorMsg}">
-																							     	<font color="red"><c:out value="${wrong_login_msg}" />	</font>						     	
-																							 </c:when>
-																							 <c:otherwise>
-																							 		</br></br>
-																							 </c:otherwise>
-																						</c:choose>
-																					</div>
-																			</div>
 																	</div>	
 														      </div>
 														      
 														      <div class="modal-footer">
-															        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-															        <div class="form-group">																		
-																		<button type="submit" class="btn btn-success" style="margin:0;">Сохранить пароль</button>																																				
+															  	  <div class="row">
+															        <div class=" col-md-offset-6 col-md-3 ">
+															        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+															        </div>
+															        <div class="col-md-2">
+																        <div class="form-group">																		
+																			<button type="submit" class="btn btn-success" style="margin:0;">Сохранить пароль</button>																																				
+																		</div>
 																	</div>
+																  </div>
 														      </div>
 														  </form>
 												    </div>
 												  </div>
 												</div>
+												
+												<!-- Modal2 -->
 												<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 												  <div class="modal-dialog" role="document">
 												    <div class="modal-content">
@@ -180,44 +154,92 @@
 												        <h4 class="modal-title" id="myModalLabel">Вы уверены, что хотите удалить профиль?</h4>
 												      </div>
 												      <div class="modal-body">
-													      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-													      <form action="Controller" method="post">
-													      		<input type="hidden" name="command" value="delete_profile" />
-													      		<button type="submit" class="btn btn-primary">Удалить пользователя</button>
-													      </form>
+													      <div class="row">
+														      <div class="col-md-2">
+														      	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+														      </div>
+														      <div class="col-md-3">
+															      <form action="Controller" method="post">
+															      		<input type="hidden" name="command" value="diactivate_user" />
+															      		<input type="hidden" name="id" value="${sessionScope.user.id}" />
+															      		<button type="submit" class="btn btn-danger">Удалить пользователя</button>
+															      </form>
+														      </div>
+													      </div>
 												      </div>												      
 												    </div>
 												  </div>
 												</div>
 									  	</div>
-								</div>
+									  	<div class="panel-footer">
+											<c:if test="${not empty requestScope.wrongPasswordErrorMsg}">
+											     	<font color="red"><c:out value="${wrong_password}" /></font>							     	
+											 </c:if>
+											 <c:if test="${not empty requestScope.emptyPasswordErrorMsg}">
+											     	<font color="red"><c:out value="${profile_password_null_msg}" /></font>
+											 </c:if>
+											 <c:if test="${not empty requestScope.differentNewPasswordErrorMsg}">
+											     	<font color="red"><c:out value="${different_msg}" /></font>						     	
+											 </c:if>
+											 <c:if test="${not empty requestScope.passwordDoNotMatches}">	
+											 		<font color="red"><c:out value="${wrong_password_msg}" /></font>																 		
+											 </c:if>																														 
+										</div>
+								</div>								
 						</div>
 				</div>
-			<div class="col-md-6 col-md-offset-3">
+			<div class="col-md-8 col-md-offset-3">
 					<div class="panel panel-default">
 						  <div class="panel-heading">Информация пользователя</div>
 						  <div class="panel-body">				  		
-						  		<form class="form-horizontal">
+						  		<form class="form-horizontal" action="Controller" method="post">
+						  			<input type="hidden" name="command" value="change_user_info">
 									  <div class="form-group">
 									    <label for="name" class="col-sm-2 control-label">Имя</label>
 									    <div class="col-sm-10">
-									      <input type="text" class="form-control" id="name" placeholder="${sessionScope.user.name } ">
-									    </div>
-									  </div>
-									  <div class="form-group">
-									    <label for="surname" class="col-sm-2 control-label">Фамилия</label>
-									    <div class="col-sm-10">
-									      <input type="text" class="form-control" id="surname" placeholder="${sessionScope.user.surname } ">
-									    </div>
-									  </div>
-									  <div class="form-group">
-									    <label for="eMail" class="col-sm-2 control-label">e-mail</label>
-									    <div class="col-sm-10">
-									      <input type="email" class="form-control" id="eMail" placeholder="${sessionScope.user.eMail } ">
-									    </div>
+									      <input type="text" class="form-control" name="name" placeholder="${sessionScope.user.name } ">
+									      <c:choose>								 
+												 <c:when test="${not empty requestScope.wrongNameErrorMsg}">
+												     	<font color="red"><c:out value="${wrong_name_msg}" /></font>							     	
+												 </c:when>
+												 <c:otherwise>
+												 		</br>
+												 </c:otherwise>
+											</c:choose>
+									    </div>									    
 									  </div>
 									  
 									  <div class="form-group">
+									    <label for="surname" class="col-sm-2 control-label">Фамилия</label>
+									    <div class="col-sm-10">
+									      <input type="text" class="form-control" name="surname" placeholder="${sessionScope.user.surname } ">
+									       <c:choose>								 
+												 <c:when test="${not empty requestScope.wrongSurnameErrorMsg}">
+												     	<font color="red"><c:out value="${wrong_surname_msg}" /></font>							     	
+												 </c:when>
+												 <c:otherwise>
+												 		</br>
+												 </c:otherwise>
+											</c:choose>
+									    </div>									   
+									  </div>
+									  
+									  <div class="form-group">
+									    <label for="eMail" class="col-sm-2 control-label">e-mail</label>
+									    <div class="col-sm-10">
+									      <input type="email" class="form-control" name="email" placeholder="${sessionScope.user.eMail } ">
+									      <c:choose>								 
+												 <c:when test="${not empty requestScope.wrongEmailErrorMsg}">
+												     	<font color="red"><c:out value="${wrong_email_msg}" /></font>							     	
+												 </c:when>											 
+											</c:choose>
+											<c:if test="${not empty requestScope.noChangesMsg}">
+												<font color="green"><c:out value="${no_changes_msg}"/></font>
+											</c:if>
+									    </div>									    
+									  <div class="form-group">
+									  </div>
+									  
 									    <div class="col-sm-offset-2 col-sm-10">
 									      <button type="submit" class="btn btn-default">Изменить</button>
 									    </div>
@@ -228,6 +250,20 @@
 			</div>
 	</div>
 	
+	<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" onclick="closeModal()">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Изменения внесены</h4>
+		      </div>		      
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeModal()">Close</button>		        
+		      </div>
+		    </div>
+		  </div>
+		</div>
 	
 
 

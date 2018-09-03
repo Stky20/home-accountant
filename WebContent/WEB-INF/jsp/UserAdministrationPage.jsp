@@ -30,8 +30,45 @@
 
 <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
 <link rel="stylesheet" href="css/main.css">
+<script type="text/javascript">		
+			
+			var defaultInfo = "Значение не установлено";	
+						
+			function setParamsInModal(name, surname, email){		
+								
+				if(name != "") $("#1").html(name);
+				if(surname != "") $("#2").html(surname);
+				if(email != "") $("#3").html(email);
+				openModal();
+			}
+			
+			function openModal(){
+				$('#myModal').modal();
+			}
+			
+			function closeModal(){
+				$("#1").html(defaultInfo);
+				$("#2").html(defaultInfo);
+				$("#3").html(defaultInfo);
+				
+			}	
+			
+			function setRoleInModal(userId){				
+				if(userId != "") $("#makeAdminForm").val(userId);
+			}
+			
+			function setRoleInDeleteModal(userId){				
+				if(userId != "") $("#deleteUserForm").val(userId);
+			}
+			
+			function openConfirmModal(modal){				
+				if(modal != null)$('#myConfirmModal').modal();
+			}	
+			
+</script>
+
 </head>
-<body onload="setPageNumber(${requestScope.pageNumber}); activatePageNumber();">
+<body onload="openConfirmModal(${requestScope.modal})">
 
 <%@ include file="inclusion/NavigationBar.jsp"%> 
 
@@ -61,39 +98,153 @@
 		
 		<div class="col-md-10">
 									
-			<c:set var="count" value="${(requestScope.pageNumber - 1) * 10}"/>		
-			
-			<table class="table table-hover table-bordered">
-  				<tr>
-  					<th>№</th>
-					<th>Id</th>
-					<th>Login</th>
-					<th>Информация</th>
-					<th>Повысить</th>
-				</tr>
-				<c:forEach var="oneUser" items="${requestScope.usersList}">
-					<tr>
-						<td>								
-					        <c:out value="${count + 1 }"/>
-					    </td>
-						<td>${oneUser.id}</td>						
-						<td>${oneUser.nickName}</td>
-						<td>
-							<button type="button" class="btn btn-primary btn-md" data-toggle="modal" onclick="return openModal(${oneUser.name}, ${oneUser.surname}, ${oneUser.eMail})">
-								О пользователе
-							</button>
-						</td>
-						<td>
-							<form action="Controller" method="get">
-								<input type="hidden" name="command" value="make_admin"/>
-								<input type="hidden" name="id" value="${oneUser.id}"/>
-								<input type="submit" class="btn btn-md btn-primary" value="Админ"/>						
-							</form>
-						</td>
-					</tr>
-				</c:forEach>		
-			</table>
-			
+			<c:set var="count" value="${(requestScope.pageNumber-1)*5+1}"/>		
+				
+			<c:if test="${requestScope.usersList[0].role == 2 }">
+				<table class="table table-hover table-bordered">
+	  				<tr>
+	  					<th>№</th>
+						<th>Id</th>
+						<th>Login</th>
+						<th>Информация</th>
+						<th>Повысить</th>
+					</tr>				
+					<c:forEach var="oneUser" items="${requestScope.usersList}">
+						<tr>
+							<td>				        
+						        <c:out value="${count}" />
+						        <c:set var="count" value="${count+1}"/>
+						    </td>
+							<td>${oneUser.id}</td>						
+							<td>${oneUser.nickName}</td>
+							<td>
+								<button type="button" class="btn btn-default btn-xs" onclick="setParamsInModal('${oneUser.name}', '${oneUser.surname}', '${oneUser.eMail}')">
+									О пользователе
+								</button>
+							</td>
+							<td>
+								<button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#myModalMakeAdmin" onclick="setRoleInModal('${oneUser.id}')">
+								  	Сделать администратором
+								</button>								
+							</td>
+						</tr>
+					</c:forEach>		
+				</table>
+				<!-- ModalMakeAdmin -->
+					<div class="modal fade" id="myModalMakeAdmin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					        <h4 class="modal-title" id="myModalLabel">Вы уверены, что хотите повысить пользователя до администратора?</h4>
+					      </div>
+					      <div class="modal-body">
+						      <div class="row">
+							      <div class="col-md-2">
+							      	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							      </div>
+							      <div class="col-md-3">
+								      <form action="Controller" method="post">
+											<input type="hidden" name="command" value="make_admin"/>
+											<input type="hidden" id="makeAdminForm" name="id" value=""/>
+											<input type="submit" class="btn btn-md btn-primary" value="Повысить до админа"/>						
+										</form>
+							      </div>
+						      </div>
+					      </div>												      
+					    </div>
+					  </div>
+					</div>
+			</c:if>
+			<c:if test="${requestScope.usersList[0].role == 1 }">
+				<table class="table table-hover table-bordered">
+	  				<tr>
+	  					<th>№</th>
+						<th>Id</th>
+						<th>Login</th>
+						<th>Информация</th>						
+					</tr>				
+					<c:forEach var="oneUser" items="${requestScope.usersList}">
+						<tr>
+							<td on="count(${oneUser.id})">				        
+						        <c:out value="${count}" />
+						        <c:set var="count" value="${count+1}"/>
+						    </td>
+							<td>${oneUser.id}</td>						
+							<td>${oneUser.nickName}</td>
+							<td>
+								<button type="button" class="btn btn-default btn-xs" onclick="setParamsInModal('${oneUser.name}', '${oneUser.surname}', '${oneUser.eMail}')">
+									О пользователе
+								</button>
+							</td>							
+						</tr>
+					</c:forEach>		
+				</table>
+			</c:if>
+			<c:if test="${requestScope.usersList[0].role == 0}">
+				<table class="table table-hover table-bordered">
+	  				<tr>
+	  					<th>№</th>
+						<th>Id</th>
+						<th>Login</th>
+						<th>Информация</th>	
+						<th>Удалить</th>
+						<th>Восстановить</th>				
+					</tr>				
+					<c:forEach var="oneUser" items="${requestScope.usersList}">
+						<tr>
+							<td on="count(${oneUser.id})">				        
+						        <c:out value="${count}" />
+						        <c:set var="count" value="${count+1}"/>
+						    </td>
+							<td>${oneUser.id}</td>						
+							<td>${oneUser.nickName}</td>
+							<td>
+								<button type="button" class="btn btn-default btn-xs" onclick="setParamsInModal('${oneUser.name}', '${oneUser.surname}', '${oneUser.eMail}')">
+									О пользователе
+								</button>
+							</td>	
+							<td>
+								<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#myModalUserDelete" onclick="setRoleInDeleteModal(${oneUser.id})">
+								  	Удалить профиль
+								</button>								
+							</td>
+							<td>
+								<form action="Controller" method="post">
+									<input type="hidden" name="command" value="restore_user"/>
+									<input type="hidden" name="id" value="${oneUser.id}"/>
+									<input type="submit" class="btn btn-xs btn-success" value="Восстановить"/>						
+								</form>
+							</td>						
+						</tr>
+					</c:forEach>		
+				</table>
+					<!-- ModalUserDelete -->
+					<div class="modal fade" id="myModalUserDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<h4 class="modal-title" id="myModalLabel">Вы уверены, что хотите удалить пользователя?</h4>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<div class="col-md-2">
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
+										<div class="col-md-3">
+											<form action="Controller" method="post">
+												<input type="hidden" name="command" value="delete_user"/>
+												<input type="hidden" id="deleteUserForm" name="id" value=""/>
+												<input type="submit" class="btn btn-md btn-danger" value="Удалить"/>						
+											</form>
+										</div>
+									</div>
+								</div>												      
+							</div>
+						</div>
+					</div>
+			</c:if>
 		</div>
 		
 		
@@ -103,7 +254,7 @@
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" onclick="return closeModal()">&times;</span></button>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" onclick="closeModal()">&times;</span></button>
 		        <h4 class="modal-title" id="myModalLabel">Информация о пользователе</h4>
 		      </div>
 		      <div class="modal-body">
@@ -119,12 +270,12 @@
 					</div>
 					 <div class="panel panel-default">
 						<div class="panel-body">
-							<p id = "3">Значение не установлено</p>
+							<p id="3">Значение не установлено</p>
 						</div>
 					</div>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="return closeModal()">Close</button>		        
+		        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeModal()">Close</button>		        
 		      </div>
 		    </div>
 		  </div>
@@ -132,15 +283,15 @@
 	
 	</div>
 	
-	<div class="container" style="text-align: center"></div>
+	<div class="container" style="text-align:center">
 		<c:if test="${requestScope.amountOfPages > 1}" >
 			<nav aria-label="Page navigation">
 				<ul class="pagination">
 					<c:choose>																						
 						<c:when test="${requestScope.amountOfPages == 2}">
 							<c:if test="${requestScope.pageNumber == 1}">
-								<li class="disabled">
-									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber}" aria-label="Previous">
+								<li class="disabled active">
+									<a href="#" aria-label="Previous">
 										<span aria-hidden="true">&laquo;</span>
 									</a>
 								</li>
@@ -156,14 +307,14 @@
 										<span aria-hidden="true">&laquo;</span>
 									</a>
 								</li>
-								<li class="disabled">
-									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber}" aria-label="Next">
+								<li class="disabled active">
+									<a href="#" aria-label="Next">
 										<span aria-hidden="true">&raquo;</span>
 									</a>
 								</li>
 							</c:if>
 						</c:when>
-						<c:when test ="${requestScope.amountOfPages > 2}">
+						<c:when test ="${requestScope.amountOfPages > 2 && requestScope.amountOfPages <= 5}">
 							<c:if test="${requestScope.pageNumber == 1}">
 								<li class="disabled">
 									<a href="#" aria-label="Previous">
@@ -178,51 +329,18 @@
 									</a>
 								</li>
 							</c:if>
-							
-							<c:if test="${requestScope.pageNumber==1 && requestScope.amountOfPages<=5}">
-								<c:forEach var="i" begin="${requestScope.pageNumber}" end="${requestScope.amountOfPages}">
+														
+							<c:forEach var="i" begin="${1}" end="${requestScope.amountOfPages}">
+								<c:if test="${requestScope.pageNumber == i}">
+									<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+								</c:if>
+								<c:if test="${requestScope.pageNumber != i}">
 									<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-								</c:forEach>
-							</c:if>
-							
-							<c:if test="${requestScope.pageNumber==2 && requestScope.amountOfPages<=5}">
-								<c:forEach var="i" begin="${requestScope.pageNumber-1}" end="${requestScope.amountOfPages}">
-									<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-								</c:forEach>
-							</c:if>
-							
-							<c:if test="${requestScope.pageNumber==2 && requestScope.amountOfPages>5}">
-								<c:forEach var="i" begin="${requestScope.pageNumber-1}" end="${requestScope.pageNumber+3}">
-									<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-								</c:forEach>
-							</c:if>
-							
-							<c:if test="${requestScope.pageNumber>2 && (requestScope.amountOfPages - requestScope.pageNumber)>2}">
-								<c:forEach var="i" begin="${requestScope.pageNumber-2}" end="${requestScope.pageNumber+2}">
-									<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-								</c:forEach>
-							</c:if>
-							
-							<c:if test="${requestScope.pageNumber>2 && (requestScope.amountOfPages - requestScope.pageNumber)==2}">
-								<c:forEach var="i" begin="${requestScope.pageNumber-2}" end="${requestScope.amountOfPages}">
-									<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-								</c:forEach>
-							</c:if>
-							
-							<c:if test="${requestScope.pageNumber>2 && (requestScope.amountOfPages - requestScope.pageNumber)==1}">
-								<c:forEach var="i" begin="${requestScope.pageNumber-3}" end="${requestScope.amountOfPages}">
-									<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-								</c:forEach>
-							</c:if>
+								</c:if>
+							</c:forEach>
 							
 							<c:if test="${requestScope.pageNumber == requestScope.amountOfPages}">
-								<c:forEach var="i" begin="${requestScope.pageNumber-4}" end="${requestScope.amountOfPages}">
-									<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-								</c:forEach>
-							</c:if>						
-							
-							<c:if test="${requestScope.pageNumber == requestScope.amountOfPages}">
-								<liclass="disabled">
+								<li class="disabled">
 									<a href="#" aria-label="Next">
 										<span aria-hidden="true">&raquo;</span>
 									</a>
@@ -231,8 +349,93 @@
 							
 							<c:if test="${requestScope.pageNumber < requestScope.amountOfPages}">
 								<li>
-									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber+1}" aria-label="Previous">
+									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber+1}" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+									</a>
+								</li>
+							</c:if>
+							
+						</c:when>
+						
+						<c:when test ="${requestScope.amountOfPages > 5}">
+							<c:if test="${requestScope.pageNumber == 1}">
+								<li class="disabled">
+									<a href="#" aria-label="Previous">
 										<span aria-hidden="true">&laquo;</span>
+									</a>
+								</li>								
+							</c:if>
+							<c:if test="${requestScope.pageNumber > 1}">
+								<li>
+									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber-1}" aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
+									</a>
+								</li>
+							</c:if>
+						
+							<c:if test="${requestScope.pageNumber==1}">
+								<c:forEach var="i" begin="${requestScope.pageNumber}" end="${requestScope.pageNumber+4}">
+									<c:if test="${requestScope.pageNumber == i}">
+										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+									</c:if>
+									<c:if test="${requestScope.pageNumber != i}">
+										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+									</c:if>
+								</c:forEach>
+							</c:if>
+							
+							<c:if test="${requestScope.pageNumber==2}">
+								<c:forEach var="i" begin="${requestScope.pageNumber-1}" end="${requestScope.pageNumber+3}">
+									<c:if test="${requestScope.pageNumber == i}">
+										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+									</c:if>
+									<c:if test="${requestScope.pageNumber != i}">
+										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+									</c:if>								</c:forEach>
+							</c:if>							
+							
+							<c:if test="${requestScope.pageNumber>2 && (requestScope.amountOfPages - requestScope.pageNumber)>=2}">
+								<c:forEach var="i" begin="${requestScope.pageNumber-2}" end="${requestScope.pageNumber+2}">
+									<c:if test="${requestScope.pageNumber == i}">
+										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+									</c:if>
+									<c:if test="${requestScope.pageNumber != i}">
+										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+									</c:if>								</c:forEach>
+							</c:if>													
+							
+							<c:if test="${requestScope.pageNumber>2 && (requestScope.amountOfPages - requestScope.pageNumber)==1}">
+								<c:forEach var="i" begin="${requestScope.pageNumber-3}" end="${requestScope.amountOfPages}">
+									<c:if test="${requestScope.pageNumber == i}">
+										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+									</c:if>
+									<c:if test="${requestScope.pageNumber != i}">
+										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+									</c:if>								</c:forEach>
+							</c:if>
+																												
+							<c:if test="${requestScope.pageNumber>2 && requestScope.pageNumber == requestScope.amountOfPages}">
+								<c:forEach var="i" begin="${requestScope.pageNumber-4}" end="${requestScope.amountOfPages}">
+									<c:if test="${requestScope.pageNumber == i}">
+										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+									</c:if>
+									<c:if test="${requestScope.pageNumber != i}">
+										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
+									</c:if>								</c:forEach>
+							</c:if>						
+							
+							<c:if test="${requestScope.pageNumber == requestScope.amountOfPages}">
+								<li class="disabled">
+									<a href="#" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+									</a>
+								</li>
+							</c:if>
+							
+							<c:if test="${requestScope.pageNumber < requestScope.amountOfPages}">
+								<li>
+									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber+1}" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
 									</a>
 								</li>
 							</c:if>
@@ -242,6 +445,21 @@
 			</nav>
 		</c:if>
 	</div>
+	
+		<!-- Modal -->
+		<div class="modal fade" id="myConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" onclick="closeModal()">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Изменения произведены успешно</h4>
+		      </div>		      
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeModal()">Close</button>		        
+		      </div>
+		    </div>
+		  </div>
+		</div>
 </div>
 
 
@@ -264,33 +482,8 @@
 		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 		crossorigin="anonymous"></script>		
 
-<script type="text/javascript">		
-			
-			var defaultInfo = "Значение не установлено";	
-			var pageNumber;
-			
-			function openModal(name, surname, email){		
-				if(name != null) document.getElementById("1").value=name;
-				if(surname != null) document.getElementById("2").value=surname;
-				if(email != null) document.getElementById("3").value=email;		
-			}
-			
-			function closeModal(){
-				var modalName = document.getElementById("1").value=defaultInfo;
-				var modalSurname = document.getElementById("2").value=defaultInfo;
-				var modaleMail =document.getElementById("3").value=defaultInfo;
-			}			
-						
-			function setPageNumber(number){
-				pageNumber = number;
-			}
-			
-			function activatePageNumber(){
-				$(#"${pageNumber}").attr("class", "active");				
-			}
-			
-		
-		</script>
+
+
 <!-- 	<script	src="js/bootstrap.min.js"></script> -->
 </body>
 </html>

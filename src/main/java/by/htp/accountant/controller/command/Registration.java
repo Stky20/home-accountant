@@ -21,9 +21,16 @@ public class Registration implements Command{
 		
 		UserService userService = ServiceFactory.getInstance().getUserService();			
 		
-		userService.registration(request, response);
-			
-		logger.warn("ServiceException while making logination");
+		try {
+			userService.registration(request, response);
+		} catch (IOException e) {
+			logger.warn("IOException while making registration", e);
+			throw e;
+		} catch (ServletException e) {
+			logger.warn("ServletException while making registration", e);
+			throw e;
+		}
+		
 	}
 
 }
