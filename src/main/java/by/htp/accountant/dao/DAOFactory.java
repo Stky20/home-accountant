@@ -1,5 +1,6 @@
 package by.htp.accountant.dao;
 
+import by.htp.accountant.dao.impl.MySQLOperationDAO;
 import by.htp.accountant.dao.impl.MySQLUserDAO;
 
 public class DAOFactory {
@@ -7,6 +8,7 @@ public class DAOFactory {
 private static final DAOFactory instance = new DAOFactory();
 	
 	private final UserDAO userDAO = new MySQLUserDAO();
+	private final OperationDAO operationDAO = new MySQLOperationDAO();
 	
 	private DAOFactory() {}
 	
@@ -16,6 +18,10 @@ private static final DAOFactory instance = new DAOFactory();
 	
 	public UserDAO getUserDAO() {
 		return userDAO;
+	}
+	
+	public OperationDAO getOperationDAO() {
+		return operationDAO;
 	}
 	
 }
