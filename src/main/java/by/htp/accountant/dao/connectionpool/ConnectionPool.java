@@ -73,6 +73,7 @@ public class ConnectionPool {
 		} catch (NumberFormatException e) {
 			poolSize = 5;
 		}
+		
 	}
 	
 	
@@ -84,8 +85,7 @@ public class ConnectionPool {
 		connectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
 
 		for (int i = 0; i < poolSize; i++) {
-			Connection connection = DriverManager.getConnection(url, user,
-					password);
+			Connection connection = DriverManager.getConnection(url, user, password);
 			
 			PooledConnection pooledConnection = new PooledConnection(connection);
 			

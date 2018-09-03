@@ -35,12 +35,8 @@ public class Controller extends HttpServlet {
 		Command command = null;
 		command = commandProvider.getCommand(commandName);
 		
-		try {
-			command.execute(request, response);
-		}catch(ConnectionPoolRuntimeException e) {
-			logger.warn("ConnectionPoolRuntimeException", e);
-			request.getRequestDispatcher(JSPPath.APPLICATION_ERROR_PAGE).forward(request, response);
-		} 
+		command.execute(request, response);
+		
 	}
 
 	

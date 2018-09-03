@@ -28,9 +28,9 @@ public class RoleCheckFilter implements Filter {
 		
 		HttpServletRequest httpRequest = (HttpServletRequest)request;
 		
-		String commandFromRequest = ((HttpServletRequest)request).getParameter(COMMAND_PARAM_NAME).toUpperCase();
+		String commandFromRequest = httpRequest.getParameter(COMMAND_PARAM_NAME).toUpperCase();
 		
-		Object object = ((HttpServletRequest)request).getSession().getAttribute(ATTRIBUTE_USER);
+		Object object = httpRequest.getSession().getAttribute(ATTRIBUTE_USER);
 		
 		if(object != null) {
 			user = (User) object;

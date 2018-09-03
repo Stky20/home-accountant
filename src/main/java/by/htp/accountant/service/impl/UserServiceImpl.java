@@ -1,6 +1,5 @@
 package by.htp.accountant.service.impl;
 
-
 import java.io.IOException;
 import java.util.List;
 
@@ -195,8 +194,7 @@ public class UserServiceImpl implements UserService {
 		int amountOfPages = 0;
 		
 		try {
-			amountOfPages = userDAO.countAmountOfPages(role, DEFAULT_RECORDINGS_AMOUNT);
-			System.out.println(amountOfPages + " - amountOfPages line 202");
+			amountOfPages = userDAO.countAmountOfPages(role, DEFAULT_RECORDINGS_AMOUNT);			
 		} catch (SQLUserDAOException e) {
 			logger.warn("Cant show Users beacorse of Exception in showUsers() method", e);
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);

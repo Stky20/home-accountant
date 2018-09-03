@@ -18,7 +18,7 @@
   <servlet-mapping>
     <servlet-name>Controller</servlet-name>
     <url-pattern>/Controller</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping> 
   <filter>
     <filter-name>RquestResponseEncodingFilter</filter-name>
     <filter-class>by.htp.accountant.filter.RquestResponseEncodingFilter</filter-class>
@@ -55,4 +55,12 @@
     <filter-name>RoleCheckFilter</filter-name>
     <url-pattern>/Controller</url-pattern>
   </filter-mapping>
+<!--   <error-page> -->
+<!--     <error-code>500</error-code> -->
+<!--     <location>/WEB-INF/jsp/TechnicalProblemError.jsp</location> -->
+<!--   </error-page> -->
+  <error-page>
+    <exception-type>javax.servlet.ServletException</exception-type>
+    <location>/WEB-INF/jsp/TechnicalProblemError.jsp</location>
+  </error-page>  
 </web-app>
