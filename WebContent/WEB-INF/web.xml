@@ -53,6 +53,6 @@
   </filter>
   <filter-mapping>
     <filter-name>RoleCheckFilter</filter-name>
-    <url-pattern>/RoleCheckFilter</url-pattern>
+    <url-pattern>/Controller</url-pattern>
   </filter-mapping>
 </web-app>

@@ -1,5 +1,6 @@
 .settings/
 build/
 target/
+src/main/resources/log/
 *.classpath
 *.project

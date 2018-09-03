@@ -10,7 +10,7 @@ public class User implements Serializable{
 		
 	private static final long serialVersionUID = 1L;
 	
-	HashPasswordMaker passwordMaker = HashPasswordMaker.getInstance();
+	private HashPasswordMaker passwordMaker = HashPasswordMaker.getInstance();
 	
 	private int id;
 	private String nickName;
@@ -20,7 +20,7 @@ public class User implements Serializable{
 	private String eMail;
 	
 	/**
-	 * 3 role 1 administrator, 2 user, guest without number
+	 * 3 role: 0 deactivated user, 1 administrator, 2 user, guest without number
 	 */
 	private int role;
 	
