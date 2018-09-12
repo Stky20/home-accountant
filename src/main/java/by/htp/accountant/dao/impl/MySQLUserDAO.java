@@ -10,6 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import by.htp.accountant.bean.OperationType;
 import by.htp.accountant.bean.User;
 import by.htp.accountant.dao.UserDAO;
 import by.htp.accountant.dao.connectionpool.ConnectionPool;
@@ -232,7 +233,9 @@ public class MySQLUserDAO implements UserDAO{
 			
 			connection.commit();
 			connection.setAutoCommit(true);
-			if(deletedRowsUsers == 1) return true;
+			if(deletedRowsUsers == 1) {
+				return true;
+			}
 			
 			
 		} catch (InterruptedException e) {			
@@ -381,14 +384,41 @@ public class MySQLUserDAO implements UserDAO{
 				updatedRows = prepareStatement.executeUpdate();
 				
 				if(updatedRows == 1) return true;
-			} catch (SQLException e) {
-				throw new SQLUserDAOException ("Can`t take Prepeared Statement or Result Set in UserDAO amountOfPages() method", e);
-			} catch (InterruptedException e) {
-				throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO amountOfPages() method", e);
-			}
+		} catch (SQLException e) {
+			throw new SQLUserDAOException ("Can`t take Prepeared Statement or Result Set in UserDAO amountOfPages() method", e);
+		} catch (InterruptedException e) {
+			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO amountOfPages() method", e);
+		}
 			
 		return false;
 	}
+
+
+	@Override
+	public List<OperationType> getUsersOperationTypes(int id) throws SQLUserDAOException {
+		
+//		try (Connection connection = connectionPool.takeConnection()){
+//			
+//		} catch (SQLException e) {
+//			throw new SQLUserDAOException ("Can`t take Prepeared Statement or Result Set in UserDAO amountOfPages() method", e);
+//		} catch (InterruptedException e) {
+//			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO amountOfPages() method", e);
+//		}
+		return null;
+	}
+
+
+	
+		
+		
+		
+	
+
+
+	
+		
+	
+
 	
 	
 }

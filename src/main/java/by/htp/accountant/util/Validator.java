@@ -87,11 +87,10 @@ public class Validator {
 	public static boolean simpleOneParameterNullEmptyCheck(String parameter) {
 		if (parameter == null ) {
 			return true;
-		}
-		if(parameter.trim().isEmpty()) {			
-			return true;
-		}		
-		return false;
+		}					
+		
+		return parameter.trim().isEmpty();		
+		
 	}
 	
 	/**

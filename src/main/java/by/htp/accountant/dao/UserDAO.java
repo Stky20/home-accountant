@@ -2,6 +2,7 @@ package by.htp.accountant.dao;
 
 import java.util.List;
 
+import by.htp.accountant.bean.OperationType;
 import by.htp.accountant.bean.User;
 import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.SQLUserDAOException;
@@ -43,5 +44,7 @@ public interface UserDAO {
 	int countAmountOfPages(int role, int recordingsAmountInTable) throws SQLUserDAOException;
 		
 	boolean changeUsersRole(int userId, int role) throws SQLUserDAOException;
+	
+	List<OperationType> getUsersOperationTypes(int id) throws SQLUserDAOException;
 	
 }

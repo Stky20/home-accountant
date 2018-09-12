@@ -1,6 +1,7 @@
 package by.htp.accountant.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -17,6 +18,8 @@ import by.htp.accountant.dao.UserDAO;
 import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.PasswordClassUtilException;
 import by.htp.accountant.exception.SQLUserDAOException;
+import by.htp.accountant.bean.DefaultOperationTypes;
+import by.htp.accountant.bean.OperationType;
 import by.htp.accountant.bean.User;
 import by.htp.accountant.bean.UserBuilder;
 import by.htp.accountant.controller.command.JSPPath;
@@ -44,6 +47,7 @@ public class UserServiceImpl implements UserService {
 	public static final String USERS_LIST_PARAM = "usersList";
 	public static final String USER_ID_PARAM = "id";
 	public final static String ATTRIBUTE_USER = "user";
+	public final static String ATTRIBUTE_OPERATION_TYPE_LIST = "operationTypeList";
 
 	public static final String EMPTY_LOGIN_PASSWORD_ERROR_MESSAGE = "emptyLoginPasswordErrorMsg";
 	public static final String EMPTY_FIELD_ERROR_MESSAGE = "emptyFieldErrorMsg";
@@ -126,6 +130,8 @@ public class UserServiceImpl implements UserService {
 		String name = request.getParameter(NAME_PARAM);
 		String surname = request.getParameter(SURNAME_PARAM);
 		String email = request.getParameter(EMAIL_PARAM);
+						
+		List<OperationType> operationTypeList = new ArrayList<OperationType>();
 		
 		RequestDispatcher dispatcher = null;
 		
@@ -156,7 +162,13 @@ public class UserServiceImpl implements UserService {
 				
 				if(userDAO.createUser(user)) {
 					user = userDAO.logination(user.getNickName(), user.getHashPassword());
-					request.getSession(true).setAttribute("user", user);
+					request.getSession(true).setAttribute(ATTRIBUTE_USER, user);
+					////////////////////////////////////////////
+					operationTypeList = initDefaultOperationTypes(user.getId());
+					
+					operationTypeList = userDAO.getUsersOperationTypes(user.getId());
+					request.getSession(true).setAttribute(ATTRIBUTE_OPERATION_TYPE_LIST, operationTypeList);
+					
 				}
 				
 			} catch (DAOException e) {			
@@ -168,6 +180,23 @@ public class UserServiceImpl implements UserService {
 		doSendRedirectOrForward(request, response, dispatcher);
 	}		
 	
+	private List<OperationType> initDefaultOperationTypes(int userId) {
+		
+		DefaultOperationTypes[] defauleOperationTypesArray = DefaultOperationTypes.values();
+		List<OperationType> defauleOperationTypesList = new ArrayList<OperationType>();
+		
+		for(DefaultOperationTypes oneType: defauleOperationTypesArray) {
+			OperationType newOperationType = new OperationType();
+			newOperationType.setOperationType(oneType.getOperationType());
+			newOperationType.setRole(oneType.getRole());
+			newOperationType.setUserId(userId);
+			defauleOperationTypesList.add(newOperationType);
+		}
+		
+		
+		return defauleOperationTypesList;
+		
+	}
 	
 	
 	@Override
