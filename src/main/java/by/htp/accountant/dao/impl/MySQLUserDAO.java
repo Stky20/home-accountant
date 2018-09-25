@@ -87,12 +87,12 @@ public class MySQLUserDAO implements UserDAO{
 			connection.setAutoCommit(true);
 			
 		} catch (InterruptedException e) {
-			logger.warn("InterruptedException in createUser() method of UserDAOimpl while taking connection from ConnectionPool", e);
-			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO to create user", e);
+			logger.warn("InterruptedException in createUser() method of MySQLUserDAO while taking connection from ConnectionPool", e);
+			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in MySQLUserDAO to create user", e);
 		} catch (SQLException e) {
-			logger.warn("SQLException in createUser() method of UserDAOimpl while taking connection from ConnectionPool or while doing "
+			logger.warn("SQLException in createUser() method of MySQLUserDAO while taking connection from ConnectionPool or while doing "
 					+ "rollback or setAutoCommit(true) on connection", e);
-			throw new SQLUserDAOException ("Can`t do rollback or setAutoCommit(true) on connection in UserDAO createUser() method", e);
+			throw new SQLUserDAOException ("Can`t do rollback or setAutoCommit(true) on connection in MySQLUserDAO createUser() method", e);
 		}	
 		
 		if(addedRowsInBase == 1) return true;
@@ -198,50 +198,48 @@ public class MySQLUserDAO implements UserDAO{
 	public boolean removeUser(int userId) throws SQLUserDAOException {
 		
 		int deletedRowsUsers = 0;		
-		Connection connection = null;
 		
-		try (Connection connect = connectionPool.takeConnection()) {			
-			connection = connect;
-			connection.setAutoCommit(false);
+		try (Connection connection = connectionPool.takeConnection()) {			
+			try {
+				connection.setAutoCommit(false);
 			
-			try(PreparedStatement statement = connection.prepareStatement(USER_DELETE_QUERY)){
-				statement.setInt(1, userId);
-				deletedRowsUsers = statement.executeUpdate();
-			}			
-			try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_OPERATIONS_QUERY)){
-				statement.setInt(1, userId);
-				statement.executeUpdate();
-			}			
-			try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_OPERATIONS_TYPES_QUERY)){
-				statement.setInt(1, userId);
-				statement.executeUpdate();
-			}					
-			try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_DEPTS_OPERATIONS_QUERY)){
-				statement.setInt(1, userId);
-				statement.executeUpdate();			
+				try(PreparedStatement statement = connection.prepareStatement(USER_DELETE_QUERY)){
+					statement.setInt(1, userId);
+					deletedRowsUsers = statement.executeUpdate();
+				}			
+				try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_OPERATIONS_QUERY)){
+					statement.setInt(1, userId);
+					statement.executeUpdate();
+				}			
+				try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_OPERATIONS_TYPES_QUERY)){
+					statement.setInt(1, userId);
+					statement.executeUpdate();
+				}					
+				try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_DEPTS_OPERATIONS_QUERY)){
+					statement.setInt(1, userId);
+					statement.executeUpdate();			
+				}
+			
+				connection.commit();
+				
+			} catch (SQLException e) {
+				logger.warn("SQLException while doing userDelete() method in MySQLUserDAO", e);
+				connection.rollback();				
 			}
-			
-			connection.commit();
+				
 			connection.setAutoCommit(true);
+			
 			if(deletedRowsUsers == 1) {
 				return true;
-			}
+			}			
 			
-			
-		} catch (InterruptedException e) {			
-			throw new SQLUserDAOException ("Can`t take connection fromm connectionpool UserDAO to delete user", e);			
-		} catch (SQLException e) {
-			
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					logger.warn("Exception while doing rollback in userDelete() method", e);
-					throw new SQLUserDAOException ("Can`t do rollback() in UserDAO deleteUser() method", e);
-				} 					
-				
-				throw new SQLUserDAOException ("Can`t create statement or execute query in UserDAO deleteUser() method", e);
-				
-		} 
+		} catch (InterruptedException e) {
+			logger.warn("InterruptedException while taking connection from connectionpool in MySQLUserDAO to delete user");
+			throw new SQLUserDAOException ("Can`t take connection from connectionpool in MySQLUserDAO to delete user", e);			
+		} catch (SQLException e) {			
+			logger.warn("SQLException while doing rollback() or setting AutoCommit true in userDelete() method of MySQLUserDAO", e);
+			throw new SQLUserDAOException ("SQLException in UserDAO deleteUser() method", e);
+		}
 		
 		return false;
 	}
