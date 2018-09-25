@@ -67,14 +67,16 @@ public class MySQLUserDAO implements UserDAO{
 							userId = resultSet.getInt(1);
 						}
 					}
-				}	
-				for(OperationType defaultType: defaultOperationTypeList) {
-					try(PreparedStatement preparedStatement = connection.prepareStatement(DEFAULT_OPERATION_TYPES_INIT_QUERY)){
+				}
+				
+				try(PreparedStatement preparedStatement = connection.prepareStatement(DEFAULT_OPERATION_TYPES_INIT_QUERY)){
+					for(OperationType defaultType: defaultOperationTypeList) {					
 						preparedStatement.setString(1, defaultType.getOperationType());
 						preparedStatement.setInt(2, userId);
 						preparedStatement.setInt(3, defaultType.getRole());
-						preparedStatement.executeUpdate();
+						preparedStatement.addBatch();
 					}	
+					preparedStatement.executeBatch();
 				}
 				
 				connection.commit();
@@ -110,7 +112,7 @@ public class MySQLUserDAO implements UserDAO{
 								                             
 				prepareStatement.setString(1, login);
 				
-				try(ResultSet resultSet = prepareStatement.executeQuery();){
+				try(ResultSet resultSet = prepareStatement.executeQuery()){
 				
 					if(resultSet.next())	{
 						loggedUser.setId(resultSet.getInt(1));  		
