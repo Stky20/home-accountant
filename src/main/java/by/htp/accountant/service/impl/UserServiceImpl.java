@@ -302,6 +302,7 @@ public class UserServiceImpl implements UserService {
 		
 	}
 	
+	
 	@Override
 	public void makeAdmin(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -329,10 +330,6 @@ public class UserServiceImpl implements UserService {
 			dispatcher.forward(request, response);				
 		}		
 	}
-
-
-
-	
 	
 	
 	@Override
@@ -473,8 +470,7 @@ public class UserServiceImpl implements UserService {
 			dispatcher.forward(request, response);				
 		}				
 
-	}
-	
+	}	
 	
 		
 	@Override

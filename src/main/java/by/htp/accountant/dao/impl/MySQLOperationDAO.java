@@ -522,10 +522,6 @@ public class MySQLOperationDAO implements OperationDAO{
 //				
 //		return operationsList;	
 //		return null;
-	}
-
-
-
-	
+	}	
 
 }

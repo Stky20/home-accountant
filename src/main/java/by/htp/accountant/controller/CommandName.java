@@ -29,15 +29,15 @@ public enum CommandName {
 	
 	int[] roles = null;
 	
-	private CommandName() {
-		
+	
+	private CommandName() {		
 	}
 	
-	private CommandName(int...roles) {
 	
-		this.roles = roles;
-		
+	private CommandName(int...roles) {	
+		this.roles = roles;		
 	}
+	
 	
 	public boolean containsRole(User user) {
 		
