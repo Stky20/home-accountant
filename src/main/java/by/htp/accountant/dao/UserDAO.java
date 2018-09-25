@@ -27,9 +27,9 @@ public interface UserDAO {
 	 */
 	boolean checkLoginAndPassword(String login, String hashPasswordFromUser) throws DAOException;
 	
-	User logination(String login, String hashPasswordFromUser) throws DAOException;
+	User authorizeUser(String login, String hashPasswordFromUser) throws DAOException;
 	
-	boolean createUser(User user) throws DAOException;
+	boolean createUser(User user, List<OperationType> defaultOperationTypeList) throws DAOException;
 	
 	boolean editUser (int userId, String name, String surname, String email) throws DAOException;
 	

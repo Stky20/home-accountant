@@ -19,7 +19,7 @@ import by.htp.accountant.controller.command.GoToSloganPageCommand;
 import by.htp.accountant.controller.command.GoToSorryPageCommand;
 import by.htp.accountant.controller.command.GoToUserAccountPageCommand;
 import by.htp.accountant.controller.command.GoToUserAdministrationPageCommand;
-import by.htp.accountant.controller.command.Localization;
+import by.htp.accountant.controller.command.ChangeLocalization;
 import by.htp.accountant.controller.command.Logination;
 import by.htp.accountant.controller.command.MakeAdminCommand;
 import by.htp.accountant.controller.command.Registration;
@@ -34,7 +34,7 @@ private Map<CommandName, Command> commands = new HashMap<CommandName, Command>()
 		commands.put(CommandName.GO_TO_MAIN_PAGE, new GoToMainPageCommand());
 		commands.put(CommandName.GO_TO_LOGIN_PAGE, new GoToLoginPageCommand());
 		commands.put(CommandName.GO_TO_REGISTRATION_PAGE, new GoToRegistrationPageCommand());
-		commands.put(CommandName.LOCALIZATION, new Localization());
+		commands.put(CommandName.CHANGE_LOCALIZATION, new ChangeLocalization());
 		commands.put(CommandName.LOGINATION, new Logination());
 		commands.put(CommandName.REGISTRATION, new Registration());
 		commands.put(CommandName.SIGN_OUT, new SignOut());
@@ -56,8 +56,12 @@ private Map<CommandName, Command> commands = new HashMap<CommandName, Command>()
 	}
 
 	public Command getCommand(String commandName) {
-		Command command = commands.get(CommandName.valueOf(commandName.toUpperCase()));
-		return command;
+		if(commandName != null) {
+			Command command = commands.get(CommandName.valueOf(commandName.toUpperCase()));
+			return command;
+		} else {
+			return null;
+		}
 	}
 
 

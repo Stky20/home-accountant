@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 public class RequestChecker {
 	
 	private final static String PARAMETR_LOCALIZATION = "localization";
-	private static String parametrValue = null;
 	
 	private RequestChecker() {
 		
@@ -16,7 +15,7 @@ public class RequestChecker {
 	
 	public static boolean isItForLocalization(ServletRequest request) {   							//checking request if it to chenge locale
 				
-		parametrValue = ((HttpServletRequest)request).getParameter(PARAMETR_LOCALIZATION);
+		String parametrValue = ((HttpServletRequest)request).getParameter(PARAMETR_LOCALIZATION);
 		
 		if(parametrValue != null) {
 			return true;		

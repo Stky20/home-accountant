@@ -157,7 +157,7 @@
 			              <ul class="dropdown-menu">
 				              	<li>
 					              		<form action="Controller" method="get">
-												<input type="hidden" name="command" value="localization" /> 
+												<input type="hidden" name="command" value="change_localization" /> 
 												<input type="hidden" name="localization" value="ru" /> 
 												<input type="submit" class="btn btn-link" name="login" value="${ru_button}" />
 										</form>
@@ -165,7 +165,7 @@
 				                <li role="separator" class="divider"></li>
 				                <li>
 					                	<form action="Controller" method="get">
-												<input type="hidden" name="command" value="localization" /> 
+												<input type="hidden" name="command" value="change_localization" /> 
 												<input type="hidden" name="localization" value="en" /> 
 												<input type="submit" class="btn btn-link" name="login" value="${en_button}" />
 										</form>

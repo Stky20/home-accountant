@@ -468,7 +468,7 @@ public class MySQLOperationDAO implements OperationDAO{
 			try(PreparedStatement preparedStatement = connection.prepareStatement(USE_DEFAULT_OPERATION_QUERY)){
 			
 				for(int i = 0; i < defaultOperationTypeList.length; i++) {
-					preparedStatement.setString(1, defaultOperationTypeList[i].getOperationType());
+					preparedStatement.setString(1, defaultOperationTypeList[i].getOperationTypeKey());
 					preparedStatement.setInt(2, userId);
 					preparedStatement.setInt(3, defaultOperationTypeList[i].getRole());
 					

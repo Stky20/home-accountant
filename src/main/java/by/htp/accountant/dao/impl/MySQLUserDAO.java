@@ -15,6 +15,7 @@ import by.htp.accountant.bean.User;
 import by.htp.accountant.dao.UserDAO;
 import by.htp.accountant.dao.connectionpool.ConnectionPool;
 import by.htp.accountant.exception.SQLUserDAOException;
+import by.htp.accountant.util.DefaultOperationTypeManager;
 
 public class MySQLUserDAO implements UserDAO{
 	
@@ -25,7 +26,8 @@ public class MySQLUserDAO implements UserDAO{
 	private final static String CHECK_LOGIN_QUERY = "SELECT nickName FROM users WHERE (nickName = ?);";                              
 	private final static String CHECK_PASSWORD_QUERY = "SELECT hashPassword FROM users WHERE (nickName = ?);";                       
 	private final static String LOGINATION_QUERY = "SELECT * FROM users WHERE (nickName = ?);";                                      
-	private final static String USER_CREATION_QUERY = "INSERT INTO users (nickName, hashPassword, name, surname, e_mail, role) VALUES (?, ?, ?, ?, ?, ?);"; 
+	private final static String USER_CREATION_QUERY = "INSERT INTO users (nickName, hashPassword, name, surname, e_mail, role) VALUES (?, ?, ?, ?, ?, ?);";
+	private final static String DEFAULT_OPERATION_TYPES_INIT_QUERY = "INSERT INTO operation_types (operationType, user_Id, role) VALUES (?, ?, ?);";
 	private final static String USER_CHANGING_QUERY = "UPDATE users SET name=?, surname=?, e_mail=? WHERE id=?;";	
 	private final static String USER_DELETE_QUERY = "DELETE FROM users WHERE id = ?;";
 	private final static String DELETE_USERS_OPERATIONS_QUERY = "DELETE FROM operations WHERE user_id = ?;";
@@ -114,7 +116,7 @@ public class MySQLUserDAO implements UserDAO{
 
 
 	@Override
-	public User logination(String login, String hashPasswordFromUser) throws SQLUserDAOException {
+	public User authorizeUser(String login, String hashPasswordFromUser) throws SQLUserDAOException {
 			
 		User loggedUser = new User();			
 			
@@ -148,20 +150,41 @@ public class MySQLUserDAO implements UserDAO{
 	
 
 	@Override
-	public boolean createUser(User user) throws SQLUserDAOException {
+	public boolean createUser(User user, List<OperationType> defaultOperationTypeList) throws SQLUserDAOException {
 		
 		int addedRowsInBase = 0;
+		int userId = 0;
+		Connection connection = null;
 		
-		try (Connection connection = connectionPool.takeConnection();
-					PreparedStatement preparedStatement = connection.prepareStatement(USER_CREATION_QUERY)){
+		try (Connection connect = connectionPool.takeConnection()){	
+			connection = connect;
+			connection.setAutoCommit(false);
+			try(PreparedStatement preparedStatement = connection.prepareStatement(USER_CREATION_QUERY)){
+				preparedStatement.setString(1, user.getNickName());
+				preparedStatement.setString(2, user.getHashPassword());
+				preparedStatement.setString(3, user.getName());
+				preparedStatement.setString(4, user.getSurname());
+				preparedStatement.setString(5, user.geteMail());
+				preparedStatement.setInt(6, user.getRole());
+				addedRowsInBase = preparedStatement.executeUpdate();
+				
+				try(ResultSet resultSet = preparedStatement.getGeneratedKeys()){
+					if(resultSet.next()) {
+						userId = resultSet.getInt(1);
+					}
+				}
+			}	
+			for(OperationType defaultType: defaultOperationTypeList) {
+				try(PreparedStatement preparedStatement = connection.prepareStatement(DEFAULT_OPERATION_TYPES_INIT_QUERY)){
+					preparedStatement.setString(1, defaultType.getOperationType());
+					preparedStatement.setInt(2, userId);
+					preparedStatement.setInt(3, defaultType.getRole());						
+				}	
+			}
 			
-			preparedStatement.setString(1, user.getNickName());
-			preparedStatement.setString(2, user.getHashPassword());
-			preparedStatement.setString(3, user.getName());
-			preparedStatement.setString(4, user.getSurname());
-			preparedStatement.setString(5, user.geteMail());
-			preparedStatement.setInt(6, user.getRole());
-			addedRowsInBase = preparedStatement.executeUpdate();
+			connection.commit();
+			connection.setAutoCommit(true);
+			
 		} catch (InterruptedException e) {
 			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO to create user", e);
 		} catch (SQLException e) {
@@ -176,8 +199,7 @@ public class MySQLUserDAO implements UserDAO{
 	@Override
 	public boolean editUser(int userId, String name, String surname, String email) throws SQLUserDAOException {				
 				
-		try (Connection connection = connectionPool.takeConnection();
-				
+		try (Connection connection = connectionPool.takeConnection();				
 			PreparedStatement preparedStatement = connection.prepareStatement(USER_CHANGING_QUERY)){
 						
 			preparedStatement.setString(1, name);
@@ -203,29 +225,24 @@ public class MySQLUserDAO implements UserDAO{
 	public boolean removeUser(int userId) throws SQLUserDAOException {
 		
 		int deletedRowsUsers = 0;		
-		
 		Connection connection = null;
 		
-		try (Connection connect = connectionPool.takeConnection()) {
-			
+		try (Connection connect = connectionPool.takeConnection()) {			
 			connection = connect;
 			connection.setAutoCommit(false);
 			
 			try(PreparedStatement statement = connection.prepareStatement(USER_DELETE_QUERY)){
 				statement.setInt(1, userId);
 				deletedRowsUsers = statement.executeUpdate();
-			}
-			
+			}			
 			try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_OPERATIONS_QUERY)){
 				statement.setInt(1, userId);
 				statement.executeUpdate();
-			}
-			
+			}			
 			try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_OPERATIONS_TYPES_QUERY)){
 				statement.setInt(1, userId);
 				statement.executeUpdate();
-			}
-					
+			}					
 			try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_DEPTS_OPERATIONS_QUERY)){
 				statement.setInt(1, userId);
 				statement.executeUpdate();			
@@ -247,7 +264,7 @@ public class MySQLUserDAO implements UserDAO{
 				} catch (SQLException e1) {
 					logger.warn("Exception while doing rollback in userDelete() method", e);
 					throw new SQLUserDAOException ("Can`t do rollback() in UserDAO deleteUser() method", e);
-				} 			
+				} 					
 				
 				throw new SQLUserDAOException ("Can`t create statement or execute query in UserDAO deleteUser() method", e);
 				

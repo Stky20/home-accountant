@@ -6,33 +6,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import by.htp.accountant.controller.Command;
 import by.htp.accountant.service.ServiceFactory;
 import by.htp.accountant.service.UserService;
 
-
 public class Logination implements Command{	
-	
-	private static final Logger logger = LoggerFactory.getLogger(Logination.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
 		UserService userService = ServiceFactory.getInstance().getUserService();			
-		
-			try {
-				userService.logination(request, response);
-			} catch (IOException e) {
-				logger.warn("ServiceException while making logination", e);
-				throw e;
-			} catch (ServletException e) {
-				logger.warn("ServiceException while making logination", e);
-				throw e;
-			}
-		
+		userService.authorizeUser(request, response);
+			
 	}
 
 }

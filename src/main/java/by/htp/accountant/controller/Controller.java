@@ -9,10 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import by.htp.accountant.controller.command.JSPPath;
-import by.htp.accountant.exception.ConnectionPoolRuntimeException;
-
-
 
 public class Controller extends HttpServlet {
 	
@@ -35,7 +31,12 @@ public class Controller extends HttpServlet {
 		Command command = null;
 		command = commandProvider.getCommand(commandName);
 		
-		command.execute(request, response);
+		if(command != null) {
+			command.execute(request, response);
+		} else {
+			logger.info("The command did not come from the request to the controller.");
+			throw new ServletException();
+		}
 		
 	}
 

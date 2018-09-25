@@ -10,12 +10,13 @@ import by.htp.accountant.controller.Command;
 import by.htp.accountant.service.ServiceFactory;
 import by.htp.accountant.service.UtilService;
 
-public class GoToProfile implements Command{
-
-	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class ChangeLocalization implements Command{
 		
-		UtilService service = ServiceFactory.getInstance().getUtilService();			
-		service.goToProfilePage(request, response);				
+	@Override
+	public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {		
+		
+		UtilService service = ServiceFactory.getInstance().getUtilService();		
+		service.changeLocalization(request, response);
+		
 	}
 }
