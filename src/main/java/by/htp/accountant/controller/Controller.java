@@ -34,7 +34,7 @@ public class Controller extends HttpServlet {
 		if(command != null) {
 			command.execute(request, response);
 		} else {
-			logger.info("The command did not come from the request to the controller.");
+			logger.info("Wrong comand or the command did not come from user.");
 			throw new ServletException();
 		}
 		

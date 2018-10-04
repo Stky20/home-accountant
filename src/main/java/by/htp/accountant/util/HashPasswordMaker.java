@@ -113,7 +113,7 @@ final public class HashPasswordMaker implements Serializable{
 		SecretKey key = null;		
 		String keyFile = getClass().getClassLoader().getResource(KEY_FILE_NAME).getFile();
 		
-		try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(keyFile));) {                         
+		try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(keyFile))) {                         
 			
 			 key = (SecretKey) objectInputStream.readObject(); 	
 			

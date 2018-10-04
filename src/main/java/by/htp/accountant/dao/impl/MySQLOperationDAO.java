@@ -12,7 +12,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import by.htp.accountant.bean.DefaultOperationTypes;
+import by.htp.accountant.bean.DefaultOperationType;
 import by.htp.accountant.bean.Operation;
 import by.htp.accountant.bean.OperationType;
 import by.htp.accountant.dao.OperationDAO;
@@ -461,7 +461,7 @@ public class MySQLOperationDAO implements OperationDAO{
 	public boolean useDefaultOperationTypes(int userId) throws DAOException {
 		
 		int addedRowsInBase = 0;
-		DefaultOperationTypes[] defaultOperationTypeList = DefaultOperationTypes.values();
+		DefaultOperationType[] defaultOperationTypeList = DefaultOperationType.values();
 		
 		try (Connection connection = connectionPool.takeConnection()){
 			

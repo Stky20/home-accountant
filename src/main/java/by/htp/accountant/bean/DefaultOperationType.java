@@ -1,6 +1,6 @@
 package by.htp.accountant.bean;
 
-public enum DefaultOperationTypes {
+public enum DefaultOperationType {
 	
 	SPENDING_HOME("spending.home", 1),
 	SPENDING_TRANSPORT("spending.transport", 1),
@@ -16,7 +16,7 @@ public enum DefaultOperationTypes {
 	private final String operationTypeKey;
 	private final int role;
 	
-	private DefaultOperationTypes(String operationTypeKey, int role) {
+	private DefaultOperationType(String operationTypeKey, int role) {
 		this.operationTypeKey = operationTypeKey;
 		this.role = role;
 	}

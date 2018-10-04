@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public void authorizeUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		
+				
 		User user = null;
 		String login = request.getParameter(LOGIN_PARAM);		
 		String hashPassword = null;
@@ -133,6 +133,7 @@ public class UserServiceImpl implements UserService {
 		String name = request.getParameter(NAME_PARAM);
 		String surname = request.getParameter(SURNAME_PARAM);
 		String email = request.getParameter(EMAIL_PARAM);
+		
 		String local = (String)request.getSession().getAttribute(LOCALIZATION_SESSION_ATTRIBUTE);
 						
 		List<OperationType> operationTypeList = DefaultOperationTypeManager.getDefaultOperationTypesFromPropertie(local);
@@ -184,6 +185,8 @@ public class UserServiceImpl implements UserService {
 		
 		int role;
 		int pageNumber;
+		int amountOfPages = 0;
+		
 		RequestDispatcher dispatcher = null;
 		String roleFromRequest =request.getParameter(ROLE_PARAM);
 		String pageNumberInString = request.getParameter(PAGE_NUMBER_PARAM);
@@ -204,9 +207,7 @@ public class UserServiceImpl implements UserService {
 			pageNumber = Integer.parseInt(pageNumberInString);
 		}else {
 			pageNumber = DEFAULT_PAGE_NUMBER;
-		}
-				
-		int amountOfPages = 0;
+		}	
 		
 		try {
 			amountOfPages = userDAO.countAmountOfPages(role, DEFAULT_RECORDINGS_AMOUNT);			
@@ -335,7 +336,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void changeLogin(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-				
+	
 		UserBuilder builder = new UserBuilder();
 		
 		RequestDispatcher dispatcher = null;
@@ -368,9 +369,7 @@ public class UserServiceImpl implements UserService {
 		} catch (DAOException e) {
 			logger.warn("Can`t change login in UserService", e);
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
-		}
-		
-		
+		}		
 		 	
 		if(dispatcher == null) {			
 			response.sendRedirect(JSPPath.GO_TO_USER_PROFILE_PAGE);			
@@ -431,7 +430,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void changeUserInfo(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		
+		//TODO
 		RequestDispatcher dispatcher = null;
 		HttpSession session = request.getSession(true);
 		

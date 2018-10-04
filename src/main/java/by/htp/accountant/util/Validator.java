@@ -57,7 +57,7 @@ public class Validator {
 		return false;
 	}
 	
-	public static boolean simpleNullEmptyParamsCheck(String... params) {
+	public static boolean simpleNullEmptyParamsCheck(String... params) {  
 		
 		for(int i = 0; i < params.length; i++) {
 			if(params[i] == null) return true;
@@ -67,7 +67,7 @@ public class Validator {
 		return false;
 	}
 	
-	public static boolean ifAllParamsNullOrEmpty(String... params) {
+	public static boolean ifAllParamsNullOrEmpty(String... params) {  
 		
 		for(int i = 0; i < params.length; i++) {
 			if(params[i] != null) {
@@ -78,6 +78,7 @@ public class Validator {
 		return true;
 	}
 	
+	
 	/**
 	 * Checks one String, if it is null or empty returns true
 	 * else returns false
@@ -87,11 +88,10 @@ public class Validator {
 	public static boolean simpleOneParameterNullEmptyCheck(String parameter) {
 		if (parameter == null ) {
 			return true;
-		}					
-		
+		}							
 		return parameter.trim().isEmpty();		
-		
 	}
+	
 	
 	/**
 	 * Checks  String if it matches to regular expression for login.
@@ -107,6 +107,7 @@ public class Validator {
 		
 	}
 	
+	
 	/**
 	 * Checks  String if it matches to regular expression for password.
 	 * If matches returns true else returns false
@@ -118,6 +119,7 @@ public class Validator {
 		Matcher m = p.matcher(password);
 		return m.matches();
 	}
+	
 	
 	/**
 	 * Checks  String if it matches to regular expression for name.
@@ -131,6 +133,7 @@ public class Validator {
 		return m.matches();
 	}
 	
+	
 	/**
 	 * Checks  String if it matches to regular expression for surname.
 	 * If matches returns true else returns false
@@ -142,6 +145,7 @@ public class Validator {
 		Matcher m = p.matcher(surname);
 		return m.matches();
 	}
+	
 	
 	/**
 	 * Checks  String if it matches to regular expression for email.
@@ -155,8 +159,9 @@ public class Validator {
 		return m.matches();
 	}
 	
+	
 	public static void validateLogin(HttpServletRequest request, UserBuilder builder, String login) {
-		if(simpleOneParameterNullEmptyCheck(login)) {																//login check if it empty, if it matches pattern, error msg setting
+		if(simpleOneParameterNullEmptyCheck(login)) {																
 			request.setAttribute(EMPTY_LOGIN_ERROR_MESSAGE, EMPTY_LOGIN_ERROR_MESSAGE);
 		} else {
 			if(loginRegularCheck(login)) {
@@ -167,8 +172,9 @@ public class Validator {
 		}		
 	}
 	
+	
 	public static void validatePassword(HttpServletRequest request, UserBuilder builder, RequestDispatcher dispatcher, String passwordFromUser) {
-		if(simpleOneParameterNullEmptyCheck(passwordFromUser)) {														//password check if it is empty, if it matches pattern, if hashPassword not null, error msg setting
+		if(simpleOneParameterNullEmptyCheck(passwordFromUser)) {														
 			request.setAttribute(EMPTY_PASSWORD_ERROR_MESSAGE, EMPTY_PASSWORD_ERROR_MESSAGE);
 		}else {
 			if(passwordRegularCheck(passwordFromUser)) {				
@@ -184,14 +190,14 @@ public class Validator {
 		}		
 	}
 	
+	
 	public static boolean validateNewPassword(HttpServletRequest request) {
 		
 		String oldPassword = request.getParameter(PASSWORD_PARAM);
 		String newPassword = request.getParameter(NEW_PASSWORD_PARAM);
 		String newPasswordAgain = request.getParameter(NEW_PASSWORD_AGAIN_PARAM);
 		
-		if(simpleNullEmptyParamsCheck(oldPassword, newPassword, newPasswordAgain)) {	
-			System.out.println("simpleNullEmptyParamsCheck в валидаторе");
+		if(simpleNullEmptyParamsCheck(oldPassword, newPassword, newPasswordAgain)) {			
 			request.setAttribute(EMPTY_PASSWORD_ERROR_MESSAGE, EMPTY_PASSWORD_ERROR_MESSAGE);			
 			return false;
 		} else if (!newPassword.equals(newPasswordAgain)) {
@@ -226,6 +232,7 @@ public class Validator {
 			}
 		}	
 	}
+	
 	
 	public static void validateEmail(HttpServletRequest request, UserBuilder builder, String email) {
 		if(!simpleOneParameterNullEmptyCheck(email)) {																	//email check it matches pattern, error msg setting

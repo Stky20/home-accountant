@@ -16,6 +16,7 @@
 <body>
 	<div class="container" style="text-align: center; margin-top: 300px;">
 		<h1>Sorry technical error occurred. Come back later</h1><br/>
+		<h1>Or try one more time.</h1>
 		<a class="btn btn-default btn-md" href="/home-accountant-version-00/Controller?command=go_to_main_page">На главную</a>
 	</div>
 </body>

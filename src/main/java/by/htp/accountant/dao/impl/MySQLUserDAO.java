@@ -175,17 +175,14 @@ public class MySQLUserDAO implements UserDAO{
 	public boolean editUser(int userId, String name, String surname, String email) throws SQLUserDAOException {				
 				
 		try (Connection connection = connectionPool.takeConnection();				
-			PreparedStatement preparedStatement = connection.prepareStatement(USER_CHANGING_QUERY)){
-						
-			preparedStatement.setString(1, name);
-						
-			preparedStatement.setString(2, surname);
+			PreparedStatement preparedStatement = connection.prepareStatement(USER_CHANGING_QUERY)){						
 			
-			preparedStatement.setString(3, email);
-			
+			preparedStatement.setString(1, name);						
+			preparedStatement.setString(2, surname);			
+			preparedStatement.setString(3, email);			
 			preparedStatement.setInt(4, userId);
 			
-			if(preparedStatement.executeUpdate() == 0) return false;
+			if(preparedStatement.executeUpdate() != 1) return false;
 			else return true;
 		} catch (InterruptedException e) {
 			throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO to edit user", e);
@@ -226,7 +223,9 @@ public class MySQLUserDAO implements UserDAO{
 				
 			} catch (SQLException e) {
 				logger.warn("SQLException while doing userDelete() method in MySQLUserDAO", e);
-				connection.rollback();				
+				connection.rollback();	
+				connection.setAutoCommit(true);
+				return false;
 			}
 				
 			connection.setAutoCommit(true);
@@ -248,8 +247,7 @@ public class MySQLUserDAO implements UserDAO{
 
 	
 	@Override
-	public boolean changeLogin(int userId, String newLogin) throws SQLUserDAOException {
-		
+	public boolean changeLogin(int userId, String newLogin) throws SQLUserDAOException {		
 		
 		int updatedRows = 0;
 		
@@ -260,15 +258,16 @@ public class MySQLUserDAO implements UserDAO{
 			preparedStatement.setInt(2, userId);
 			updatedRows = preparedStatement.executeUpdate();
 			
-			if(updatedRows == 1) return true;
-			
+			if(updatedRows == 1) {
+				return true;
+			} else {
+				throw new SQLUserDAOException("executeUpdate() updated " + updatedRows + " rows while changing user`s(ID- " + userId +") login");
+			}			
 		}catch (InterruptedException e) {
 			throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO, can`t update user login", e);
 		} catch (SQLException e) {
 			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO, can`t update user login", e);
-		}	
-		
-		return false;
+		}			
 	}
 	
 
@@ -307,14 +306,17 @@ public class MySQLUserDAO implements UserDAO{
 				prepareStatement.setInt(2, userId);
 				updatedRows = prepareStatement.executeUpdate();
 				
-				if(updatedRows == 1) return true;
+				if(updatedRows == 1) {
+					return true;
+				} else {
+					throw new SQLUserDAOException("executeUpdate() updated " + updatedRows + " rows while changing user`s(ID- " + userId +") role");
+				}
 		} catch (SQLException e) {
 			throw new SQLUserDAOException ("Can`t take Prepeared Statement or Result Set in UserDAO amountOfPages() method", e);
 		} catch (InterruptedException e) {
 			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO amountOfPages() method", e);
 		}
-			
-		return false;
+		
 	}
 	
 	
