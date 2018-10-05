@@ -3,6 +3,8 @@ package by.htp.accountant.service.impl;
 import static by.htp.accountant.util.validation.ValidationErrorMessage.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ import by.htp.accountant.bean.User;
 import by.htp.accountant.bean.UserBuilder;
 import by.htp.accountant.controller.command.JSPPath;
 import by.htp.accountant.dao.DAOFactory;
+import by.htp.accountant.dao.OperationTypeDAO;
 import by.htp.accountant.dao.UserDAO;
 import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.PasswordClassUtilException;
@@ -36,9 +39,10 @@ public class UserServiceImplTwo implements UserService {
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImplTwo.class);
 	
 	private UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
+	private OperationTypeDAO typeDAO = DAOFactory.getInstance().getOperationTypeDAO();
 	private HashPasswordMaker hashPasswordMaker = HashPasswordMaker.getInstance();
 	private ParameterValidator validator = ValidationFactory.getInstance().getValidator();
-	
+		
 	private static final String LOGIN_PARAM = "login";
 	private static final String PASSWORD_PARAM = "password";	
 	private static final String NEW_PASSWORD_PARAM = "new_password";
@@ -53,10 +57,14 @@ public class UserServiceImplTwo implements UserService {
 	private static final String USER_ID_PARAM = "id";
 	private final static String ATTRIBUTE_USER = "user";
 	private final static String ATTRIBUTE_OPERATION_TYPE_LIST = "operationTypeList";
-	
+	private final static String ATTRIBUTE_DATE = "date";
+	private final static String PATTERN_DATE = "yyyy-MM-dd";
+
 	public static final String LOCALIZATION_ATTRIBUTE = "local";
 	private static final String MODAL_ATTRIBUTE = "modal";
-	
+	private static final String SPENDING_TYPES_LIST_ATTRIBUTE = "spendingTypesList";
+	private static final String INCOME_TYPES_LIST_ATTRIBUTE = "incomeTypesList";
+
 	private static final int DEFAULT_ROLE = 2;
 	private static final int UNACTIVE_ROLE = 0;
 	private static final int ADMIN_ROLE = 1;
@@ -72,8 +80,10 @@ public class UserServiceImplTwo implements UserService {
 		String login = request.getParameter(LOGIN_PARAM);		
 		String hashPassword = null;
 		String errorMessage = null;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PATTERN_DATE);
 		
 		RequestDispatcher dispatcher = null;
+		HttpSession session = request.getSession(true);
 		
 		try {
 			hashPassword = hashPasswordMaker.getHashPassword(request.getParameter(PASSWORD_PARAM));
@@ -100,14 +110,41 @@ public class UserServiceImplTwo implements UserService {
 				dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 			}
 		}		
-		if(user != null) {
-			request.getSession(true).setAttribute(ATTRIBUTE_USER, user);
+		if(user != null) {			
+			try {
+				session = setInSessionUserOperationTypesLists(user.getId(), session);
+				
+				session.setAttribute(ATTRIBUTE_USER, user);
+				session.setAttribute(ATTRIBUTE_DATE, LocalDate.now().format(formatter));
+			} catch (UserServiceException e) {	
+				logger.warn("UserServiceException in setInSessionUserOperationTypesLists() method of UserServiceImpl", e);			
+				dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);			
+			}			
 		}		
 		doSendRedirectOrForward(request, response, dispatcher, JSPPath.GO_TO_MAIN_PAGE);		
 	}
 	
-	
+	/**
+	 * 
+	 * @param userId
+	 * @param session
+	 * @return
+	 * @throws UserServiceException
+	 */
+	private HttpSession setInSessionUserOperationTypesLists(int userId, HttpSession session) throws UserServiceException {
+		try {
+			session.setAttribute(SPENDING_TYPES_LIST_ATTRIBUTE, 
+				typeDAO.getUserOperationTypesDependingOnTypeRole(userId, OperationType.SPENDING_TYPE_ROLE));
+			session.setAttribute(INCOME_TYPES_LIST_ATTRIBUTE, 
+				typeDAO.getUserOperationTypesDependingOnTypeRole(userId, OperationType.INCOME_TYPE_ROLE));
+		} catch (DAOException e) {			
+			throw new UserServiceException("DAOException while trying to get user`s spending or "
+					+ "income types with getUserOperationTypesDependingOnTypeRole() of OperationTypeDAO ", e);
+		}
+		return session;
+	}
 
+	
 	@Override
 	public void registrateUser(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {

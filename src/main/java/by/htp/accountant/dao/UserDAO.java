@@ -23,9 +23,7 @@ public interface UserDAO {
 	
 	boolean changePassword(int userId, String newHashPasswordFromUser) throws DAOException;
 	
-	boolean changeUsersRole(int userId, int role) throws SQLUserDAOException;	
-	
-	List<OperationType> getUsersOperationTypes(int id) throws SQLUserDAOException;
+	boolean changeUsersRole(int userId, int role) throws SQLUserDAOException;		
 	
 	int countAmountOfPages(int role, int recordingsAmountInTable) throws SQLUserDAOException;	
 	

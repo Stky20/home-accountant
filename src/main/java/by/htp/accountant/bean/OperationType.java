@@ -6,13 +6,15 @@ public class OperationType implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
+	public static final int SPENDING_TYPE_ROLE = 1;
+	public static final int INCOME_TYPE_ROLE = 2;
+	
 	private int id;
 	private String operationType;
 	private int role;
 	private int userId;
 	
-	public OperationType() {
-		this.role = 1;
+	public OperationType() {		
 	}
 
 	public int getId() {

@@ -10,6 +10,10 @@ public class User implements Serializable{
 		
 	private static final long serialVersionUID = 1L;
 	
+	public static final int ADMINISTRATOR_ROLE = 1;	
+	public static final int USER_ROLE = 2;
+	public static final int UNACTIVE_USER_ROLE = 0;
+	
 	private HashPasswordMaker passwordMaker = HashPasswordMaker.getInstance();
 	
 	private int id;
@@ -26,7 +30,7 @@ public class User implements Serializable{
 	
 	
 	public User() {
-		this.role = 2;
+		this.role = USER_ROLE;
 	}	
 	
 	public User(String nickName, String passwordFromUser) throws UtilException {

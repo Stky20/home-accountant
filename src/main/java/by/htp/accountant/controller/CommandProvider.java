@@ -6,6 +6,7 @@ import java.util.Map;
 import by.htp.accountant.controller.command.ChangeLoginCommand;
 import by.htp.accountant.controller.command.ChangePasswordCommand;
 import by.htp.accountant.controller.command.ChangeUserInfoCommand;
+import by.htp.accountant.controller.command.CreateOperationCommand;
 import by.htp.accountant.controller.command.DeleteUserCommand;
 import by.htp.accountant.controller.command.DiactivateUserCommand;
 import by.htp.accountant.controller.command.GoToAboutUsPageCommand;
@@ -53,12 +54,13 @@ private Map<CommandName, Command> commands = new HashMap<CommandName, Command>()
 		commands.put(CommandName.DELETE_USER, new DeleteUserCommand());
 		commands.put(CommandName.GO_TO_USER_ACCOUNT_PAGE, new GoToUserAccountPageCommand());
 		commands.put(CommandName.GO_TO_OPERATION_FORM, new GoToOperationFormCommand());
+		commands.put(CommandName.CREATE_OPERATION, new CreateOperationCommand());
 	}
 
 	public Command getCommand(String commandName) {
-		if(commandName != null) {
-			Command command = commands.get(CommandName.valueOf(commandName.toUpperCase()));
-			return command;
+		if(commandName != null) {			
+				Command command = commands.get(CommandName.getCommand(commandName.toUpperCase()));
+				return command;			
 		} else {
 			return null;
 		}

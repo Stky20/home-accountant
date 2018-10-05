@@ -40,7 +40,7 @@ public class ConnectionPool {
 	
 	static{		
 			try {
-				instance.initPoolData();
+				instance.initPoolData();				
 			} catch (ClassNotFoundException e) {
 				logger.warn("Can`t load JDBC Driver.class in ConnectionPool init() method", e);
 				throw new ConnectionPoolRuntimeException("Can't create connection pool, can`t load JDBC Driver.class", e);

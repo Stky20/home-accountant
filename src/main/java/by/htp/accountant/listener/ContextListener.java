@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import by.htp.accountant.dao.connectionpool.ConnectionPool;
-import by.htp.accountant.service.impl.UserServiceImpl;
 
 /**
  * Application Lifecycle Listener implementation class ContextListener

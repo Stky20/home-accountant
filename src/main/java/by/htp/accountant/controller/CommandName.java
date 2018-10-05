@@ -1,6 +1,7 @@
 package by.htp.accountant.controller;
 
 import by.htp.accountant.bean.User;
+import by.htp.accountant.exception.NoSuchCommandException;
 
 public enum CommandName {
 	
@@ -25,19 +26,18 @@ public enum CommandName {
 	MAKE_ADMIN(1),
 	DELETE_USER(1),
 	GO_TO_USER_ACCOUNT_PAGE(1,2),
-	GO_TO_OPERATION_FORM(1,2);
+	GO_TO_OPERATION_FORM(1,2),
+	CREATE_OPERATION(1,2);
 	
 	int[] roles = null;
 	
 	
 	private CommandName() {		
-	}
-	
+	}	
 	
 	private CommandName(int...roles) {	
 		this.roles = roles;		
-	}
-	
+	}	
 	
 	public boolean containsRole(User user) {
 		
@@ -53,9 +53,15 @@ public enum CommandName {
 			if(role == user.getRole()) { 
 				return true;
 			}
-		}
-		
-		return false;		
+		}		
+		return false;	
 	}
 	
+	public static CommandName getCommand(String potentialElement) throws NoSuchCommandException {
+		try {
+			return CommandName.valueOf(potentialElement);
+		} catch (IllegalArgumentException e) {
+		     throw new NoSuchCommandException("There is no such element as " + potentialElement + " in CommandName enum.", e);
+		}		
+	}
 }

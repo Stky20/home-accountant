@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import by.htp.accountant.exception.NoSuchCommandException;
+
 
 public class Controller extends HttpServlet {
 	
@@ -29,17 +31,16 @@ public class Controller extends HttpServlet {
 		
 		String commandName = request.getParameter(COMMAND_PARAM_NAME);
 		Command command = null;
-		command = commandProvider.getCommand(commandName);
+		command = commandProvider.getCommand(commandName);		
 		
 		if(command != null) {
 			command.execute(request, response);
 		} else {
-			logger.info("Wrong comand or the command did not come from user.");
-			throw new ServletException();
+			logger.info("Wrong comandName or the command did not come from user. - " + commandName);
+			throw new NoSuchCommandException();
 		}
 		
 	}
-
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);

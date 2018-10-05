@@ -318,14 +318,7 @@ public class MySQLUserDAO implements UserDAO{
 			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO amountOfPages() method", e);
 		}
 		
-	}
-	
-	
-	@Override
-	public List<OperationType> getUsersOperationTypes(int id) throws SQLUserDAOException {
-		
-		return null;
-	}
+	}	
 	
 	
 	@Override

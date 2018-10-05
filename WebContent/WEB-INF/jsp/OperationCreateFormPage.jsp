@@ -29,57 +29,61 @@
 <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
 <link rel="stylesheet" href="css/main.css">
 
+<script type="text/javascript">	
+			function hideSpendingsShowIncome(){
+				$("#spending").hide();				
+				$("#income").show();
+			}
+								
+			function hideIncomeShowSpending(){
+				$("#income").hide();				
+				$("#spending").show();
+			}
+</script>
+
 </head>
 <body>
 <%@ include file="inclusion/NavigationBar.jsp"%> 
 
-<div class="container" style="margin-top:100px; text-align: center;">
+<div class="container" style="margin-top:100px; text-align:center; width:500px;">
 	<form action="Controller" method="post">
 		<input type="hidden" name="command" value="create_operation">
-		<div class="radio">
-			<label>
-			<input type="radio" name="type" id="optionsRadios1" value="spending" checked>
-				Данная операция относится к расходам
-			</label>
-		</div>
-		<div class="radio">
-			<label>
-			<input type="radio" name="type" id="optionsRadios2" value="income">
-				Данная операция относится к доходам
-			</label>
-		</div>
+			<p>Выберите тип операции:</p>
+			<div class="radio">
+				<label onclick="hideIncomeShowSpending()">
+					<input type="radio" name="type" id="optionsRadios1" value="1" checked>Расход
+				</label>
+			</div>
+			<div class="radio">
+				<label onclick="hideSpendingsShowIncome()">
+					<input type="radio" name="type" id="optionsRadios2" value="2">Доход
+				</label>
+			</div>
 		
-		<select class="form-control" name="spending">
+		
+		<select class="form-control" name="spending" id="spending">
 			<c:forEach var="oneSpending" items="${sessionScope.spendingTypesList}">>
-				<option>oneSpending.operationType</option>				
+				<option>${oneSpending.operationType}</option>				
 			</c:forEach>
 		</select>
 		
-		<select class="form-control" name="income">
+		<select class="form-control" name="income" id="income" style="display:none;">
 			<c:forEach var="oneIncome" items="${sessionScope.incomeTypesList}">>
-				<option>oneIncome.operationType</option>				
+				<option>${oneIncome.operationType}</option>				
 			</c:forEach>
-		</select>
-				
-		<select class="form-control" name="count">
-			<option>1</option>
-			<option>2</option>
-			<option>3</option>
-			<option>4</option>
-			<option>5</option>
-		</select>
+		</select>		
 		
 		<div class="form-group">
    			 <label for="exampleInputEmail1">Введите сумму:</label>
 			 <input type="text" class="form-control" id="exampleInputAmount" name="amount" placeholder="Сумма">
 		</div>
-		
+		<p>Вы можете ввести пояснения:</p>
 		<textarea class="form-control" rows="3" placeholder="Пояснения" name="remark"></textarea>
-		<div>
-		<input type="date" name="date">
+		<div style="margin:10px 0 10px 0;">
+			Выберите дату операции: <input type="date" name="date" max="${sessionScope.date}">
 		</div>
 		<div>
-		<input type="submit" class="btn btn-default">	
+			<input type="submit" class="btn btn-default">	
 		</div>
 	
 	</form>

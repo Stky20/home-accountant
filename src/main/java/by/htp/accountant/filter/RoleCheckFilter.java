@@ -36,8 +36,8 @@ public class RoleCheckFilter implements Filter {
 			user = (User) object;
 		}
 		
-		CommandName command = CommandName.valueOf(commandFromRequest);
-				
+		CommandName command = CommandName.getCommand(commandFromRequest);
+		
 		if(!command.containsRole(user)) {			
 			((HttpServletResponse)response).sendRedirect(JSPPath.GO_TO_SORRY_PAGE);
 			return;			
