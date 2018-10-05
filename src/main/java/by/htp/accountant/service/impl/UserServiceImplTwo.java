@@ -134,7 +134,6 @@ public class UserServiceImplTwo implements UserService {
 		if(!validationErrors.isEmpty() && dispatcher == null) {
 			for(String errorMsg : validationErrors) {
 				request.setAttribute(errorMsg, errorMsg);
-				System.out.println(errorMsg);
 			}
 			dispatcher = request.getRequestDispatcher(JSPPath.REGISTRATION_PAGE);
 		}		
