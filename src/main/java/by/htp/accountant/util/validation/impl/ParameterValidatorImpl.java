@@ -187,5 +187,22 @@ public class ParameterValidatorImpl implements ParameterValidator{
 		
 		return errorMessages;
 	}
+	
+	@Override
+	public List<String> validateNameSurnameEmailForRegistration(String name, String surname, String email) {
+		List<String> errorMessages = new ArrayList<String>();
+		
+		if(!oneParameterNullEmptyCheck(name)) {
+			errorMessages.addAll(validateName(name));
+		}
+		if(!oneParameterNullEmptyCheck(surname)) {
+			errorMessages.addAll(validateSurname(surname));
+		}
+		if(!oneParameterNullEmptyCheck(email)) {
+			errorMessages.addAll(validateEmail(email));
+		}
+		
+		return errorMessages;
+	}
 
 }

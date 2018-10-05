@@ -53,7 +53,8 @@ public class MySQLUserDAO implements UserDAO{
 		try (Connection connection = connectionPool.takeConnection()){	
 			try {
 				connection.setAutoCommit(false);
-				try(PreparedStatement preparedStatement = connection.prepareStatement(USER_CREATION_QUERY)){
+				try(PreparedStatement preparedStatement = connection.prepareStatement(USER_CREATION_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)){
+					
 					preparedStatement.setString(1, user.getNickName());
 					preparedStatement.setString(2, user.getHashPassword());
 					preparedStatement.setString(3, user.getName());
@@ -66,7 +67,7 @@ public class MySQLUserDAO implements UserDAO{
 						if(resultSet.next()) {
 							userId = resultSet.getInt(1);
 						}
-					}
+					}					
 				}
 				
 				try(PreparedStatement preparedStatement = connection.prepareStatement(DEFAULT_OPERATION_TYPES_INIT_QUERY)){
@@ -202,22 +203,22 @@ public class MySQLUserDAO implements UserDAO{
 			try {
 				connection.setAutoCommit(false);
 			
-				try(PreparedStatement statement = connection.prepareStatement(USER_DELETE_QUERY)){
+				try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_DEPTS_OPERATIONS_QUERY)){
 					statement.setInt(1, userId);
-					deletedRowsUsers = statement.executeUpdate();
-				}			
+					statement.executeUpdate();			
+				}		
+				try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_OPERATIONS_TYPES_QUERY)){
+					statement.setInt(1, userId);
+					statement.executeUpdate();
+				}
 				try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_OPERATIONS_QUERY)){
 					statement.setInt(1, userId);
 					statement.executeUpdate();
 				}			
-				try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_OPERATIONS_TYPES_QUERY)){
+				try(PreparedStatement statement = connection.prepareStatement(USER_DELETE_QUERY)){
 					statement.setInt(1, userId);
-					statement.executeUpdate();
-				}					
-				try(PreparedStatement statement = connection.prepareStatement(DELETE_USERS_DEPTS_OPERATIONS_QUERY)){
-					statement.setInt(1, userId);
-					statement.executeUpdate();			
-				}
+					deletedRowsUsers = statement.executeUpdate();
+				}	
 			
 				connection.commit();
 				

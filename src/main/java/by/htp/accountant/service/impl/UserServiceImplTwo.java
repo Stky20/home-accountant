@@ -134,6 +134,7 @@ public class UserServiceImplTwo implements UserService {
 		if(!validationErrors.isEmpty() && dispatcher == null) {
 			for(String errorMsg : validationErrors) {
 				request.setAttribute(errorMsg, errorMsg);
+				System.out.println(errorMsg);
 			}
 			dispatcher = request.getRequestDispatcher(JSPPath.REGISTRATION_PAGE);
 		}		
@@ -521,7 +522,7 @@ public class UserServiceImplTwo implements UserService {
 		
 		errorMsgs.addAll(validator.validateLogin(login));
 		errorMsgs.addAll(validator.validatePassword(password));
-		errorMsgs.addAll(validator.validateNameSurnameEmail(name, surname, email));
+		errorMsgs.addAll(validator.validateNameSurnameEmailForRegistration(name, surname, email));
 		
 		if(errorMsgs.isEmpty()) {
 			String messageAfterLoginDBCheck = null; 
@@ -536,6 +537,8 @@ public class UserServiceImplTwo implements UserService {
 				errorMsgs.add(messageAfterLoginDBCheck);
 			}
 		}		
+		
+		
 		
 		return errorMsgs;
 	}

@@ -9,7 +9,7 @@ import by.htp.accountant.bean.OperationType;
 
 public class DefaultOperationTypeManager {	
 	
-	public static final String FILE_NAME = "defaultoperationTypes/defaultTypes";
+	public static final String FILE_NAME = "defaultOperationTypes/defaultTypes";
 	public static final String LOCALE_RU ="ru";
 	public static final String LOCALE_EN ="en";
 	public static final String FILE_NAME_CONNECTOR ="_";
@@ -32,7 +32,7 @@ public class DefaultOperationTypeManager {
 		for(DefaultOperationType typeKeyAndRole : keysAndRolesList) {
 			OperationType type = new OperationType();
 			type.setOperationType(bundle.getString(typeKeyAndRole.getOperationTypeKey()));
-			type.setId(typeKeyAndRole.getRole());
+			type.setRole(typeKeyAndRole.getRole());
 			defaultOperationTypesList.add(type);
 		}		
 		return defaultOperationTypesList;

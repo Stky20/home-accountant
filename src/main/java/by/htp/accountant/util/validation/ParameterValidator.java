@@ -109,6 +109,14 @@ public interface ParameterValidator {
 	 */
 	public List<String> validateNameSurnameEmail(String name, String surname, String email);
 	
+	/**
+	 * 
+	 * @param name
+	 * @param surname
+	 * @param email
+	 * @return
+	 */
+	public List<String> validateNameSurnameEmailForRegistration(String name, String surname, String email);	
 	
 	
 }
