@@ -46,6 +46,11 @@ public class MySQLOperationTypeDAO implements OperationTypeDAO {
 					
 						spendingTypeList.add(type);
 					}
+					if(typeRole == OperationType.SPENDING_TYPE_ROLE) {
+						spendingTypeList.add(getUserUndeletableOperationTypesDependingOnTypeRole(userId, OperationType.SPENDING_TYPE_UNDELETEBLE_ROLE));
+					} else {
+						spendingTypeList.add(getUserUndeletableOperationTypesDependingOnTypeRole(userId, OperationType.INCOME_TYPE_UNDELETEBLE_ROLE));
+					}
 				}
 		} catch (SQLException e) {
 			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationTypeDAO getUserOperationTypesDependingOnTypeRole() method", e);
@@ -54,6 +59,34 @@ public class MySQLOperationTypeDAO implements OperationTypeDAO {
 		}
 				
 		return spendingTypeList;		
+	}
+
+	@Override
+	public OperationType getUserUndeletableOperationTypesDependingOnTypeRole(int userId,
+			int undeletableOperationTypeRole) throws DAOException {
+
+		OperationType operationType = new OperationType();
+		
+		try (Connection connection = connectionPool.takeConnection(); 
+				PreparedStatement prepareStatement = connection.prepareStatement(GET_USER_OPERATION_TYPES_ON_ROLE_QUERY)){
+					
+					prepareStatement.setInt(1, userId);
+					prepareStatement.setInt(2, undeletableOperationTypeRole);
+					
+					try(ResultSet resultSet = prepareStatement.executeQuery()){				
+						if(resultSet.next())	{							
+							operationType.setId(resultSet.getInt(1));  		
+							operationType.setOperationType(resultSet.getString(2)); 
+							operationType.setUserId(resultSet.getInt(3)); 
+							operationType.setRole(resultSet.getInt(4));					
+						}
+					}
+			} catch (SQLException e) {
+				throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationTypeDAO getUserUndeletableOperationTypesDependingOnTypeRole() method", e);
+			} catch (InterruptedException e) {
+				throw new DAOException ("Can`t take connection from ConnectionPool in OperationTypeDAO getUserUndeletableOperationTypesDependingOnTypeRole() method", e);
+			}
+		return operationType;
 	}
 	
 }

@@ -75,7 +75,7 @@
 		
 		<div class="form-group">
    			 <label for="exampleInputEmail1">Введите сумму:</label>
-			 <input type="text" class="form-control" id="exampleInputAmount" name="amount" placeholder="Сумма">
+			 <input type="text" class="form-control" id="exampleInputAmount" name="amount" placeholder="Сумма" pattern="\d+(,\d{2})?">
 		</div>
 		<p>Вы можете ввести пояснения:</p>
 		<textarea class="form-control" rows="3" placeholder="Пояснения" name="remark"></textarea>

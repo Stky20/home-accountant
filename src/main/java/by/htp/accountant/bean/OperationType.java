@@ -8,11 +8,15 @@ public class OperationType implements Serializable{
 	
 	public static final int SPENDING_TYPE_ROLE = 1;
 	public static final int INCOME_TYPE_ROLE = 2;
+	public static final int SPENDING_TYPE_UNDELETEBLE_ROLE = 3;
+	public static final int INCOME_TYPE_UNDELETEBLE_ROLE = 4;
+	
 	
 	private int id;
 	private String operationType;
 	private int role;
 	private int userId;
+	private double percentOfAllTypes;
 	
 	public OperationType() {		
 	}
@@ -48,12 +52,19 @@ public class OperationType implements Serializable{
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
+	
+	public double getPercentOfAllTypes() {
+		return percentOfAllTypes;
+	}
+
+	public void setPercentOfAllTypes(double percentOfAllTypes) {
+		this.percentOfAllTypes = percentOfAllTypes;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
 		result = prime * result + ((operationType == null) ? 0 : operationType.hashCode());
 		result = prime * result + role;
 		result = prime * result + userId;
@@ -69,12 +80,10 @@ public class OperationType implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		OperationType other = (OperationType) obj;
-		if (id != other.id)
-			return false;
 		if (operationType == null) {
 			if (other.operationType != null)
 				return false;
-		} else if (!operationType.equals(other.operationType))
+		} else if (!(operationType.toLowerCase().trim()).equals(other.operationType.toLowerCase().trim()))
 			return false;
 		if (role != other.role)
 			return false;
@@ -87,8 +96,6 @@ public class OperationType implements Serializable{
 	public String toString() {
 		return "OperationType [id=" + id + ", operationType=" + operationType + ", role=" + role + ", userId=" + userId
 				+ "]";
-	}
-	
-	
+	}	
 	
 }

@@ -34,10 +34,30 @@
 <%@ include file="inclusion/NavigationBar.jsp"%> 
 
 <div class="container" style="margin-top:100px; text-align: center;">
-	<form action="Controller" method="get">
-		<input type="hidden" name="command" value="go_to_operation_form">
-		<button type="submit" class="btn btn-success btn-lg">Произвести операцию</button>
-	</form>
+	<div class="container" style="margin-bottom:20px;">
+		<form action="Controller" method="get">
+			<input type="hidden" name="command" value="go_to_operation_form">
+			<button type="submit" class="btn btn-success btn-lg">Добавить расходы/доходы</button>
+		</form>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+			<div class="list-group">
+				<button type="submit" class="list-group-item">Один день</button>
+				<button type="submit" class="list-group-item">Текущая неделя</button>
+				<button type="submit" class="list-group-item">Текущий месяц</button>
+				<button type="submit" class="list-group-item">Текущий год</button>
+				<button type="submit" class="list-group-item">В диаграммах</button>							
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_edit_operationtype_form">
+					<button type="submit" class="list-group-item list-group-item-info">Указать период</button>
+				</form>
+			</div>	
+		</div>
+		<div class="col-md-10">
+			
+		</div>
+	</div>
 
 </div>
 

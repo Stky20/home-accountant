@@ -6,11 +6,11 @@ public enum DefaultOperationType {
 	SPENDING_TRANSPORT("spending.transport", 1),
 	SPENDING_FOOD("spending.food", 1),
 	SPENDING_CLOTHES("spending.clothes", 1),
-	SPENDING_OTHER("spending.other", 1),
+	SPENDING_OTHER("spending.other", 3),
 	
 	INCOME_WAGE("income.wage", 2),
 	INCOME_DEPOSIT("income.deposit", 2),
-	INCOME_OTHER("income.other", 2);		
+	INCOME_OTHER("income.other", 4);		
 	
 	
 	private final String operationTypeKey;
