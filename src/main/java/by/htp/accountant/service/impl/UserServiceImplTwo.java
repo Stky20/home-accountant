@@ -31,7 +31,7 @@ import by.htp.accountant.exception.UserServiceException;
 import by.htp.accountant.service.UserService;
 import by.htp.accountant.util.DefaultOperationTypeManager;
 import by.htp.accountant.util.HashPasswordMaker;
-import by.htp.accountant.util.validation.ParameterValidator;
+import by.htp.accountant.util.validation.UserParameterValidator;
 import by.htp.accountant.util.validation.ValidationFactory;
 
 public class UserServiceImplTwo implements UserService {
@@ -41,12 +41,12 @@ public class UserServiceImplTwo implements UserService {
 	private UserDAO userDAO = DAOFactory.getInstance().getUserDAO();
 	private OperationTypeDAO typeDAO = DAOFactory.getInstance().getOperationTypeDAO();
 	private HashPasswordMaker hashPasswordMaker = HashPasswordMaker.getInstance();
-	private ParameterValidator validator = ValidationFactory.getInstance().getValidator();
+	private UserParameterValidator validator = ValidationFactory.getInstance().getUserValidator();
 		
 	private static final String LOGIN_PARAM = "login";
 	private static final String PASSWORD_PARAM = "password";	
 	private static final String NEW_PASSWORD_PARAM = "new_password";
-	public static final String NEW_PASSWORD_AGAIN_PARAM = "new_password_again";
+	private static final String NEW_PASSWORD_AGAIN_PARAM = "new_password_again";
 	private static final String NAME_PARAM = "name";
 	private static final String SURNAME_PARAM = "surname";	
 	private static final String EMAIL_PARAM = "email";
@@ -159,7 +159,7 @@ public class UserServiceImplTwo implements UserService {
 		String surname = request.getParameter(SURNAME_PARAM);
 		String email = request.getParameter(EMAIL_PARAM);		
 		String local = (String)request.getSession().getAttribute(LOCALIZATION_ATTRIBUTE);
-						
+		
 		List<OperationType> defaultOperationTypeList = DefaultOperationTypeManager.getDefaultOperationTypesFromPropertie(local);
 		List<String> validationErrors = new ArrayList<String>();
 		

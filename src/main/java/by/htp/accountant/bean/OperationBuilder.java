@@ -5,7 +5,6 @@ import java.time.LocalDate;
 public class OperationBuilder {
 	
 	private int id;
-	private int role;
 	private int operationTypeId;
 	private double amount;
 	private String remark;
@@ -19,12 +18,7 @@ public class OperationBuilder {
 	public OperationBuilder buildId(int id) {
 		this.id = id;
 		return this;
-	}
-
-	public OperationBuilder buildRole(int role) {
-		this.role = role;
-		return this;
-	}
+	}	
 	
 	public OperationBuilder buildOperationType(int operationTypeId) {
 		this.operationTypeId = operationTypeId;
@@ -53,8 +47,7 @@ public class OperationBuilder {
 	
 	public Operation buildOperation() {
 		Operation operation = new Operation();
-		if (id != 0) operation.setId(id);
-		if (role != 0) operation.setRole(role);
+		if (id != 0) operation.setId(id);		
 		if (operationTypeId != 0) operation.setOperationTypeId(operationTypeId);
 		if (amount != 0) operation.setAmount(amount);
 		if (remark != null) operation.setRemark(remark);

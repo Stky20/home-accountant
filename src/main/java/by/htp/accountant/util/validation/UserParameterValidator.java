@@ -2,7 +2,7 @@ package by.htp.accountant.util.validation;
 
 import java.util.List;
 
-public interface ParameterValidator {
+public interface UserParameterValidator {
 	
 	
 	/**

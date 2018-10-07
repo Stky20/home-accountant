@@ -9,12 +9,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 
-public class RquestResponseEncodingFilter implements Filter {
+public class RequestResponseEncodingFilter implements Filter {
 
 	private String requestEncoding;
 	private String responseEncoding;
    
-    public RquestResponseEncodingFilter() {
+    public RequestResponseEncodingFilter() {
         
     }
 
@@ -27,7 +27,7 @@ public class RquestResponseEncodingFilter implements Filter {
 		
 		request.setCharacterEncoding(requestEncoding);
 		response.setContentType(responseEncoding);
-				
+		
 		chain.doFilter(request, response);
 	}
 

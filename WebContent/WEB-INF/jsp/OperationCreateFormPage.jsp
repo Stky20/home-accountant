@@ -46,42 +46,45 @@
 <%@ include file="inclusion/NavigationBar.jsp"%> 
 
 <div class="container" style="margin-top:100px; text-align:center; width:500px;">
+	<h1>Создайте новую операцию!</h1>
 	<form action="Controller" method="post">
 		<input type="hidden" name="command" value="create_operation">
 			<p>Выберите тип операции:</p>
 			<div class="radio">
 				<label onclick="hideIncomeShowSpending()">
-					<input type="radio" name="type" id="optionsRadios1" value="1" checked>Расход
+					<input type="radio" name="operationTypeRole" id="optionsRadios1" value="1" checked>Расход
 				</label>
-			</div>
-			<div class="radio">
 				<label onclick="hideSpendingsShowIncome()">
-					<input type="radio" name="type" id="optionsRadios2" value="2">Доход
+					<input type="radio" name="operationTypeRole" id="optionsRadios2" value="2">Доход
 				</label>
 			</div>
 		
 		
-		<select class="form-control" name="spending" id="spending">
-			<c:forEach var="oneSpending" items="${sessionScope.spendingTypesList}">>
+		<select class="form-control" name="operationType" id="spending">
+			<c:forEach var="oneSpending" items="${sessionScope.spendingTypesList}">
 				<option>${oneSpending.operationType}</option>				
 			</c:forEach>
 		</select>
 		
-		<select class="form-control" name="income" id="income" style="display:none;">
-			<c:forEach var="oneIncome" items="${sessionScope.incomeTypesList}">>
+		<select class="form-control" name="operationType" id="income" style="display:none;">
+			<c:forEach var="oneIncome" items="${sessionScope.incomeTypesList}">
 				<option>${oneIncome.operationType}</option>				
 			</c:forEach>
 		</select>		
 		
-		<div class="form-group">
-   			 <label for="exampleInputEmail1">Введите сумму:</label>
-			 <input type="text" class="form-control" id="exampleInputAmount" name="amount" placeholder="Сумма" pattern="\d+(,\d{2})?">
+		<div class="input-group" style="margin:20px 0 20px 0;; padding-left:100px;">
+			<span class="input-group-addon" id="basic-addon1">Сумма Br:</span>
+			<input type="text" class="form-control" name="amount" placeholder="123,25" aria-describedby="basic-addon1" pattern="\d+([,.]{1}\d{1,2})?" style="width: 200px;">
 		</div>
+		
+		
 		<p>Вы можете ввести пояснения:</p>
 		<textarea class="form-control" rows="3" placeholder="Пояснения" name="remark"></textarea>
+		
 		<div style="margin:10px 0 10px 0;">
-			Выберите дату операции: <input type="date" name="date" max="${sessionScope.date}">
+			Выберите дату операции: <input type="date" name="date" max="${sessionScope.date}" placeholder="dd.mm.yyyy">
 		</div>
+		
 		<div>
 			<input type="submit" class="btn btn-default">	
 		</div>

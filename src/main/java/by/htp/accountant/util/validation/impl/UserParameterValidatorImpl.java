@@ -8,9 +8,9 @@ import java.util.List;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
-import by.htp.accountant.util.validation.ParameterValidator;
+import by.htp.accountant.util.validation.UserParameterValidator;
 
-public class ParameterValidatorImpl implements ParameterValidator{
+public class UserParameterValidatorImpl implements UserParameterValidator{
 	
 	//private static final Logger logger = LoggerFactory.getLogger(ParameterValidatorImpl.class);
 	

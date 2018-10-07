@@ -6,6 +6,7 @@ public class JSPPath {
 	public final static String GO_TO_SORRY_PAGE = "Controller?command=go_to_sorry_page";
 	public final static String GO_TO_USER_PROFILE_PAGE = "Controller?command=go_to_profile&modal=true";
 	public final static String GO_TO_USER_ADMINISTRATION_PAGE = "Controller?command=go_to_user_administration_page&modal=true";
+	public final static String GO_TO_USER_ACCOUNT_PAGE = "Controller?command=go_to_user_account_page&modal=true";
 	
 	
 	public final static String MAIN_PAGE = "/WEB-INF/jsp/MainPage.jsp";

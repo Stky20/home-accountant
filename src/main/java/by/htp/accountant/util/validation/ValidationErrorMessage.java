@@ -19,6 +19,14 @@ public class ValidationErrorMessage {
 	public static final String LOGIN_MATCHER_ERROR_MESSAGE = "loginDoNotMatches";
 	public static final String PASSWORD_MATCHER_ERROR_MESSAGE = "passwordDoNotMatches";
 	
+	
+	public static final String WRONG_OPERATION_TYPE_OR_ROLE_ERROR_MSG = "wrongOperationTypeOrRole";
+	public static final String WRONG_OPERATION_REMARK_ERROR_MSG = "wrongOperationRemark";
+	public static final String WRONG_OPERATION_DATE_ERROR_MSG = "wrongOperationDate";
+	public static final String WRONG_OPERATION_AMOUNT_ERROR_MSG = "wrongOperationDate";
+	public static final String EMPTY_OPERATION_AMOUNT_ERROR_MSG = "emptyOperationAmount";
+	
+	
 	public static final String NO_CHANGES_MSG = "noChangesMsg";	
 		
 

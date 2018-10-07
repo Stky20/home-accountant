@@ -6,9 +6,8 @@ import java.time.LocalDate;
 public class Operation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	private int id;
-	private int role;
+	
+	private int id;	
 	private int operationTypeId;
 	private double amount;
 	private String remark;
@@ -26,15 +25,7 @@ public class Operation implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public int getRole() {
-		return role;
-	}
-
-	public void setRole(int role) {
-		this.role = role;
-	}
-
+	
 	public int getOperationTypeId() {
 		return operationTypeId;
 	}
@@ -83,10 +74,8 @@ public class Operation implements Serializable {
 		temp = Double.doubleToLongBits(amount);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((date == null) ? 0 : date.hashCode());
-		result = prime * result + id;
-		result = prime * result + ((remark == null) ? 0 : remark.hashCode());
-		result = prime * result + role;
 		result = prime * result + operationTypeId;
+		result = prime * result + ((remark == null) ? 0 : remark.hashCode());
 		result = prime * result + userId;
 		return result;
 	}
@@ -107,16 +96,12 @@ public class Operation implements Serializable {
 				return false;
 		} else if (!date.equals(other.date))
 			return false;
-		if (id != other.id)
+		if (operationTypeId != other.operationTypeId)
 			return false;
 		if (remark == null) {
 			if (other.remark != null)
 				return false;
 		} else if (!remark.equals(other.remark))
-			return false;
-		if (role != other.role)
-			return false;
-		if (operationTypeId != other.operationTypeId)
 			return false;
 		if (userId != other.userId)
 			return false;
@@ -125,8 +110,8 @@ public class Operation implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Operation [id=" + id + ", role=" + role + ", spendingTypeId=" + operationTypeId + ", amount=" + amount
-				+ ", remark=" + remark + ", date=" + date + ", userId=" + userId + "]";
+		return "Operation [id=" + id + ", operationTypeId=" + operationTypeId + ", amount=" + amount + ", remark="
+				+ remark + ", date=" + date + ", userId=" + userId + "]";
 	}
 	
 	
