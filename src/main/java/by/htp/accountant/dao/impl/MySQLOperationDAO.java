@@ -26,8 +26,8 @@ public class MySQLOperationDAO implements OperationDAO{
 	
 	private static final Logger logger = LoggerFactory.getLogger(MySQLOperationDAO.class);	
 	
-	private final static String CREATE_OPERATION_QUERY = "INSERT INTO operations (role, operationTypeId, amount, remark, operationDate, user_id) VALUES (?, ?, ?, ?, ?, ?);";
-	private final static String EDIT_OPERATION_QUERY = "UPDATE operations SET role=?, operationTypeId=?, amount=?, remark=?, operationDate=?, user_id=? WHERE id=?;";
+	private final static String CREATE_OPERATION_QUERY = "INSERT INTO operations (operationTypeId, amount, remark, operationDate, user_id) VALUES (?, ?, ?, ?, ?);";
+	private final static String EDIT_OPERATION_QUERY = "UPDATE operations SET operationTypeId=?, amount=?, remark=?, operationDate=?, user_id=? WHERE id=?;";
 	private final static String REMOVE_OPERATION_QUERY = "DELETE FROM operations WHERE id = ?;";
 	private final static String SHOW_ALL_OPERATION_QUERY = "SELECT * FROM operations WHERE role=? AND operationDate>? AND operationDate<? AND user_id=? LIMIT ?,?;";
 	private final static String SHOW_ALL_OPERATION_ONE_DAY_QUERY = "SELECT * FROM operations WHERE role=? AND operationDate=? AND user_id=? LIMIT ?,?;";
@@ -41,12 +41,10 @@ public class MySQLOperationDAO implements OperationDAO{
 	private final static String GET_ALL_USERS_OPERATION_TYPES_QUERY = "SELECT * FROM operation_types WHERE user_Id=?;";
 
 
-
 	
 	public MySQLOperationDAO() {
 		connectionPool = ConnectionPool.getInstance();
-	}
-	
+	}	
 	
 
 	@Override
@@ -56,13 +54,12 @@ public class MySQLOperationDAO implements OperationDAO{
 		try (Connection connection = connectionPool.takeConnection()){
 			
 			try(PreparedStatement preparedStatement = connection.prepareStatement(CREATE_OPERATION_QUERY)){
-			
-				preparedStatement.setInt(1, operation.getRole());
-				preparedStatement.setInt(2, operation.getOperationTypeId());
-				preparedStatement.setDouble(3, operation.getAmount());
-				preparedStatement.setString(4, operation.getRemark());
-				preparedStatement.setDate(5, Date.valueOf(operation.getDate()));
-				preparedStatement.setInt(6, operation.getUserId());
+							
+				preparedStatement.setInt(1, operation.getOperationTypeId());
+				preparedStatement.setDouble(2, operation.getAmount());
+				preparedStatement.setString(3, operation.getRemark());
+				preparedStatement.setDate(4, Date.valueOf(operation.getDate()));
+				preparedStatement.setInt(5, operation.getUserId());
 				addedRowsInBase = preparedStatement.executeUpdate();
 			}
 		} catch (InterruptedException e) {
@@ -89,14 +86,13 @@ public class MySQLOperationDAO implements OperationDAO{
 		try (Connection connection = connectionPool.takeConnection()){
 			
 			try(PreparedStatement preparedStatement = connection.prepareStatement(EDIT_OPERATION_QUERY)){	
-				
-				preparedStatement.setInt(1, newOperation.getRole());
-				preparedStatement.setInt(2, newOperation.getOperationTypeId());
-				preparedStatement.setDouble(3, newOperation.getAmount());
-				preparedStatement.setString(4, newOperation.getRemark());
-				preparedStatement.setDate(5, Date.valueOf(newOperation.getDate()));
-				preparedStatement.setInt(6, newOperation.getUserId());
-				preparedStatement.setInt(7, oldOperationId);
+								
+				preparedStatement.setInt(1, newOperation.getOperationTypeId());
+				preparedStatement.setDouble(2, newOperation.getAmount());
+				preparedStatement.setString(3, newOperation.getRemark());
+				preparedStatement.setDate(4, Date.valueOf(newOperation.getDate()));
+				preparedStatement.setInt(5, newOperation.getUserId());
+				preparedStatement.setInt(6, oldOperationId);
 				
 				changedRowsInBase = preparedStatement.executeUpdate();			
 				
@@ -146,81 +142,82 @@ public class MySQLOperationDAO implements OperationDAO{
 	public List<Operation> showAllOperations(int role, int operationsNumber, int startingFrom, LocalDate fromDate,
 			LocalDate tilDate, int userId) throws DAOException {
 		
-		List<Operation> operationsList = new ArrayList<Operation>();
-		
-		try (Connection connection = connectionPool.takeConnection()){				
-			
-				try(PreparedStatement prepareStatement = connection.prepareStatement(SHOW_ALL_OPERATION_QUERY)){
-					prepareStatement.setInt(1, role);
-					prepareStatement.setDate(2, Date.valueOf(fromDate));
-					prepareStatement.setDate(3, Date.valueOf(tilDate));
-					prepareStatement.setInt(4, userId);
-					prepareStatement.setInt(5, startingFrom);
-					prepareStatement.setInt(6, operationsNumber);
-					
-					try(ResultSet resultSet = prepareStatement.executeQuery()){
-						while(resultSet.next()) {
-							Operation operation = new Operation();
-							operation.setId(resultSet.getInt(1));
-							operation.setRole(resultSet.getInt(2));
-							operation.setOperationTypeId(resultSet.getInt(3));
-							operation.setAmount(resultSet.getDouble(4));
-							operation.setRemark(resultSet.getString(5));
-							operation.setDate(resultSet.getDate(6).toLocalDate());
-							operation.setUserId(resultSet.getInt(7));
-						}
-					}
-				}							
-				
-		} catch (SQLException e) {
-			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationDAO showAllOperations() method", e);
-		} catch (InterruptedException e) {
-			throw new DAOException ("Can`t take connection from ConnectionPool in OperationDAO showAllOperations() method", e);			
-		}
-				
-		return operationsList;	
-		
+//		List<Operation> operationsList = new ArrayList<Operation>();
+//		
+//		try (Connection connection = connectionPool.takeConnection()){				
+//			
+//				try(PreparedStatement prepareStatement = connection.prepareStatement(SHOW_ALL_OPERATION_QUERY)){
+//					prepareStatement.setInt(1, role);
+//					prepareStatement.setDate(2, Date.valueOf(fromDate));
+//					prepareStatement.setDate(3, Date.valueOf(tilDate));
+//					prepareStatement.setInt(4, userId);
+//					prepareStatement.setInt(5, startingFrom);
+//					prepareStatement.setInt(6, operationsNumber);
+//					
+//					try(ResultSet resultSet = prepareStatement.executeQuery()){
+//						while(resultSet.next()) {
+//							Operation operation = new Operation();
+//							operation.setId(resultSet.getInt(1));
+//							operation.setRole(resultSet.getInt(2));
+//							operation.setOperationTypeId(resultSet.getInt(3));
+//							operation.setAmount(resultSet.getDouble(4));
+//							operation.setRemark(resultSet.getString(5));
+//							operation.setDate(resultSet.getDate(6).toLocalDate());
+//							operation.setUserId(resultSet.getInt(7));
+//						}
+//					}
+//				}							
+//				
+//		} catch (SQLException e) {
+//			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationDAO showAllOperations() method", e);
+//		} catch (InterruptedException e) {
+//			throw new DAOException ("Can`t take connection from ConnectionPool in OperationDAO showAllOperations() method", e);			
+//		}
+//				
+//		return operationsList;	
+		return null;
 	}
 	
 	@Override
 	public List<Operation> showAllOperationsAtOneDay(int role, int operationsNumber, int startingFrom, LocalDate date,
 			int userId) throws DAOException {
 		
-		List<Operation> operationsList = new ArrayList<Operation>();
-		
-		try (Connection connection = connectionPool.takeConnection()){			
-				
-				try(PreparedStatement prepareStatement = connection.prepareStatement(SHOW_ALL_OPERATION_ONE_DAY_QUERY)){
-					prepareStatement.setInt(1, role);
-					prepareStatement.setDate(2, Date.valueOf(date));
-					prepareStatement.setInt(3, userId);
-					prepareStatement.setInt(4, startingFrom);
-					prepareStatement.setInt(5, operationsNumber);
-					
-					try(ResultSet resultSet = prepareStatement.executeQuery()){
-						while(resultSet.next()) {
-							Operation operation = new Operation();
-							
-							operation.setId(resultSet.getInt(1));
-							operation.setRole(resultSet.getInt(2));
-							operation.setOperationTypeId(resultSet.getInt(3));
-							operation.setAmount(resultSet.getDouble(4));
-							operation.setRemark(resultSet.getString(5));
-							operation.setDate(resultSet.getDate(6).toLocalDate());
-							operation.setUserId(resultSet.getInt(7));
-							
-							operationsList.add(operation);
-						}
-					}
-				}							
-				
-		} catch (SQLException e) {
-			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationDAO showAllOperations() method", e);
-		} catch (InterruptedException e) {
-			throw new DAOException ("Can`t take connection from ConnectionPool in OperationDAO showAllOperations() method", e);			
-		}
-				
-		return operationsList;	
+//		List<Operation> operationsList = new ArrayList<Operation>();
+//		
+//		try (Connection connection = connectionPool.takeConnection()){			
+//				
+//				try(PreparedStatement prepareStatement = connection.prepareStatement(SHOW_ALL_OPERATION_ONE_DAY_QUERY)){
+//					prepareStatement.setInt(1, role);
+//					prepareStatement.setDate(2, Date.valueOf(date));
+//					prepareStatement.setInt(3, userId);
+//					prepareStatement.setInt(4, startingFrom);
+//					prepareStatement.setInt(5, operationsNumber);
+//					
+//					try(ResultSet resultSet = prepareStatement.executeQuery()){
+//						while(resultSet.next()) {
+//							Operation operation = new Operation();
+//							
+//							operation.setId(resultSet.getInt(1));
+//							operation.setRole(resultSet.getInt(2));
+//							operation.setOperationTypeId(resultSet.getInt(3));
+//							operation.setAmount(resultSet.getDouble(4));
+//							operation.setRemark(resultSet.getString(5));
+//							operation.setDate(resultSet.getDate(6).toLocalDate());
+//							operation.setUserId(resultSet.getInt(7));
+//							
+//							operationsList.add(operation);
+//						}
+//					}
+//				}							
+//				
+//		} catch (SQLException e) {
+//			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationDAO showAllOperations() method", e);
+//		} catch (InterruptedException e) {
+//			throw new DAOException ("Can`t take connection from ConnectionPool in OperationDAO showAllOperations() method", e);			
+//		}
+//				
+//		return operationsList;	
+		return null;
 	}
 	
 
@@ -296,44 +293,44 @@ public class MySQLOperationDAO implements OperationDAO{
 	public List<Operation> showOneTypeOperations(int role, int userId, int operationType, int operationsNumber,
 			int startingFrom, LocalDate fromDate, LocalDate tilDate) throws DAOException {
 		
-		List<Operation> operationsList = new ArrayList<Operation>();
-		
-		try (Connection connection = connectionPool.takeConnection()){				
-			
-				try(PreparedStatement prepareStatement = connection.prepareStatement(SHOW_ONE_TYPE_OPERATION_QUERY)){
-					prepareStatement.setInt(1, role);
-					prepareStatement.setInt(2, userId);
-					prepareStatement.setInt(3, operationType);
-					prepareStatement.setDate(4, Date.valueOf(fromDate));
-					prepareStatement.setDate(5, Date.valueOf(tilDate));
-					prepareStatement.setInt(6, startingFrom);
-					prepareStatement.setInt(7, operationsNumber);					
-					
-					try(ResultSet resultSet = prepareStatement.executeQuery()){
-						while(resultSet.next()) {
-							Operation operation = new Operation();
-							
-							operation.setId(resultSet.getInt(1));
-							operation.setRole(resultSet.getInt(2));
-							operation.setOperationTypeId(resultSet.getInt(3));
-							operation.setAmount(resultSet.getDouble(4));
-							operation.setRemark(resultSet.getString(5));
-							operation.setDate(resultSet.getDate(6).toLocalDate());
-							operation.setUserId(resultSet.getInt(7));
-							
-							operationsList.add(operation);
-						}
-					}
-				}							
-				
-		} catch (SQLException e) {
-			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationDAO showOneTypeOperations() method", e);
-		} catch (InterruptedException e) {
-			throw new DAOException ("Can`t take connection from ConnectionPool in OperationDAO showOneTypeOperations() method", e);			
-		}
-				
-		return operationsList;	
-		
+//		List<Operation> operationsList = new ArrayList<Operation>();
+//		
+//		try (Connection connection = connectionPool.takeConnection()){				
+//			
+//				try(PreparedStatement prepareStatement = connection.prepareStatement(SHOW_ONE_TYPE_OPERATION_QUERY)){
+//					prepareStatement.setInt(1, role);
+//					prepareStatement.setInt(2, userId);
+//					prepareStatement.setInt(3, operationType);
+//					prepareStatement.setDate(4, Date.valueOf(fromDate));
+//					prepareStatement.setDate(5, Date.valueOf(tilDate));
+//					prepareStatement.setInt(6, startingFrom);
+//					prepareStatement.setInt(7, operationsNumber);					
+//					
+//					try(ResultSet resultSet = prepareStatement.executeQuery()){
+//						while(resultSet.next()) {
+//							Operation operation = new Operation();
+//							
+//							operation.setId(resultSet.getInt(1));
+//							operation.setRole(resultSet.getInt(2));
+//							operation.setOperationTypeId(resultSet.getInt(3));
+//							operation.setAmount(resultSet.getDouble(4));
+//							operation.setRemark(resultSet.getString(5));
+//							operation.setDate(resultSet.getDate(6).toLocalDate());
+//							operation.setUserId(resultSet.getInt(7));
+//							
+//							operationsList.add(operation);
+//						}
+//					}
+//				}							
+//				
+//		} catch (SQLException e) {
+//			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationDAO showOneTypeOperations() method", e);
+//		} catch (InterruptedException e) {
+//			throw new DAOException ("Can`t take connection from ConnectionPool in OperationDAO showOneTypeOperations() method", e);			
+//		}
+//				
+//		return operationsList;	
+		return null;
 	}
 
 
@@ -342,43 +339,43 @@ public class MySQLOperationDAO implements OperationDAO{
 	public List<Operation> showOneTypeOperationsAtOneDay(int role, int userId, int operationTypeId, int operationsNumber,
 			int startingFrom, LocalDate date) throws DAOException {
 		
-		List<Operation> operationsList = new ArrayList<Operation>();
-		
-		try (Connection connection = connectionPool.takeConnection()){			
-				
-				try(PreparedStatement prepareStatement = connection.prepareStatement(SHOW_ONE_TYPE_OPERATION_ONE_DAY_QUERY)){
-					prepareStatement.setInt(1, role);
-					prepareStatement.setInt(2, userId);
-					prepareStatement.setInt(3, operationTypeId);
-					prepareStatement.setDate(4, Date.valueOf(date));
-					prepareStatement.setInt(5, startingFrom);
-					prepareStatement.setInt(6, operationsNumber);
-					
-					try(ResultSet resultSet = prepareStatement.executeQuery()){
-						while(resultSet.next()) {
-							Operation operation = new Operation();
-							
-							operation.setId(resultSet.getInt(1));
-							operation.setRole(resultSet.getInt(2));
-							operation.setOperationTypeId(resultSet.getInt(3));
-							operation.setAmount(resultSet.getDouble(4));
-							operation.setRemark(resultSet.getString(5));
-							operation.setDate(resultSet.getDate(6).toLocalDate());
-							operation.setUserId(resultSet.getInt(7));
-							
-							operationsList.add(operation);
-						}
-					}
-				}							
-				
-		} catch (SQLException e) {
-			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationDAO showOneTypeOperationsAtOneDay() method", e);
-		} catch (InterruptedException e) {
-			throw new DAOException ("Can`t take connection from ConnectionPool in OperationDAO showOneTypeOperationsAtOneDay() method", e);			
-		}
-				
-		return operationsList;	
-		
+//		List<Operation> operationsList = new ArrayList<Operation>();
+//		
+//		try (Connection connection = connectionPool.takeConnection()){			
+//				
+//				try(PreparedStatement prepareStatement = connection.prepareStatement(SHOW_ONE_TYPE_OPERATION_ONE_DAY_QUERY)){
+//					prepareStatement.setInt(1, role);
+//					prepareStatement.setInt(2, userId);
+//					prepareStatement.setInt(3, operationTypeId);
+//					prepareStatement.setDate(4, Date.valueOf(date));
+//					prepareStatement.setInt(5, startingFrom);
+//					prepareStatement.setInt(6, operationsNumber);
+//					
+//					try(ResultSet resultSet = prepareStatement.executeQuery()){
+//						while(resultSet.next()) {
+//							Operation operation = new Operation();
+//							
+//							operation.setId(resultSet.getInt(1));
+//							operation.setRole(resultSet.getInt(2));
+//							operation.setOperationTypeId(resultSet.getInt(3));
+//							operation.setAmount(resultSet.getDouble(4));
+//							operation.setRemark(resultSet.getString(5));
+//							operation.setDate(resultSet.getDate(6).toLocalDate());
+//							operation.setUserId(resultSet.getInt(7));
+//							
+//							operationsList.add(operation);
+//						}
+//					}
+//				}							
+//				
+//		} catch (SQLException e) {
+//			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationDAO showOneTypeOperationsAtOneDay() method", e);
+//		} catch (InterruptedException e) {
+//			throw new DAOException ("Can`t take connection from ConnectionPool in OperationDAO showOneTypeOperationsAtOneDay() method", e);			
+//		}
+//				
+//		return operationsList;	
+		return null;
 	}
 
 

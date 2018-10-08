@@ -22,6 +22,7 @@ import by.htp.accountant.dao.DAOFactory;
 import by.htp.accountant.dao.OperationDAO;
 import by.htp.accountant.dao.OperationTypeDAO;
 import by.htp.accountant.exception.DAOException;
+import by.htp.accountant.exception.ServiceException;
 import by.htp.accountant.service.OperationService;
 import by.htp.accountant.util.validation.OperationParameterValidator;
 import by.htp.accountant.util.validation.UserParameterValidator;
@@ -38,7 +39,8 @@ public class OperationServiceImpl implements OperationService {
 	private OperationParameterValidator validator = ValidationFactory.getInstance().getOperationValidator();
 	
 	private static final String OPERATION_TYPE_ROLE_PARAM = "operationTypeRole";
-	private static final String OPERATION_TYPE_PARAM = "operationType";	
+	private static final String OPERATION_TYPE_SPENTING_PARAM = "spending";
+	private static final String OPERATION_TYPE_INCOME_PARAM = "income";
 	private static final String OPERATION_REMARK_PARAM = "remark";
 	private static final String OPERATION_DATE_PARAM = "date";
 	private static final String OPERATION_AMOUNT_PARAM = "amount";
@@ -46,7 +48,7 @@ public class OperationServiceImpl implements OperationService {
 	private final static String USER_ATTRIBUTE = "user";
 	private static final String SPENDING_TYPES_LIST_ATTRIBUTE = "spendingTypesList";
 	private static final String INCOME_TYPES_LIST_ATTRIBUTE = "incomeTypesList";
-	private static final String MODAL_CREATE_OPERATION_ATTRIBUTE = "modalCreateOperation";
+	private static final String MODAL_CREATE_OPERATION_ATTRIBUTE = "operationCreateModal";
 	private static final String MODAL_CREATE_OPERATION_TYPE_ATTRIBUTE = "modalCreateOperationType";
 	private static final String MODAL_EDIT_OPERATION_ATTRIBUTE = "modalEditOperation";
 	private static final String MODAL_EDIT_OPERATION_TYPE_ATTRIBUTE = "modalEditOperationType";
@@ -61,29 +63,27 @@ public class OperationServiceImpl implements OperationService {
 		RequestDispatcher dispatcher = null;
 		HttpSession session = request.getSession(true);
 		
-		User user = (User) session.getAttribute(USER_ATTRIBUTE);
+		User user = (User) session.getAttribute(USER_ATTRIBUTE);		
+		String operationTypeRole = request.getParameter(OPERATION_TYPE_ROLE_PARAM);		
+		String operationType = getParamOperationTypeOnRole(operationTypeRole, request);
+		String remark = request.getParameter(OPERATION_REMARK_PARAM);
+		String date = request.getParameter(OPERATION_DATE_PARAM);
+		String amount = request.getParameter(OPERATION_AMOUNT_PARAM);
+		
+		List<String> paramsValidationErrors = new ArrayList<String>();
 		List<OperationType> spendingTypesList = null; 
-		List<OperationType> incomeTypesList = null;
+		List<OperationType> incomeTypesList = null;		
+		Operation operation = null;
 		
 		try {
 			spendingTypesList = typeDAO.getUserOperationTypesDependingOnTypeRole(user.getId(), OperationType.SPENDING_TYPE_ROLE);
 			incomeTypesList = typeDAO.getUserOperationTypesDependingOnTypeRole(user.getId(), OperationType.INCOME_TYPE_ROLE);
 		} catch (DAOException e) {
 			logger.warn("DAOException while geting operationTypesLists", e);
-			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
-		}
-		Operation operation = null;
+			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);			
+		}		
 		
-		if(dispatcher == null) {
-			List<String> paramsValidationErrors = new ArrayList<String>();
-			
-			String operationTypeRole = request.getParameter(OPERATION_TYPE_ROLE_PARAM);		
-			String operationType = request.getParameter(OPERATION_TYPE_PARAM);
-			String remark = request.getParameter(OPERATION_REMARK_PARAM);
-			String date = request.getParameter(OPERATION_DATE_PARAM);
-			String amount = request.getParameter(OPERATION_AMOUNT_PARAM);
-			LocalDate operationDate = null;
-			double operationAmount = 0;
+		if(dispatcher == null) {			
 	
 			paramsValidationErrors.addAll(validator.validateOperationParams(remark, date, amount));
 			
@@ -95,37 +95,29 @@ public class OperationServiceImpl implements OperationService {
 			
 			if(!paramsValidationErrors.isEmpty()) {
 				for(String errorMsg: paramsValidationErrors) {
-					request.setAttribute(errorMsg, errorMsg);
+					request.setAttribute(errorMsg, errorMsg);					
 				}
 				request.setAttribute(MODAL_CREATE_OPERATION_ATTRIBUTE, MODAL_CREATE_OPERATION_ATTRIBUTE);
-				dispatcher = request.getRequestDispatcher(JSPPath.USER_ACCOUNT_PAGE);
+				dispatcher = request.getRequestDispatcher(JSPPath.USER_ACCOUNT_PAGE);				
 			} else {
-				if (validator.oneParameterNullEmptyCheck(date)) {// private method TODO
-					operationDate = LocalDate.now();
-				} else {
-					operationDate = LocalDate.parse(date);
+				try {
+					operation = makeOperationFromStringParams(user.getId(), operationTypeId, date, amount, remark);
+				} catch (ServiceException e) {
+					dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 				}
-				
-				operationAmount = Double.parseDouble(amount);
-				
-				if(validator.oneParameterNullEmptyCheck(remark)) {
-					remark = null;
-				}
-				
-				operation = new Operation();
-				operation.setAmount(operationAmount);
-				operation.setDate(operationDate);
-				operation.setRemark(remark);
-				operation.setOperationTypeId(operationTypeId);
-				operation.setUserId(user.getId());//
 			}
 			
-			if (operation != null) {
+			if (operation != null && dispatcher == null) {
 				try {
-					operationDAO.createOperation(operation);
+					if(!operationDAO.createOperation(operation)) {
+						logger.info("Couldn`t create operation becourse of operationDAO.createOperation(operation) returned false"
+								+ " in createOperation() method - line 107");
+						dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
+					}						
+					
 				} catch (DAOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.warn("DAOException while creatingOperation() method", e);
+					dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);					
 				}
 			}		
 		}
@@ -135,10 +127,123 @@ public class OperationServiceImpl implements OperationService {
 	}
 	
 	
+	/**
+	 * 
+	 * @param operationTypeRole
+	 * @param request
+	 * @return
+	 */
+	private String getParamOperationTypeOnRole(String operationTypeRole, HttpServletRequest request){
+		int realOperationTypeRole = 0;
+		String operationType = null;
+		
+		if(!validator.oneParameterNullEmptyCheck(operationTypeRole)) {
+			try {
+				realOperationTypeRole = Integer.parseInt(operationTypeRole);
+			} catch(NumberFormatException e) {
+				logger.info("NumberFormatException while trying to do parseInt() in getParamOperationTypeOnRole() method of OperationServiceImpl", e);				
+			}
+		} 
+		
+		if(realOperationTypeRole == OperationType.SPENDING_TYPE_ROLE) {
+			operationType = request.getParameter(OPERATION_TYPE_SPENTING_PARAM);
+		} else if (realOperationTypeRole == OperationType.INCOME_TYPE_ROLE) {
+			operationType = request.getParameter(OPERATION_TYPE_INCOME_PARAM);
+		} 
+		
+		return operationType;
+	}
+	
+	
+	/**
+	 * 
+	 * @param operationTypeRole
+	 * @param operationType
+	 * @param spendingTypesList
+	 * @param incomeTypesList
+	 * @return
+	 */
 	private int getOperationTypeIdFromTypesLists(String operationTypeRole, String operationType, 
 			List<OperationType> spendingTypesList, List<OperationType> incomeTypesList) {
-		// TODO
-		return 0;
+		
+		int wrongOperationTypeId = -1;
+		int realOperationTypeRole = 0;		
+		
+		if(validator.ifSomeOfParamsNullEmptyCheck(operationTypeRole, operationType)) {
+			logger.info("Somehow in getOperationTypeIdFromTypesLists() method of OperationServiceImpl as parameters came operationTypeRole -" 
+						+ operationTypeRole + " and as operationType - " + operationType);
+			return -1;
+		}
+		
+		try {
+			realOperationTypeRole = Integer.parseInt(operationTypeRole);			
+		} catch(NumberFormatException e) {
+			logger.info("NumberFormatException while trying to do parseInt() of parameter - operationTypeRole in  "
+					+ "getOperationTypeIdFromTypesLists() method of OperationServiceImpl", e);
+			return wrongOperationTypeId;
+		}
+		
+		
+		if(realOperationTypeRole == OperationType.SPENDING_TYPE_ROLE) {
+			for (OperationType type: spendingTypesList) {				
+				if(type.getOperationType().equals(operationType)) {					
+					return type.getId();
+				}
+			}
+		} else if (realOperationTypeRole == OperationType.INCOME_TYPE_ROLE) {
+			for (OperationType type: incomeTypesList) {				
+				if(type.getOperationType().equals(operationType)) {					
+					return type.getId();
+				}
+			}
+		}
+		
+		return wrongOperationTypeId;
+	}
+	
+	/**
+	 * 
+	 * @param userId
+	 * @param operationTypeId
+	 * @param date
+	 * @param amount
+	 * @param remark
+	 * @return
+	 * @throws ServiceException 
+	 */
+	private Operation makeOperationFromStringParams(int userId, int operationTypeId, String date, String amount, String remark) throws ServiceException {
+		Operation operation = new Operation();
+		LocalDate operationDate = null;
+		String rightAmount = amount.replace(",", ".");
+		double operationAmount = 0;
+		
+		if (validator.oneParameterNullEmptyCheck(date)) {
+			operationDate = LocalDate.now();
+		} else {
+			operationDate = LocalDate.parse(date);
+		}
+		
+		try {
+			operationAmount = Double.parseDouble(rightAmount);
+		} catch (NumberFormatException e) {
+			logger.info("NumberFormatException while trying to do parseDouble() parameter rightAmount in "
+					+ "makeOperationFromStringParams() method of OperationServiceImpl", e);
+			throw new ServiceException("NumberFormatException while trying to do parseDouble() parameter rightAmount in \"\r\n" + 
+					"					+ \"makeOperationFromStringParams() method of OperationServiceImpl", e);
+		}
+		
+		if(validator.oneParameterNullEmptyCheck(remark)) {
+			remark = null;
+		}
+		
+		operation = new Operation();
+		operation.setAmount(operationAmount);
+		operation.setDate(operationDate);
+		operation.setRemark(remark);
+		operation.setOperationTypeId(operationTypeId);
+		operation.setUserId(userId);
+		
+		return operation;
 	}
 	
 	/**
