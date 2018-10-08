@@ -23,7 +23,7 @@ public class ValidationErrorMessage {
 	public static final String WRONG_OPERATION_TYPE_OR_ROLE_ERROR_MSG = "wrongOperationTypeOrRole";
 	public static final String WRONG_OPERATION_REMARK_ERROR_MSG = "wrongOperationRemark";
 	public static final String WRONG_OPERATION_DATE_ERROR_MSG = "wrongOperationDate";
-	public static final String WRONG_OPERATION_AMOUNT_ERROR_MSG = "wrongOperationDate";
+	public static final String WRONG_OPERATION_AMOUNT_ERROR_MSG = "wrongOperationAmount";
 	public static final String EMPTY_OPERATION_AMOUNT_ERROR_MSG = "emptyOperationAmount";
 	
 	

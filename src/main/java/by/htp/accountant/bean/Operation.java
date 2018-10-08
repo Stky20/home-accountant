@@ -1,11 +1,13 @@
 package by.htp.accountant.bean;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 
 public class Operation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private static final String pattern = "#.##";
 	
 	private int id;	
 	private int operationTypeId;
@@ -64,6 +66,15 @@ public class Operation implements Serializable {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	
+	public static double roundDoubleCalculations(double culculations) {
+		DecimalFormat df = new DecimalFormat(pattern);
+		double result = 0;
+		String resultInString = df.format(culculations).replace(",", ".");
+		result = Double.parseDouble(resultInString);
+		
+		return result;
 	}
 
 	@Override

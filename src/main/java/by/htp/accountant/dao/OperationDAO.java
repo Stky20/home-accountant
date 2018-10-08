@@ -9,7 +9,14 @@ import by.htp.accountant.exception.DAOException;
 
 public interface OperationDAO {
 	
-	boolean createOperation(Operation operation) throws DAOException;
+	public boolean createOperation(Operation operation) throws DAOException;
+	
+	public List<Operation> getAllOperationsDuringPeriod(int userId, LocalDate from, LocalDate till) throws DAOException;
+	
+	public List<Operation> getAllOperationsAtDate(int userId, LocalDate date) throws DAOException;
+	
+	
+	
 	
 	boolean editOperation(int oldOperationId, Operation newOperation) throws DAOException;
 	

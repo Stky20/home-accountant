@@ -10,7 +10,7 @@ import static by.htp.accountant.util.validation.ValidationErrorMessage.*;
 public class OperationParameterValidatorImpl implements OperationParameterValidator {
 	
 	public final static String OPERATION_REMARK_PATTERN = "[\\wА-Яа-я-_\\.,:;\\(\\)\\s]{1,60}";	
-	public final static String OPERATION_DATE_PATTERN = "^((19|20)\\\\d\\\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$";
+	public final static String OPERATION_DATE_PATTERN = "^((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$";
 	public final static String OPERATION_AMOUNT_PATTERN = "\\d+([,.]\\d{1,2})?";
 	
 

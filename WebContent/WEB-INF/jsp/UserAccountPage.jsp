@@ -70,12 +70,121 @@
 					<input type="hidden" name="command" value="go_to_edit_operationtype_form">
 					<button type="submit" class="list-group-item list-group-item-info">Указать период</button>
 				</form>
+				<button type="submit" class="list-group-item">Все операции за период без типов</button>
 				<button type="submit" class="list-group-item">В диаграммах</button>
-				<button type="submit" class="list-group-item">Долговые обязателства</button>	
+				<button type="submit" class="list-group-item">Долговые обязателства</button>
+				
 			</div>	
 		</div>
-		<div class="col-md-10">
+		
+		<div class="col-md-10" style="text-align: center;">
+			<!--DIV of Balance-->
+			<div>
+				<c:if test="${not empty requestScope.balance}">
+				
+					<c:if test="${requestScope.balance < 0}">
+					   	<div class="alert alert-warning" role="alert">
+				   			<h5>Баланс за период 
+				   				<c:if  test="${not empty requestScope.firstDate}">
+					   				<c:out value="${requestScope.firstDate}"/>
+				   				</c:if>
+				   				<c:if  test="${not empty requestScope.lastDate}">
+					   				<c:out value="по ${requestScope.lastDate}"/>
+				   				</c:if>
+				   			 составляет:				   				
+				   			</h5>
+				   			<h3>${requestScope.balance} BYR</h3>
+				   		</div>							     	
+					</c:if>
+					<c:if test="${requestScope.balance >= 0}">
+					   	<div class="alert alert-success" role="alert">
+				   			<h5>Баланс за период 
+				   				<c:if  test="${not empty requestScope.firstDate}">
+					   				<c:out value="${requestScope.firstDate}"/>
+				   				</c:if>
+				   				<c:if  test="${not empty requestScope.lastDate}">
+					   				<c:out value="по ${requestScope.lastDate}"/>
+				   				</c:if>
+				   			 составляет:</h5>
+				   			<h3>${requestScope.balance} BYR</h3>
+				   		</div>							     	
+					</c:if>
+				</c:if>
+			</div>
 			
+			<div class="row">
+			
+				<div class="col-md-6">
+					<div>
+					<c:if test="${not empty requestScope.spendingTypesList}">
+						<c:set var="countSpendings" value="1"/>
+						<table class="table table-hover table-bordered" style="background-color: #FAEBD7">
+	  						<h3>Расходы</h3>
+	  						<tr class="danger">
+	  							<th>№</th>
+								<th>Тип</th>
+								<th>%</th>
+								<th><button>+</button></th>							
+							</tr>				
+							<c:forEach var="oneSpending" items="${requestScope.spendingTypesList}">
+								<tr class="warning">
+									<td>				        
+						       			<c:out value="${countSpendings}" />
+						       			<c:set var="countSpendings" value="${countSpendings+1}"/>
+						    		</td>
+									<td>${oneSpending.operationType}</td>						
+									<td>${oneSpending.percentOfAllTypes}</td>
+									<td>
+										<button type="button" class="btn btn-link btn-xs" onclick="setParamsInModal('${oneSpending.id}')">
+											Редактировать
+										</button>
+									</td>									
+								</tr>
+							</c:forEach>		
+						</table>
+					</c:if>
+					<c:if test="${empty requestScope.spendingTypesList}">
+						<div class="alert alert-success" role="alert">За указанный период не было расходов!</div>
+					</c:if>
+					</div>
+				</div>
+				
+				<div class="col-md-6">
+					<div>
+					<c:if test="${not empty requestScope.incomeTypesList}">
+						<c:set var="countIncome" value="1"/>
+						<table class="table table-hover table-bordered" style="background-color: #E0FFFF" >
+	  						<h3>Доходы</h3>
+	  						<tr class="success">
+	  							<th>№</th>
+								<th>Тип</th>
+								<th>%</th>
+								<th><button>+</button></th>							
+							</tr>				
+							<c:forEach var="oneIncome" items="${requestScope.incomeTypesList}">
+								<tr class="active">
+									<td>				        
+						       			<c:out value="${countIncome}" />
+						       			<c:set var="countIncome" value="${countIncome+1}"/>
+						    		</td>
+									<td>${oneIncome.operationType}</td>						
+									<td>${oneIncome.percentOfAllTypes}</td>
+									<td>
+										<button type="button" class="btn btn-link btn-xs" onclick="setParamsInModal('${oneIncome.id}')">
+											Редактировать
+										</button>
+									</td>									
+								</tr>
+							</c:forEach>		
+						</table>
+					</c:if>
+					<c:if test="${empty requestScope.spendingTypesList}">
+						<div class="alert alert-info" role="alert">За указанный период не было Доходов!</div>
+					</c:if>
+					</div>
+				</div>
+				
+			</div>
 			
 		</div>
 	</div>
@@ -126,8 +235,8 @@
 				<c:if test="${not empty requestScope.emptyOperationAmount}">
 				   	<font color="red"><c:out value="emptyOperationAmount" /></font>							     	
 				</c:if>
-				<c:if test="${not empty requestScope.wrongOperationDate}">
-				   	<font color="red"><c:out value="wrongOperationDate" /></font>							     	
+				<c:if test="${not empty requestScope.wrongOperationAmount}">
+				   	<font color="red"><c:out value="wrongOperationAmount" /></font>							     	
 				</c:if>
 				
 			<p>Вы можете ввести пояснения:</p>

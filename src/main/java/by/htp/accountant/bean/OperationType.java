@@ -18,7 +18,8 @@ public class OperationType implements Serializable{
 	private int userId;
 	private double percentOfAllTypes;
 	
-	public OperationType() {		
+	public OperationType() {
+		percentOfAllTypes = 0;
 	}
 
 	public int getId() {

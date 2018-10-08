@@ -15,9 +15,11 @@ import org.slf4j.LoggerFactory;
 import by.htp.accountant.bean.DefaultOperationType;
 import by.htp.accountant.bean.Operation;
 import by.htp.accountant.bean.OperationType;
+import by.htp.accountant.bean.User;
 import by.htp.accountant.dao.OperationDAO;
 import by.htp.accountant.dao.connectionpool.ConnectionPool;
 import by.htp.accountant.exception.DAOException;
+import by.htp.accountant.exception.SQLUserDAOException;
 
 
 public class MySQLOperationDAO implements OperationDAO{
@@ -26,7 +28,19 @@ public class MySQLOperationDAO implements OperationDAO{
 	
 	private static final Logger logger = LoggerFactory.getLogger(MySQLOperationDAO.class);	
 	
+	private final static int ID_FIELD_IN_OPERATION_TABLE = 1;
+	private final static int OPERATION_TYPE_ID_FIELD_IN_OPERATION_TABLE = 2;
+	private final static int AMOUNT_FIELD_IN_OPERATION_TABLE = 3;
+	private final static int REMARK_FIELD_IN_OPERATION_TABLE = 4;
+	private final static int OPERATION_DATE_FIELD_IN_OPERATION_TABLE = 5;
+	private final static int USER_ID_FIELD_IN_OPERATION_TABLE = 6;
+	
 	private final static String CREATE_OPERATION_QUERY = "INSERT INTO operations (operationTypeId, amount, remark, operationDate, user_id) VALUES (?, ?, ?, ?, ?);";
+	private final static String GET_ALL_OPERATION_DURING_PERIOD_QUERY = "SELECT * FROM operations WHERE user_id=? AND operationDate >= ? AND operationDate <= ?;";
+	private final static String GET_ALL_OPERATION_AT_DATE_QUERY = "SELECT * FROM operations WHERE user_id=? AND operationDate=? ;";
+
+	
+	
 	private final static String EDIT_OPERATION_QUERY = "UPDATE operations SET operationTypeId=?, amount=?, remark=?, operationDate=?, user_id=? WHERE id=?;";
 	private final static String REMOVE_OPERATION_QUERY = "DELETE FROM operations WHERE id = ?;";
 	private final static String SHOW_ALL_OPERATION_QUERY = "SELECT * FROM operations WHERE role=? AND operationDate>? AND operationDate<? AND user_id=? LIMIT ?,?;";
@@ -75,6 +89,85 @@ public class MySQLOperationDAO implements OperationDAO{
 			return false;
 		}
 	}
+	
+	
+	@Override
+	public List<Operation> getAllOperationsDuringPeriod(int userId, LocalDate from, LocalDate till) throws DAOException {
+		
+		List<Operation> operationsDuringPeriod = new ArrayList<Operation>();
+		
+		try (Connection connection = connectionPool.takeConnection(); 
+			PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_OPERATION_DURING_PERIOD_QUERY)){	
+			
+			preparedStatement.setInt(1, userId);
+			preparedStatement.setDate(2, Date.valueOf(from));
+			preparedStatement.setDate(3, Date.valueOf(till));
+			
+			try(ResultSet resultSet = preparedStatement.executeQuery()){				
+				while(resultSet.next())	{
+					Operation operation = new Operation();
+					operation.setId(resultSet.getInt(ID_FIELD_IN_OPERATION_TABLE));  		
+					operation.setOperationTypeId(resultSet.getInt(OPERATION_TYPE_ID_FIELD_IN_OPERATION_TABLE)); 
+					operation.setAmount(resultSet.getDouble(AMOUNT_FIELD_IN_OPERATION_TABLE));
+					operation.setDate(resultSet.getDate(OPERATION_DATE_FIELD_IN_OPERATION_TABLE).toLocalDate());
+					operation.setRemark(resultSet.getString(REMARK_FIELD_IN_OPERATION_TABLE));
+					operation.setUserId(resultSet.getInt(USER_ID_FIELD_IN_OPERATION_TABLE));
+					
+					operationsDuringPeriod.add(operation);
+				}
+			}			
+		} catch (InterruptedException e) {
+			throw new DAOException ("Can`t take connection from ConnectionPool in MySQLOperationDAO to getAllOperationsDuringPeriod()", e);
+		} catch (SQLException e) {
+			throw new DAOException ("Can`t create statement or create resultSet or execute query in "
+					+ "MySQLOperationDAO getAllOperationsDuringPeriod() method", e);
+		}			
+		
+		return operationsDuringPeriod;
+	}
+
+
+	@Override
+	public List<Operation> getAllOperationsAtDate(int userId, LocalDate date) throws DAOException {
+
+		List<Operation> operationsAtDate = new ArrayList<Operation>();
+		
+		try (Connection connection = connectionPool.takeConnection(); 
+			PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_OPERATION_AT_DATE_QUERY)){	
+			
+			preparedStatement.setInt(1, userId);
+			preparedStatement.setDate(2, Date.valueOf(date));			
+			
+			try(ResultSet resultSet = preparedStatement.executeQuery()){				
+				while(resultSet.next())	{
+					Operation operation = new Operation();
+					operation.setId(resultSet.getInt(ID_FIELD_IN_OPERATION_TABLE));  		
+					operation.setOperationTypeId(resultSet.getInt(OPERATION_TYPE_ID_FIELD_IN_OPERATION_TABLE)); 
+					operation.setAmount(resultSet.getDouble(AMOUNT_FIELD_IN_OPERATION_TABLE));
+					operation.setDate(resultSet.getDate(OPERATION_DATE_FIELD_IN_OPERATION_TABLE).toLocalDate());
+					operation.setRemark(resultSet.getString(REMARK_FIELD_IN_OPERATION_TABLE));
+					operation.setUserId(resultSet.getInt(USER_ID_FIELD_IN_OPERATION_TABLE));
+					
+					operationsAtDate.add(operation);
+				}
+			}			
+		} catch (InterruptedException e) {
+			throw new DAOException ("Can`t take connection from ConnectionPool in MySQLOperationDAO to getAllOperationsAtDate()", e);
+		} catch (SQLException e) {
+			throw new DAOException ("Can`t create statement or create resultSet or execute query in "
+					+ "MySQLOperationDAO getAllOperationsAtDate() method", e);
+		}			
+		
+		return operationsAtDate;		
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 
@@ -519,6 +612,9 @@ public class MySQLOperationDAO implements OperationDAO{
 //				
 //		return operationsList;	
 //		return null;
-	}	
+	}
+
+
+	
 
 }
