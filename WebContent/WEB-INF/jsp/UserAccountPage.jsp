@@ -30,6 +30,7 @@
 <link rel="stylesheet" href="css/main.css">
 
 <script type="text/javascript">	
+			
 			function hideSpendingsShowIncome(){
 				$("#spending").hide();				
 				$("#income").show();
@@ -40,13 +41,47 @@
 				$("#spending").show();
 			}
 			
-			function openModal(operationCreateModal){
-				if(operationCreateModal != null)$('#operationCreateModal').modal();
+			function openModal(modal, role, typeId){
+				
+				if(modal == "typeCreateModal"){
+					$('#createRole').attr('value', role);
+					$('#typeCreateModal').modal();
+				}
+				
+				if(modal == "typeEditModal"){
+					$('#editTypeId').attr('value', typeId);
+					$('#typeEditModal').modal();
+				}
 			}
+			
+			function setParamsInTypeCreateModal(role){		
+								
+				if(role != "") $("#createRole").attr('value', role);				
+				openTypeCreateModal();
+			}
+			
+			function openTypeCreateModal(){		
+				$('#typeCreateModal').modal();				
+			}
+			
+			function setParamsInTypeEditModal(id, name, role){		
+				
+				if(id != "")$("#editTypeId").attr('value', id);
+				if(id != "")$("#deleteTypeId").attr('value', id);
+				if(role != "")$("#deleteTypeRole").attr('value', role);
+				if(name != "")$('#editTypeName').attr('placeholder', name);
+				
+				openTypeEditModal();
+			}
+			
+			function openTypeEditModal(){		
+				$('#typeEditModal').modal();				
+			}
+			
 </script>
 
 </head>
-<body onload="openModal(${requestScope.operationCreateModal})">
+<body onload="openModal('${requestScope.modal}', '${requestScope.role}', '${requestScope.typeId}')">
 <%@ include file="inclusion/NavigationBar.jsp"%> 
 
 <div class="container" style="margin-top:100px; text-align: center;">
@@ -61,18 +96,14 @@
 	<div class="row">
 		<div class="col-md-2">
 			<div class="list-group">
-				<button type="submit" class="list-group-item">Один день</button>
-				<button type="submit" class="list-group-item">Текущая неделя</button>
-				<button type="submit" class="list-group-item">Текущий месяц</button>
-				<button type="submit" class="list-group-item">Текущий год</button>
-				<button type="submit" class="list-group-item">В диаграммах</button>	<button type="submit" class="list-group-item">В диаграммах</button>						
-				<form action="Controller" method="get">
-					<input type="hidden" name="command" value="go_to_edit_operationtype_form">
-					<button type="submit" class="list-group-item list-group-item-info">Указать период</button>
-				</form>
+				<button type="submit" class="list-group-item">За текущий день</button>
+				<button type="submit" class="list-group-item">За текущую неделю</button>
+				<button type="submit" class="list-group-item">За текущий месяц</button>
+				<button type="button" class="list-group-item">За текущий год</button>				
+				<button type="button" class="list-group-item" data-toggle="modal" data-target="#dateChooseModal">Указать период</button>					
 				<button type="submit" class="list-group-item">Все операции за период без типов</button>
-				<button type="submit" class="list-group-item">В диаграммах</button>
-				<button type="submit" class="list-group-item">Долговые обязателства</button>
+				<button type="submit" class="list-group-item" style="background: #FA8072;">В диаграммах</button>
+				<button type="submit" class="list-group-item" style="background: #FA8072;">Долговые обязателства</button>
 				
 			</div>	
 		</div>
@@ -84,28 +115,28 @@
 				
 					<c:if test="${requestScope.balance < 0}">
 					   	<div class="alert alert-warning" role="alert">
-				   			<h5>Баланс за период 
-				   				<c:if  test="${not empty requestScope.firstDate}">
+				   			<h4>Баланс за период 
+				   				<strong><c:if  test="${not empty requestScope.firstDate}">
 					   				<c:out value="${requestScope.firstDate}"/>
 				   				</c:if>
 				   				<c:if  test="${not empty requestScope.lastDate}">
 					   				<c:out value="по ${requestScope.lastDate}"/>
-				   				</c:if>
+				   				</c:if></strong>
 				   			 составляет:				   				
-				   			</h5>
+				   			</h4>
 				   			<h3>${requestScope.balance} BYR</h3>
 				   		</div>							     	
 					</c:if>
 					<c:if test="${requestScope.balance >= 0}">
 					   	<div class="alert alert-success" role="alert">
-				   			<h5>Баланс за период 
+				   			<h4>Баланс за период 
 				   				<c:if  test="${not empty requestScope.firstDate}">
 					   				<c:out value="${requestScope.firstDate}"/>
 				   				</c:if>
 				   				<c:if  test="${not empty requestScope.lastDate}">
 					   				<c:out value="по ${requestScope.lastDate}"/>
 				   				</c:if>
-				   			 составляет:</h5>
+				   			 составляет:</h4>
 				   			<h3>${requestScope.balance} BYR</h3>
 				   		</div>							     	
 					</c:if>
@@ -124,7 +155,7 @@
 	  							<th>№</th>
 								<th>Тип</th>
 								<th>%</th>
-								<th><button>+</button></th>							
+								<th><button type="button" class="btn btn-default btn-xs" onclick="setParamsInTypeCreateModal('${requestScope.spendingTypesList[0].role}')">+</button></th>							
 							</tr>				
 							<c:forEach var="oneSpending" items="${requestScope.spendingTypesList}">
 								<tr class="warning">
@@ -135,7 +166,7 @@
 									<td>${oneSpending.operationType}</td>						
 									<td>${oneSpending.percentOfAllTypes}</td>
 									<td>
-										<button type="button" class="btn btn-link btn-xs" onclick="setParamsInModal('${oneSpending.id}')">
+										<button type="button" class="btn btn-link btn-xs" onclick="setParamsInTypeEditModal('${oneSpending.id}','${oneSpending.operationType}','${oneSpending.role}')">										
 											Редактировать
 										</button>
 									</td>									
@@ -159,7 +190,7 @@
 	  							<th>№</th>
 								<th>Тип</th>
 								<th>%</th>
-								<th><button>+</button></th>							
+								<th><button type="button" class="btn btn-default btn-xs" onclick="setParamsInTypeCreateModal('${requestScope.incomeTypesList[0].role}')">+</button></th>							
 							</tr>				
 							<c:forEach var="oneIncome" items="${requestScope.incomeTypesList}">
 								<tr class="active">
@@ -170,7 +201,7 @@
 									<td>${oneIncome.operationType}</td>						
 									<td>${oneIncome.percentOfAllTypes}</td>
 									<td>
-										<button type="button" class="btn btn-link btn-xs" onclick="setParamsInModal('${oneIncome.id}')">
+										<button type="button" class="btn btn-link btn-xs" onclick="setParamsInTypeEditModal('${oneIncome.id}','${oneIncome.operationType}','${oneIncome.role}')">
 											Редактировать
 										</button>
 									</td>									
@@ -193,7 +224,7 @@
 
 
 <!-- operationCreateModal -->
-<div class="modal fade" id="operationCreateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="operationCreateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -246,7 +277,7 @@
 				</c:if>
 				
 			<div style="margin:10px 0 10px 0;">
-				Выберите дату операции: <input type="date" name="date" max="${sessionScope.date}" placeholder="dd.mm.yyyy">
+				Выберите дату операции: <input type="date" name="date" max="${sessionScope.date}">
 			</div>	
 				<c:if test="${not empty requestScope.wrongOperationDate}">
 				   	<font color="red"><c:out value="wrongOperationDate" /></font>							     	
@@ -258,6 +289,99 @@
         	<button type="submit" class="btn btn-primary">Сохранить</button>
       	</div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!-- typeCreateModal -->
+<div class="modal fade" id="typeCreateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Создайте новый тип!!!</h4>
+      </div>
+       	<div class="modal-body">
+      		<form action="Controller" method="post">
+				<input type="hidden" name="command" value="create_type">
+				<input type="hidden" name="role" id="createRole" value="">
+					<p>
+						Введите название: <input type="text" name="operationType" placeholder="Название типа">
+						<button type="submit" class="btn btn-primary">Создать</button>
+					</p>
+			</form>
+				<c:if test="${not empty requestScope.wrongOperationType}">
+				   	<font color="red"><c:out value="wrongOperationType" /></font>							     	
+				</c:if>
+				<c:if test="${not empty requestScope.emptyOperationType}">
+				   	<font color="red"><c:out value="emptyOperationType" /></font>							     	
+				</c:if>					
+      	</div>     
+    </div>
+  </div>
+</div>
+
+<!-- typeEditModal -->
+<div class="modal fade" id="typeEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Редактировать тип!!!</h4>
+      </div>
+      <form action="Controller" method="post">
+      	<div class="modal-body" style="text-align: center;">
+      		<form action="Controller" method="post">
+				<input type="hidden" name="command" value="edit_type">
+				<input type="hidden" name="typeId" id="editTypeId">
+					<p>
+						Введите название: <input type="text" name="operationType" id="editTypeName" placeholder="">
+						<button type="submit" class="btn btn-primary">Переименовать</button>
+					</p>
+			</form>
+			<c:if test="${not empty requestScope.wrongOperationType}">
+			   	<font color="red"><c:out value="wrongOperationType" /></font>							     	
+			</c:if>
+			<c:if test="${not empty requestScope.emptyOperationType}">
+			   	<font color="red"><c:out value="emptyOperationType" /></font>							     	
+			</c:if><br/>
+			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#deleteTypeModal">Удалить тип</button>
+      	</div>     
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- dateChooseModal -->
+<div class="modal fade bs-example-modal-sm" id="dateChooseModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+  	 <div class="modal-content">
+  	 	<div style="text-align: center;">
+  	 		<h2>Выберите даты!</h2>
+    		<fotm action="Controller" method="post">
+	    		<input type="hidden" name="command" value="go_to_user_account_page">
+    			<p>C:<input type="date" name="fromDate" max="${sessionScope.date}"></p>
+    			<p>По:<input type="date" name="tillDate" max="${sessionScope.date}"></p><br/>
+    			<button type="button" class="btn btn-default btn-xs" data-dismiss="modal" style="margin-bottom: 10px;">Close</button>
+    			<button type="submit" class="btn btn-primary btn-xs" style="margin-bottom: 10px;">Сохранить</button>
+    		</fotm>
+    	</div>
+    </div>
+  </div>
+</div>
+
+<!-- deleteTypeModal -->
+<div class="modal fade bs-example-modal-sm" id="deleteTypeModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">  	
+    <div class="modal-content" style="text-align: center;">
+    	<h4>Вы уверены?</h4>
+    	<form action="Controller" method="post">
+	    	<input type="hidden" name="command" value="delete_type">
+	    	<input type="hidden" name="typeId" id="deleteTypeId">
+	    	<input type="hidden" name="role" id="deleteTypeRole">
+	    	<button type="button" class="btn btn-default btn-xs" data-dismiss="modal" style="margin-bottom: 10px;">Нет</button>
+    		<button type="submit" class="btn btn-danger btn-xs" style="margin-bottom: 10px;">Да</button>
+    	</form>
     </div>
   </div>
 </div>

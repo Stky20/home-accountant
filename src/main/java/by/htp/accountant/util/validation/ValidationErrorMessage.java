@@ -26,6 +26,9 @@ public class ValidationErrorMessage {
 	public static final String WRONG_OPERATION_AMOUNT_ERROR_MSG = "wrongOperationAmount";
 	public static final String EMPTY_OPERATION_AMOUNT_ERROR_MSG = "emptyOperationAmount";
 	
+	public static final String EMPTY_OPERATION_TYPE_ERROR_MSG = "emptyOperationType";
+	public static final String WRONG_OPERATION_TYPE_ERROR_MSG = "wrongOperationType";
+	
 	
 	public static final String NO_CHANGES_MSG = "noChangesMsg";	
 		

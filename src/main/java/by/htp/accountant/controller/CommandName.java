@@ -1,10 +1,13 @@
 package by.htp.accountant.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import by.htp.accountant.bean.User;
 import by.htp.accountant.exception.NoSuchCommandException;
 
 public enum CommandName {
-	
+		
 	GO_TO_MAIN_PAGE(),
 	GO_TO_REGISTRATION_PAGE(),
 	GO_TO_LOGIN_PAGE(),
@@ -27,7 +30,12 @@ public enum CommandName {
 	DELETE_USER(1),
 	GO_TO_USER_ACCOUNT_PAGE(1,2),
 	GO_TO_OPERATION_FORM(1,2),
-	CREATE_OPERATION(1,2);
+	CREATE_OPERATION(1,2),
+	CREATE_TYPE(1,2),
+	EDIT_TYPE(1,2),
+	DELETE_TYPE(1,2);
+	
+	private static final Logger logger = LoggerFactory.getLogger("CommandName.class");
 	
 	int[] roles = null;
 	
@@ -61,6 +69,7 @@ public enum CommandName {
 		try {
 			return CommandName.valueOf(potentialElement);
 		} catch (IllegalArgumentException e) {
+			logger.info("There is no such element as " + potentialElement + " in CommandName enum.", e);
 		     throw new NoSuchCommandException("There is no such element as " + potentialElement + " in CommandName enum.", e);
 		}		
 	}

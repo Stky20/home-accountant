@@ -7,8 +7,11 @@ import by.htp.accountant.controller.command.ChangeLoginCommand;
 import by.htp.accountant.controller.command.ChangePasswordCommand;
 import by.htp.accountant.controller.command.ChangeUserInfoCommand;
 import by.htp.accountant.controller.command.CreateOperationCommand;
+import by.htp.accountant.controller.command.CreateTypeCommand;
+import by.htp.accountant.controller.command.DeleteTypeCommand;
 import by.htp.accountant.controller.command.DeleteUserCommand;
 import by.htp.accountant.controller.command.DiactivateUserCommand;
+import by.htp.accountant.controller.command.EditTypeCommand;
 import by.htp.accountant.controller.command.GoToAboutUsPageCommand;
 import by.htp.accountant.controller.command.GoToContactsPageCommand;
 import by.htp.accountant.controller.command.GoToLoginPageCommand;
@@ -55,6 +58,9 @@ private Map<CommandName, Command> commands = new HashMap<CommandName, Command>()
 		commands.put(CommandName.GO_TO_USER_ACCOUNT_PAGE, new GoToUserAccountPageCommand());
 		commands.put(CommandName.GO_TO_OPERATION_FORM, new GoToOperationFormCommand());
 		commands.put(CommandName.CREATE_OPERATION, new CreateOperationCommand());
+		commands.put(CommandName.CREATE_TYPE, new CreateTypeCommand());
+		commands.put(CommandName.EDIT_TYPE, new EditTypeCommand());
+		commands.put(CommandName.DELETE_TYPE, new DeleteTypeCommand());
 	}
 
 	public Command getCommand(String commandName) {

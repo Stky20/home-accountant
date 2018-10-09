@@ -1,6 +1,7 @@
 package by.htp.accountant.util.validation;
 
 import by.htp.accountant.util.validation.impl.OperationParameterValidatorImpl;
+import by.htp.accountant.util.validation.impl.TypeParametersValidatorImpl;
 import by.htp.accountant.util.validation.impl.UserParameterValidatorImpl;
 
 public class ValidationFactory {
@@ -9,6 +10,7 @@ public class ValidationFactory {
 	
 	private final UserParameterValidator userValidator = new UserParameterValidatorImpl();
 	private final OperationParameterValidator operationValidator = new OperationParameterValidatorImpl();
+	private final TypeParametersValidator typeValidator = new TypeParametersValidatorImpl();
 	
 	
 	private ValidationFactory() {		
@@ -26,5 +28,7 @@ public class ValidationFactory {
 		return operationValidator;
 	}
 	
-	
+	public TypeParametersValidator getTypeValidator() {
+		return typeValidator;
+	}
 }

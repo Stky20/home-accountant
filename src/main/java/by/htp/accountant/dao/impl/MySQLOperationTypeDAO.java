@@ -14,12 +14,21 @@ import by.htp.accountant.bean.OperationType;
 import by.htp.accountant.dao.OperationTypeDAO;
 import by.htp.accountant.dao.connectionpool.ConnectionPool;
 import by.htp.accountant.exception.DAOException;
+import by.htp.accountant.exception.SQLUserDAOException;
 
 public class MySQLOperationTypeDAO implements OperationTypeDAO {
 	
 	private ConnectionPool connectionPool;	
 	
-	private final static String GET_USER_OPERATION_TYPES_ON_ROLE_QUERY = "SELECT * FROM operation_types WHERE (user_Id = ?) AND (role = ?);";  	
+	private static final Logger logger = LoggerFactory.getLogger(MySQLOperationTypeDAO.class);
+	
+	private final static String GET_USER_OPERATION_TYPES_ON_ROLE_QUERY = "SELECT * FROM operation_types WHERE (user_Id = ?) AND (role = ?);"; 
+	private final static String TYPE_CREATE_QUERY = "INSERT INTO operation_types (operationType, user_Id, role) VALUES (?, ?, ?);";
+	private final static String TYPE_EDIT_QUERY = "UPDATE operation_types SET operationType=? WHERE id=?;";
+	private final static String TYPE_DELETE_QUERY = "DELETE FROM operation_types WHERE id=?;";
+	private final static String OPERATION_DELETE_QUERY = "DELETE FROM operations WHERE operationTypesId=?;";
+
+	
 	
 	
 	public MySQLOperationTypeDAO() {
@@ -87,6 +96,93 @@ public class MySQLOperationTypeDAO implements OperationTypeDAO {
 				throw new DAOException ("Can`t take connection from ConnectionPool in OperationTypeDAO getUserUndeletableOperationTypesDependingOnTypeRole() method", e);
 			}
 		return operationType;
+	}
+
+	@Override
+	public boolean createOperationType(OperationType type) throws DAOException   {
+		
+		int addedRowsInBase = 0;
+		
+		try (Connection connection = connectionPool.takeConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(TYPE_CREATE_QUERY)){	
+			
+			preparedStatement.setString(1, type.getOperationType());
+			preparedStatement.setInt(2, type.getUserId());
+			preparedStatement.setInt(3, type.getRole());			
+			
+			addedRowsInBase = preparedStatement.executeUpdate();
+			
+		} catch (InterruptedException e) {
+			throw new DAOException ("Can`t take connection from ConnectionPool in MySQLOperationTypeDAO to create operation type", e);
+		} catch (SQLException e) {			
+			throw new DAOException ("SQLException in MySQLOperationTypeDAO to create operation type in createOperationType() method", e);
+		}	
+		
+		if(addedRowsInBase == 1) return true;
+		else return false;	
+	}
+
+	@Override
+	public boolean editOperationType(int typeId, String operationType) throws DAOException {
+		try (Connection connection = connectionPool.takeConnection();				
+				PreparedStatement preparedStatement = connection.prepareStatement(TYPE_EDIT_QUERY)){						
+				
+			preparedStatement.setString(1, operationType);	
+			preparedStatement.setInt(2, typeId);					
+								
+				if(preparedStatement.executeUpdate() != 1) return false;
+				else return true;
+				
+			} catch (InterruptedException e) {
+				throw new DAOException("Can`t take connection from ConnectionPool in OperationTypeDAO to edit type", e);
+			} catch (SQLException e) {
+				throw new DAOException("Can`t create statement or execute query in operationType editOperationType() method", e);
+			}				
+	}
+
+	@Override
+	public boolean deleteOperationType(int typeId) throws DAOException {
+
+		int deletedrypeRows = 0;		
+		
+		try (Connection connection = connectionPool.takeConnection()) {			
+			try {
+				connection.setAutoCommit(false);
+			
+				try(PreparedStatement statement = connection.prepareStatement(OPERATION_DELETE_QUERY)){
+					statement.setInt(1, typeId);
+					statement.executeUpdate();			
+				}		
+				try(PreparedStatement statement = connection.prepareStatement(TYPE_DELETE_QUERY)){
+					statement.setInt(1, typeId);
+					deletedrypeRows = statement.executeUpdate();
+				}				
+			
+				connection.commit();
+				
+			} catch (SQLException e) {
+				logger.warn("SQLException while doing deleteOperationType() method in MySQLOperationTypeDAO", e);
+				connection.rollback();	
+				connection.setAutoCommit(true);
+				throw new DAOException ("SQLException in OperationTypeDAO deleteOperationType() method", e);
+			}
+				
+			connection.setAutoCommit(true);
+			
+			if(deletedrypeRows == 1) {
+				return true;
+			}			
+			
+		} catch (InterruptedException e) {
+			logger.warn("InterruptedException while taking connection from connectionpool in MySQLUserDAO to delete user");
+			throw new DAOException ("Can`t take connection from connectionpool in MySQLUserDAO to delete user", e);			
+		} catch (SQLException e) {			
+			logger.warn("SQLException while doing rollback() or setting AutoCommit true in userDelete() method of MySQLUserDAO", e);
+			throw new DAOException ("SQLException in UserDAO deleteUser() method", e);
+		}
+		
+		return false;
+		
 	}
 	
 }

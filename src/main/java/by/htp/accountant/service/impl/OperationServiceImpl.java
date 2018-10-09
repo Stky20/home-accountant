@@ -46,15 +46,12 @@ public class OperationServiceImpl implements OperationService {
 	private static final String OPERATION_AMOUNT_PARAM = "amount";
 	
 	private final static String USER_ATTRIBUTE = "user";
+	private static final String MODAL_ATTRIBUTE = "modal";
 	private static final String SPENDING_TYPES_LIST_ATTRIBUTE = "spendingTypesList";
 	private static final String INCOME_TYPES_LIST_ATTRIBUTE = "incomeTypesList";
-	private static final String MODAL_CREATE_OPERATION_ATTRIBUTE = "operationCreateModal";
-	private static final String MODAL_CREATE_OPERATION_TYPE_ATTRIBUTE = "modalCreateOperationType";
-	private static final String MODAL_EDIT_OPERATION_ATTRIBUTE = "modalEditOperation";
-	private static final String MODAL_EDIT_OPERATION_TYPE_ATTRIBUTE = "modalEditOperationType";
-	private static final String MODAL_SUCCESS_ATTRIBUTE = "modalSuccess";
-	private static final String MODAL_ARE_U_SURE_TYPE_ATTRIBUTE = "modalAreUSure";
-	
+	private static final String MODAL_CREATE_OPERATION_ATTRIBUTE = "operationCreateModal";	
+	private static final String MODAL_EDIT_OPERATION_ATTRIBUTE = "modalEditOperation";	
+	private static final String MODAL_SUCCESS_ATTRIBUTE = "success";	
 	
 	
 	@Override
@@ -97,7 +94,7 @@ public class OperationServiceImpl implements OperationService {
 				for(String errorMsg: paramsValidationErrors) {
 					request.setAttribute(errorMsg, errorMsg);					
 				}
-				request.setAttribute(MODAL_CREATE_OPERATION_ATTRIBUTE, MODAL_CREATE_OPERATION_ATTRIBUTE);
+				request.setAttribute(MODAL_ATTRIBUTE, MODAL_CREATE_OPERATION_ATTRIBUTE);
 				dispatcher = request.getRequestDispatcher(JSPPath.USER_ACCOUNT_PAGE);				
 			} else {
 				try {
@@ -122,7 +119,7 @@ public class OperationServiceImpl implements OperationService {
 			}		
 		}
 		
-		doSendRedirectOrForward(request, response, dispatcher, JSPPath.GO_TO_USER_ACCOUNT_PAGE);
+		doSendRedirectOrForward(request, response, dispatcher, JSPPath.GO_TO_USER_ACCOUNT_SUCCESS_PAGE);
 		
 	}
 	
