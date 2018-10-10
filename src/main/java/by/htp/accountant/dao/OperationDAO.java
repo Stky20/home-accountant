@@ -9,11 +9,20 @@ import by.htp.accountant.exception.DAOException;
 
 public interface OperationDAO {
 	
-	public boolean createOperation(Operation operation) throws DAOException;
+	boolean createOperation(Operation operation) throws DAOException;
 	
-	public List<Operation> getAllOperationsDuringPeriod(int userId, LocalDate from, LocalDate till) throws DAOException;
+	List<Operation> getAllOperationsDuringPeriod(int userId, LocalDate from, LocalDate till) throws DAOException;
 	
-	public List<Operation> getAllOperationsAtDate(int userId, LocalDate date) throws DAOException;
+	List<Operation> getAllOperationsAtDate(int userId, LocalDate date) throws DAOException;
+	
+	int getOneTypeOperationsNumberOfPagesAtDate(int typeID, LocalDate date) throws DAOException;
+	
+	int getOneTypeOperationsNumberOfPagesBetweenDates(int typeID, LocalDate firstDate, LocalDate lastDate) throws DAOException;
+	
+	List<Operation> getOneTypeOperationsAtDate(int typeId, LocalDate date, int startingFrom, int operationsAmount) throws DAOException;
+	
+	List<Operation> getOneTypeOperationsBetweenDates(int typeId, LocalDate firstDate, LocalDate lastDate, int startingFrom, int operationsAmount) throws DAOException;
+	
 	
 	
 	

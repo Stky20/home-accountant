@@ -33,7 +33,8 @@ public enum CommandName {
 	CREATE_OPERATION(1,2),
 	CREATE_TYPE(1,2),
 	EDIT_TYPE(1,2),
-	DELETE_TYPE(1,2);
+	DELETE_TYPE(1,2),
+	GO_TO_USER_OPERATIONS_PAGE(1,2);
 	
 	private static final Logger logger = LoggerFactory.getLogger("CommandName.class");
 	

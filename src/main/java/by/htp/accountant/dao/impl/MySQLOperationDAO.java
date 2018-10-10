@@ -38,7 +38,12 @@ public class MySQLOperationDAO implements OperationDAO{
 	private final static String CREATE_OPERATION_QUERY = "INSERT INTO operations (operationTypeId, amount, remark, operationDate, user_id) VALUES (?, ?, ?, ?, ?);";
 	private final static String GET_ALL_OPERATION_DURING_PERIOD_QUERY = "SELECT * FROM operations WHERE user_id=? AND operationDate >= ? AND operationDate <= ?;";
 	private final static String GET_ALL_OPERATION_AT_DATE_QUERY = "SELECT * FROM operations WHERE user_id=? AND operationDate=? ;";
-
+	private final static String GET_ONE_TYPE_NUMBER_OF_PAGES_AT_DATE_QUERY = "SELECT count(*) FROM operations WHERE operationTypeId=? AND operationDate=?;";
+	private final static String GET_ONE_TYPE_NUMBER_OF_PAGES_BETWEEN_DATES_QUERY = "SELECT count(*) FROM operations WHERE operationTypeId=? AND operationDate BETWEEN ? AND ?;";
+	private final static String GET_ONE_TYPE_OPERATIONS_AT_DATE_QUERY = "SELECT * FROM operations WHERE operationTypeId=? AND operationDate=? LIMIT ?,?";
+	private final static String GET_ONE_TYPE_OPERATIONS_BETWEEN_DATES_QUERY = "SELECT * FROM operations WHERE operationTypeId=? AND operationDate BETWEEN ? AND ? LIMIT ?,?";
+	
+	
 	
 	
 	private final static String EDIT_OPERATION_QUERY = "UPDATE operations SET operationTypeId=?, amount=?, remark=?, operationDate=?, user_id=? WHERE id=?;";
@@ -160,6 +165,135 @@ public class MySQLOperationDAO implements OperationDAO{
 		
 		return operationsAtDate;		
 	}	
+	
+	
+	@Override
+	public int getOneTypeOperationsNumberOfPagesAtDate(int typeID, LocalDate date) throws DAOException {
+		int numberOfPages = 0;
+		
+		try(Connection connection = connectionPool.takeConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(GET_ONE_TYPE_NUMBER_OF_PAGES_AT_DATE_QUERY)){
+			
+			preparedStatement.setInt(1, typeID);
+			preparedStatement.setDate(2, Date.valueOf(date));	
+			
+			try(ResultSet resultSet = preparedStatement.executeQuery()){				
+				if(resultSet.next()){
+					numberOfPages =resultSet.getInt(1);					
+				}
+			}		
+		} catch (SQLException e) {
+			throw new DAOException("Can`t create statement or create resultSet or execute query in " + 
+					"MySQLOperationDAO getOneTypeOperationsNumberOfPagesAtDate() method", e);
+		} catch (InterruptedException e) {
+			throw new DAOException("Can`t take connection from ConnectionPool in MySQLOperationDAO to getOneTypeOperationsNumberOfPagesAtDate()", e);
+		}
+		return numberOfPages;
+	}
+
+
+	@Override
+	public int getOneTypeOperationsNumberOfPagesBetweenDates(int typeID, LocalDate firstDate, LocalDate lastDate) throws DAOException {
+		int numberOfPages = 0;
+		
+		try(Connection connection = connectionPool.takeConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(GET_ONE_TYPE_NUMBER_OF_PAGES_BETWEEN_DATES_QUERY)){
+			
+			preparedStatement.setInt(1, typeID);
+			preparedStatement.setDate(2, Date.valueOf(firstDate));
+			preparedStatement.setDate(3, Date.valueOf(lastDate));
+			
+			try(ResultSet resultSet = preparedStatement.executeQuery()){				
+				if(resultSet.next()){
+					numberOfPages =resultSet.getInt(1);					
+				}
+			}		
+		} catch (SQLException e) {
+			throw new DAOException("Can`t create statement or create resultSet or execute query in " + 
+					"MySQLOperationDAO getOneTypeOperationsNumberOfPagesBetweenDates() method", e);
+		} catch (InterruptedException e) {
+			throw new DAOException("Can`t take connection from ConnectionPool in MySQLOperationDAO to getOneTypeOperationsNumberOfPagesBetweenDates()", e);
+		}
+		return numberOfPages;
+	}
+
+
+	@Override
+	public List<Operation> getOneTypeOperationsAtDate(int typeId, LocalDate date, int startingFrom, int operationsAmount) throws DAOException {
+		List<Operation> operationList = new ArrayList<Operation>();
+		
+		try(Connection connection = connectionPool.takeConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(GET_ONE_TYPE_OPERATIONS_AT_DATE_QUERY)){
+			
+			preparedStatement.setInt(1, typeId);
+			preparedStatement.setDate(2, Date.valueOf(date));
+			preparedStatement.setInt(3, startingFrom);
+			preparedStatement.setInt(4, operationsAmount);
+			
+			try(ResultSet resultSet = preparedStatement.executeQuery()){				
+				while(resultSet.next()){
+					Operation operation = new Operation();
+					operation.setId(resultSet.getInt(ID_FIELD_IN_OPERATION_TABLE));  		
+					operation.setOperationTypeId(resultSet.getInt(OPERATION_TYPE_ID_FIELD_IN_OPERATION_TABLE)); 
+					operation.setAmount(resultSet.getDouble(AMOUNT_FIELD_IN_OPERATION_TABLE));
+					operation.setDate(resultSet.getDate(OPERATION_DATE_FIELD_IN_OPERATION_TABLE).toLocalDate());
+					operation.setRemark(resultSet.getString(REMARK_FIELD_IN_OPERATION_TABLE));
+					operation.setUserId(resultSet.getInt(USER_ID_FIELD_IN_OPERATION_TABLE));
+					
+					operationList.add(operation);				
+				}
+			}		
+		} catch (SQLException e) {
+			throw new DAOException("Can`t create statement or create resultSet or execute query in " + 
+					"MySQLOperationDAO getOneTypeOperationsAtDate() method", e);
+		} catch (InterruptedException e) {
+			throw new DAOException("Can`t take connection from ConnectionPool in MySQLOperationDAO to getOneTypeOperationsAtDate()", e);
+		}
+		return operationList;
+	}
+
+
+	@Override
+	public List<Operation> getOneTypeOperationsBetweenDates(int typeId, LocalDate firstDate, LocalDate lastDate, 
+															int startingFrom, int operationsAmount) throws DAOException {
+		
+		List<Operation> operationList = new ArrayList<Operation>();
+		
+		try(Connection connection = connectionPool.takeConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(GET_ONE_TYPE_OPERATIONS_BETWEEN_DATES_QUERY)){
+			
+			preparedStatement.setInt(1, typeId);
+			preparedStatement.setDate(2, Date.valueOf(firstDate));
+			preparedStatement.setDate(3, Date.valueOf(lastDate));
+			preparedStatement.setInt(4, startingFrom);
+			preparedStatement.setInt(5, operationsAmount);
+			
+			try(ResultSet resultSet = preparedStatement.executeQuery()){				
+				while(resultSet.next()){
+					Operation operation = new Operation();
+					operation.setId(resultSet.getInt(ID_FIELD_IN_OPERATION_TABLE));  		
+					operation.setOperationTypeId(resultSet.getInt(OPERATION_TYPE_ID_FIELD_IN_OPERATION_TABLE)); 
+					operation.setAmount(resultSet.getDouble(AMOUNT_FIELD_IN_OPERATION_TABLE));
+					operation.setDate(resultSet.getDate(OPERATION_DATE_FIELD_IN_OPERATION_TABLE).toLocalDate());
+					operation.setRemark(resultSet.getString(REMARK_FIELD_IN_OPERATION_TABLE));
+					operation.setUserId(resultSet.getInt(USER_ID_FIELD_IN_OPERATION_TABLE));
+					
+					operationList.add(operation);				
+				}
+			}		
+		} catch (SQLException e) {
+			throw new DAOException("Can`t create statement or create resultSet or execute query in " + 
+					"MySQLOperationDAO getOneTypeOperationsBetweenDates() method", e);
+		} catch (InterruptedException e) {
+			throw new DAOException("Can`t take connection from ConnectionPool in MySQLOperationDAO to getOneTypeOperationsBetweenDates()", e);
+		}
+		return operationList;
+	}
+
+	
+	
+	
+	
 	
 	
 	
@@ -614,6 +748,8 @@ public class MySQLOperationDAO implements OperationDAO{
 //		return null;
 	}
 
+
+	
 
 	
 

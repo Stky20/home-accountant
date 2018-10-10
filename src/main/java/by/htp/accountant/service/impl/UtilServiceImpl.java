@@ -2,7 +2,6 @@ package by.htp.accountant.service.impl;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,21 +23,31 @@ import by.htp.accountant.dao.OperationDAO;
 import by.htp.accountant.dao.OperationTypeDAO;
 import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.ServiceException;
+import by.htp.accountant.exception.ValidationException;
 import by.htp.accountant.service.UtilService;
+import by.htp.accountant.util.validation.UtilValidator;
+import by.htp.accountant.util.validation.ValidationFactory;
 
 public class UtilServiceImpl implements UtilService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UtilServiceImpl.class);
 	
-	OperationTypeDAO typeDAO = DAOFactory.getInstance().getOperationTypeDAO();
-	OperationDAO operationDAO = DAOFactory.getInstance().getOperationDAO();
+	private final OperationTypeDAO typeDAO = DAOFactory.getInstance().getOperationTypeDAO();
+	private final OperationDAO operationDAO = DAOFactory.getInstance().getOperationDAO();
+	
+	private final UtilValidator validator = ValidationFactory.getInstance().getUtilValidator();
 	
 	private static final String LOCALIZATION_PARAM_FROM_REQUEST = "localization";	
 	private static final String LOCALIZATION_SESSION_ATTRIBUTE = "local";	
 	private static final String PREVIOS_PAGE_SESSION_PARAM ="previousPage";
 	private static final String MODAL_ATTRIBUTE = "modal";
 	private static final String USER_PARAMETER = "user";
-	
+	private static final String OPERATION_TYPE_PARAMETER = "operationType";
+	private static final String TYPE_ID_PARAMETER = "typeId";
+	private static final String PAGE_NUMBER_PARAMETER = "pageNumber";
+	private static final String AMOUNT_OF_PAGES_PARAMETER = "amountOfPages";
+	private static final String OPERATIONS_LIST_PARAMETER = "operationsList";
+
 	private static final String BALANCE_ATTRIBUTE = "balance";
 	private static final String SPENDING_TYPES_LIST_ATTRIBUTE = "spendingTypesList";
 	private static final String INCOME_TYPES_LIST_ATTRIBUTE = "incomeTypesList";
@@ -46,7 +55,8 @@ public class UtilServiceImpl implements UtilService {
 	private static final String LAST_DATE_ATTRIBUTE = "lastDate";
 	
 	private static final int FIRST_DAY_OF_MONTH_OR_WEEK_VALUE = 1;
-	
+	private static final int DEFAULT_PAGE_NUMBER = 1;
+	private static final int DEFAULT_RECORDINGS_AMOUNT = 10;
 		
 
 	@Override
@@ -229,8 +239,12 @@ public class UtilServiceImpl implements UtilService {
 		spendingTypesList = calculateSharesOfEachType(operationListDuringPeriod, spendingTypesList);
 		incomeTypesList = calculateSharesOfEachType(operationListDuringPeriod, incomeTypesList);
 		
-		request.setAttribute(FIRST_DATE_ATTRIBUTE, firstDateOfMonth.toString());
-		request.setAttribute(LAST_DATE_ATTRIBUTE, currentDate.toString());
+		if(currentDate.equals(firstDateOfMonth)) {
+			request.setAttribute(FIRST_DATE_ATTRIBUTE, firstDateOfMonth.toString());
+		} else {
+			request.setAttribute(FIRST_DATE_ATTRIBUTE, firstDateOfMonth.toString());
+			request.setAttribute(LAST_DATE_ATTRIBUTE, currentDate.toString());
+		}		
 		request.setAttribute(BALANCE_ATTRIBUTE, balance);
 		request.setAttribute(SPENDING_TYPES_LIST_ATTRIBUTE, spendingTypesList);
 		request.setAttribute(INCOME_TYPES_LIST_ATTRIBUTE, incomeTypesList);
@@ -331,6 +345,198 @@ public class UtilServiceImpl implements UtilService {
 	}
 	
 	
+	@Override
+	public void goToUserOperationsPage(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		//TODO
+		RequestDispatcher dispatcher = null;		
+		
+		String firstDateInString = request.getParameter(FIRST_DATE_ATTRIBUTE);
+		String lastDateInString = request.getParameter(LAST_DATE_ATTRIBUTE);
+		
+		String operationType = request.getParameter(OPERATION_TYPE_PARAMETER);
+		String typeIdInString = request.getParameter(TYPE_ID_PARAMETER);		
+		String pageNumberInString = request.getParameter(PAGE_NUMBER_PARAMETER);
+				
+		List<Operation> operationsList = new ArrayList<Operation>();
+		int typeId = 0;
+		int amountOfPages = 0;
+		int pageNumber = 0;
+		
+		LocalDate firstDate = determinFirstDate(firstDateInString, lastDateInString);
+		LocalDate lastDate = determinLastDate(firstDateInString, lastDateInString);
+		
+		
+		try {
+			if(validator.validatTypeIdNumber(operationType, typeIdInString, pageNumberInString)) {
+				typeId = Integer.parseInt(typeIdInString);
+				pageNumber = Integer.parseInt(pageNumberInString);
+			} else {
+				typeId = Integer.parseInt(typeIdInString);
+				pageNumber = DEFAULT_PAGE_NUMBER;
+			}
+		} catch (ValidationException e) {
+			logger.info("ValidationException while validating operationType, typeId, pageNumber to execute goToUserOperationsPage()", e);
+			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
+		}
+		
+		if(dispatcher == null) {			
+			try {
+				amountOfPages = getAmountOfPages(typeId, firstDate, lastDate);
+			} catch (ServiceException e) {
+				logger.warn("ServiceException trying to execute getAmountOfPages(typeId, firstDate, lastDate) method of UtilServiceImpl", e);
+				dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
+			}			
+		}		
+		
+		if(dispatcher == null) {
+			int firstRecordToGetFromDB = (pageNumber - 1) * DEFAULT_RECORDINGS_AMOUNT;			
+			try {
+				operationsList = getOneTypeOperationsList(typeId, firstDate, lastDate, firstRecordToGetFromDB);
+			} catch (ServiceException e) {
+				logger.warn("ServiceException trying to execute getOneTypeOperationsList(typeId, firstDate, lastDate, firstRecordToGetFromDB) method of UtilServiceImpl", e);
+				dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
+			}
+		}
+		
+		if(dispatcher == null) {
+			request = setAttributesToRequest(firstDate, lastDate, request, amountOfPages, pageNumber, operationsList, operationType, typeId);
+			dispatcher = request.getRequestDispatcher(JSPPath.USER_OPERATIONS_PAGE);
+		}
+		
+		doForwardWithLog(dispatcher, request, response);		
+		
+	}
+	
+	private LocalDate determinLastDate(String firstDateInString, String lastDateInString) {
+		LocalDate lastDate = null;
+		LocalDate firstDate = null;
+		LocalDate currentDate = LocalDate.now();
+		
+		try {
+			if(validator.validateDate(lastDateInString)) {
+				lastDate = LocalDate.parse(lastDateInString);
+			} else {
+				lastDate = LocalDate.now();
+			}
+		} catch (ValidationException e) {
+			logger.info("ValidationException while validating date to execute goToUserOperationsPage()", e);
+			lastDate = LocalDate.now();
+		}
+		
+		try {
+			if(validator.validateDate(firstDateInString)) {
+				firstDate = LocalDate.parse(firstDateInString);
+			} else {
+				firstDate = null;
+			}
+		} catch (ValidationException e) {
+			logger.info("ValidationException while validating date to execute goToUserOperationsPage()", e);
+			firstDate = LocalDate.of(currentDate.getYear(), currentDate.getMonthValue(), FIRST_DAY_OF_MONTH_OR_WEEK_VALUE);
+		}
+		
+		LocalDate spareDate = null;
+		
+		if(firstDate.isAfter(lastDate)) {
+			spareDate = firstDate;
+			firstDate = lastDate;
+			lastDate = spareDate;
+		}
+		if(firstDate.equals(lastDate)) {
+			firstDate = null;
+		}	
+		
+		return lastDate;
+	}
+	
+	private LocalDate determinFirstDate(String firstDateInString, String lastDateInString) {
+		LocalDate lastDate = null;
+		LocalDate firstDate = null;
+		LocalDate currentDate = LocalDate.now();
+		
+		try {
+			if(validator.validateDate(lastDateInString)) {
+				lastDate = LocalDate.parse(lastDateInString);
+			} else {
+				lastDate = LocalDate.now();
+			}
+		} catch (ValidationException e) {
+			logger.info("ValidationException while validating date to execute goToUserOperationsPage()", e);
+			lastDate = LocalDate.now();
+		}
+		
+		try {
+			if(validator.validateDate(firstDateInString)) {
+				firstDate = LocalDate.parse(firstDateInString);
+			} else {
+				firstDate = null;
+			}
+		} catch (ValidationException e) {
+			logger.info("ValidationException while validating date to execute goToUserOperationsPage()", e);
+			firstDate = LocalDate.of(currentDate.getYear(), currentDate.getMonthValue(), FIRST_DAY_OF_MONTH_OR_WEEK_VALUE);
+		}
+		
+		LocalDate spareDate = null;
+		
+		if(firstDate.isAfter(lastDate)) {
+			spareDate = firstDate;
+			firstDate = lastDate;
+			lastDate = spareDate;
+		}
+		if(firstDate.equals(lastDate)) {
+			firstDate = null;
+		}	
+		
+		return firstDate;		
+	}
+	
+	private HttpServletRequest setAttributesToRequest(LocalDate firstDate, LocalDate lastDate, HttpServletRequest request, 
+													  int amountOfPages, int pageNumber, List<Operation> operationsList,String operationType, int typeId) {
+				
+		if(firstDate == null) {
+			request.setAttribute(LAST_DATE_ATTRIBUTE, lastDate);			
+		} else {
+			request.setAttribute(FIRST_DATE_ATTRIBUTE, firstDate);
+			request.setAttribute(LAST_DATE_ATTRIBUTE, lastDate);			
+		}
+		request.setAttribute(AMOUNT_OF_PAGES_PARAMETER, amountOfPages);
+		request.setAttribute(OPERATIONS_LIST_PARAMETER, operationsList);
+		request.setAttribute(PAGE_NUMBER_PARAMETER, pageNumber);
+		request.setAttribute(OPERATION_TYPE_PARAMETER, operationType);
+		request.setAttribute(TYPE_ID_PARAMETER, typeId);
+		return request;
+	}
+	
+	private int getAmountOfPages(int typeId, LocalDate firstDate, LocalDate lastDate) throws ServiceException{
+		int amountOfPages = 0;
+		try {
+			if(firstDate == null) {				
+				amountOfPages = operationDAO.getOneTypeOperationsNumberOfPagesAtDate(typeId, lastDate);				
+			} else {
+				amountOfPages = operationDAO.getOneTypeOperationsNumberOfPagesBetweenDates(typeId, firstDate, lastDate);
+			}
+		} catch (DAOException e) {
+			throw new ServiceException("DAOException in getAmountOfPages() of UtilServiceImpl", e);
+		}
+		return amountOfPages;
+	}
+	
+	
+	private List<Operation> getOneTypeOperationsList(int typeId, LocalDate firstDate, LocalDate lastDate, int firstRecordToGetFromDB) throws ServiceException{
+		List<Operation> operationsList = new ArrayList<Operation>();
+		try {
+			if(firstDate == null) {
+				operationsList = operationDAO.getOneTypeOperationsAtDate(typeId, lastDate, firstRecordToGetFromDB, DEFAULT_RECORDINGS_AMOUNT);
+			} else {
+				operationsList = operationDAO.getOneTypeOperationsBetweenDates(typeId, firstDate, lastDate, firstRecordToGetFromDB, DEFAULT_RECORDINGS_AMOUNT);
+			}
+		} catch (DAOException e) {
+			throw new ServiceException("DAOException in getOneTypeOperationsList() of UtilServiceImpl", e);
+		}
+		return operationsList;
+	}
+	
+	
 	/**
 	 * Private method of UtilServiceImpl which do forward or redirect depends on RequestDispatcher value. 
 	 * Also method makes log if forward or sendRedirect throw exception.
@@ -363,4 +569,7 @@ public class UtilServiceImpl implements UtilService {
 			}				
 		}
 	}
+
+
+	
 }

@@ -38,6 +38,7 @@ public class OperationServiceImpl implements OperationService {
 	private OperationTypeDAO typeDAO = DAOFactory.getInstance().getOperationTypeDAO();
 	private OperationParameterValidator validator = ValidationFactory.getInstance().getOperationValidator();
 	
+	private static final String OPERATION_TYPE_PARAM = "operationType";
 	private static final String OPERATION_TYPE_ROLE_PARAM = "operationTypeRole";
 	private static final String OPERATION_TYPE_SPENTING_PARAM = "spending";
 	private static final String OPERATION_TYPE_INCOME_PARAM = "income";
@@ -60,9 +61,9 @@ public class OperationServiceImpl implements OperationService {
 		RequestDispatcher dispatcher = null;
 		HttpSession session = request.getSession(true);
 		
-		User user = (User) session.getAttribute(USER_ATTRIBUTE);		
-		String operationTypeRole = request.getParameter(OPERATION_TYPE_ROLE_PARAM);		
-		String operationType = getParamOperationTypeOnRole(operationTypeRole, request);
+		User user = (User) session.getAttribute(USER_ATTRIBUTE);
+		String operationTypeRole =  request.getParameter(OPERATION_TYPE_ROLE_PARAM);
+		String operationType =  getParamOperationTypeOnRole(operationTypeRole, request);
 		String remark = request.getParameter(OPERATION_REMARK_PARAM);
 		String date = request.getParameter(OPERATION_DATE_PARAM);
 		String amount = request.getParameter(OPERATION_AMOUNT_PARAM);
@@ -71,7 +72,7 @@ public class OperationServiceImpl implements OperationService {
 		List<OperationType> spendingTypesList = null; 
 		List<OperationType> incomeTypesList = null;		
 		Operation operation = null;
-		
+				
 		try {
 			spendingTypesList = typeDAO.getUserOperationTypesDependingOnTypeRole(user.getId(), OperationType.SPENDING_TYPE_ROLE);
 			incomeTypesList = typeDAO.getUserOperationTypesDependingOnTypeRole(user.getId(), OperationType.INCOME_TYPE_ROLE);
@@ -167,8 +168,8 @@ public class OperationServiceImpl implements OperationService {
 		int realOperationTypeRole = 0;		
 		
 		if(validator.ifSomeOfParamsNullEmptyCheck(operationTypeRole, operationType)) {
-			logger.info("Somehow in getOperationTypeIdFromTypesLists() method of OperationServiceImpl as parameters came operationTypeRole -" 
-						+ operationTypeRole + " and as operationType - " + operationType);
+			logger.info("Somehow in getOperationTypeIdFromTypesLists() method of OperationServiceImpl came operationTypeRole: " 
+						+ operationTypeRole + " and as operationType: " + operationType);
 			return -1;
 		}
 		

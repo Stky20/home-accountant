@@ -20,4 +20,6 @@ public interface UtilService {
 	public void goToSorryPage(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 	public void goToUserAccountPage(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 	public void signOut(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	public void goToUserOperationsPage(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
+	
 }

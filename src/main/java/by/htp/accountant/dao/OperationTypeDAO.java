@@ -17,5 +17,7 @@ public interface OperationTypeDAO {
 	
 	boolean deleteOperationType(int typeId) throws DAOException;
 	
+	int getTypeIdOnUserIdAndOperationType(int userId, String operationType) throws DAOException;
+	
 	
 }

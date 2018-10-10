@@ -10,8 +10,8 @@ import by.htp.accountant.util.validation.TypeParametersValidator;
 
 public class TypeParametersValidatorImpl implements TypeParametersValidator{
 	
-	public final static String OPERATION_TYPE_PATTERN = "[\\wА-Яа-я-]{1,10}";
-	public final static String TYPES_ROLE_PATTERN = "[12]{1}";
+	public final static String OPERATION_TYPE_PATTERN = "[\\wА-Яа-я-\\s]{1,10}";
+	public final static String TYPES_ROLE_PATTERN = "[1234]{1}";
 	public final static String TYPES_ID_PATTERN = "[1-9]+";
 
 	@Override

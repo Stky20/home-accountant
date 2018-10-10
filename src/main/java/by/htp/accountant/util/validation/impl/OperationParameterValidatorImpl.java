@@ -3,6 +3,7 @@ package by.htp.accountant.util.validation.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.htp.accountant.exception.ValidationException;
 import by.htp.accountant.util.validation.OperationParameterValidator;
 
 import static by.htp.accountant.util.validation.ValidationErrorMessage.*;
@@ -12,6 +13,7 @@ public class OperationParameterValidatorImpl implements OperationParameterValida
 	public final static String OPERATION_REMARK_PATTERN = "[\\wА-Яа-я-_\\.,:;\\(\\)\\s]{1,60}";	
 	public final static String OPERATION_DATE_PATTERN = "^((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$";
 	public final static String OPERATION_AMOUNT_PATTERN = "\\d+([,.]\\d{1,2})?";
+	public final static String OPERATION_TYPE_PATTERN = "[\\wА-Яа-я-\\s]{1,20}";
 	
 
 	@Override
@@ -65,6 +67,7 @@ public class OperationParameterValidatorImpl implements OperationParameterValida
 		}
 		return null;
 	}
+	
 
 	@Override
 	public List<String> validateOperationParams(String remark, String date, String amount) {
@@ -83,9 +86,11 @@ public class OperationParameterValidatorImpl implements OperationParameterValida
 		
 		if(errorMsgAmount != null) {
 			errorMsgs.add(errorMsgAmount);
-		}
+		}		
 		
 		return errorMsgs;
 	}
+
+	
 
 }

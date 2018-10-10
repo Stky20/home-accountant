@@ -23,6 +23,7 @@ import by.htp.accountant.controller.command.GoToSloganPageCommand;
 import by.htp.accountant.controller.command.GoToSorryPageCommand;
 import by.htp.accountant.controller.command.GoToUserAccountPageCommand;
 import by.htp.accountant.controller.command.GoToUserAdministrationPageCommand;
+import by.htp.accountant.controller.command.GoToUserOperationsPageCommand;
 import by.htp.accountant.controller.command.ChangeLocalization;
 import by.htp.accountant.controller.command.Logination;
 import by.htp.accountant.controller.command.MakeAdminCommand;
@@ -61,6 +62,7 @@ private Map<CommandName, Command> commands = new HashMap<CommandName, Command>()
 		commands.put(CommandName.CREATE_TYPE, new CreateTypeCommand());
 		commands.put(CommandName.EDIT_TYPE, new EditTypeCommand());
 		commands.put(CommandName.DELETE_TYPE, new DeleteTypeCommand());
+		commands.put(CommandName.GO_TO_USER_OPERATIONS_PAGE, new GoToUserOperationsPageCommand());
 	}
 
 	public Command getCommand(String commandName) {

@@ -7,7 +7,7 @@ public class JSPPath {
 	public final static String GO_TO_USER_PROFILE_PAGE = "Controller?command=go_to_profile&modal=true";
 	public final static String GO_TO_USER_ADMINISTRATION_PAGE = "Controller?command=go_to_user_administration_page&modal=true";
 	public final static String GO_TO_USER_ACCOUNT_PAGE = "Controller?command=go_to_user_account_page";
-	public final static String GO_TO_USER_ACCOUNT_SUCCESS_PAGE = "Controller?command=go_to_user_account_page&modal=success";
+	public final static String GO_TO_USER_ACCOUNT_SUCCESS_PAGE = "Controller?command=go_to_user_account_page&modal=messageModal&successMsg=true";
 	
 	
 	
@@ -22,6 +22,7 @@ public class JSPPath {
 	public final static String SORRY_PAGE = "/WEB-INF/jsp/SorryPage.jsp";
 	public final static String USER_ACCOUNT_PAGE = "/WEB-INF/jsp/UserAccountPage.jsp";
 	public final static String OPERATION_FORM_PAGE = "/WEB-INF/jsp/OperationCreateFormPage.jsp";
+	public final static String USER_OPERATIONS_PAGE = "/WEB-INF/jsp/UserOperationsPage.jsp";
 		
 	public final static String COMMAND_ERROR_PAGE = "/WEB-INF/jsp/CommandError.jsp";	
 	public final static String APPLICATION_ERROR_PAGE = "/WEB-INF/jsp/ApplicationError.jsp";	

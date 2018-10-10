@@ -36,10 +36,16 @@ public class OperationTypeServiceImpl implements OperationTypeService {
 	private static final String ID_PARAM = "typeId";
 		
 	private final static String USER_ATTRIBUTE = "user";
+	private static final String FIRST_DATE_ATTRIBUTE = "firstDate";
+	private static final String LAST_DATE_ATTRIBUTE = "lastDate";
+	
 	private static final String MODAL_ATTRIBUTE = "modal";
 	private static final String CREATE_TYPE_MODAL_ATTRIBUTE = "typeCreateModal";
 	private static final String EDIT_TYPE_MODAL_ATTRIBUTE = "typeEditModal";
-	private static final String IMPOSIBLE_MODAL_ATTRIBUTE = "imposibleModal";
+	private static final String MESSAGE_MODAL_ATTRIBUTE = "messageModal";
+	
+	
+	private static final String IMPOSIBLE_MESSAGE_FOR_MODAL = "imposibleMsg";
 	
 	@Override
 	public void createOperationType(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -51,7 +57,6 @@ public class OperationTypeServiceImpl implements OperationTypeService {
 		User user = (User)session.getAttribute(USER_ATTRIBUTE);
 		String roleInString = request.getParameter(ROLE_PARAM);		
 		String operationType = request.getParameter(OPERATION_TYPE_PARAM);
-		int role = 0;
 		List<String> validationErrors = new ArrayList<String>();
 		
 		try {
@@ -156,6 +161,10 @@ public class OperationTypeServiceImpl implements OperationTypeService {
 				
 		String typeIdInString = request.getParameter(ID_PARAM);
 		String typeRoleInString = request.getParameter(ROLE_PARAM);
+		
+		System.out.println(typeIdInString);
+		System.out.println(typeRoleInString);
+
 		int typeId = 0;
 		int typeRole = 0;
 		try {
@@ -168,7 +177,9 @@ public class OperationTypeServiceImpl implements OperationTypeService {
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 		}
 		
-		if(typeRole != OperationType.INCOME_TYPE_UNDELETEBLE_ROLE && typeRole != OperationType.SPENDING_TYPE_UNDELETEBLE_ROLE) {
+		if(typeRole != OperationType.INCOME_TYPE_UNDELETEBLE_ROLE 
+				&& typeRole != OperationType.SPENDING_TYPE_UNDELETEBLE_ROLE 
+				&& dispatcher == null) {
 			try {
 				typeDAO.deleteOperationType(typeId);
 			} catch (DAOException e) {
@@ -176,7 +187,8 @@ public class OperationTypeServiceImpl implements OperationTypeService {
 				dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 			}
 		} else {
-			request.setAttribute(MODAL_ATTRIBUTE, IMPOSIBLE_MODAL_ATTRIBUTE);
+			request.setAttribute(MODAL_ATTRIBUTE, MESSAGE_MODAL_ATTRIBUTE);
+			request.setAttribute(IMPOSIBLE_MESSAGE_FOR_MODAL, true);
 			dispatcher = request.getRequestDispatcher(JSPPath.USER_ACCOUNT_PAGE);
 		}
 		

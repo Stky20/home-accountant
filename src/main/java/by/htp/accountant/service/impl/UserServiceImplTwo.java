@@ -233,7 +233,7 @@ public class UserServiceImplTwo implements UserService {
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 		} 
 		
-		int startingFrom = (pageNumber - 1) * 5;		
+		int startingFrom = (pageNumber - 1) * DEFAULT_RECORDINGS_AMOUNT;		
 		
 		List<User> usersList = null;
 		

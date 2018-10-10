@@ -14,7 +14,7 @@ import by.htp.accountant.bean.OperationType;
 import by.htp.accountant.dao.OperationTypeDAO;
 import by.htp.accountant.dao.connectionpool.ConnectionPool;
 import by.htp.accountant.exception.DAOException;
-import by.htp.accountant.exception.SQLUserDAOException;
+
 
 public class MySQLOperationTypeDAO implements OperationTypeDAO {
 	
@@ -26,7 +26,8 @@ public class MySQLOperationTypeDAO implements OperationTypeDAO {
 	private final static String TYPE_CREATE_QUERY = "INSERT INTO operation_types (operationType, user_Id, role) VALUES (?, ?, ?);";
 	private final static String TYPE_EDIT_QUERY = "UPDATE operation_types SET operationType=? WHERE id=?;";
 	private final static String TYPE_DELETE_QUERY = "DELETE FROM operation_types WHERE id=?;";
-	private final static String OPERATION_DELETE_QUERY = "DELETE FROM operations WHERE operationTypesId=?;";
+	private final static String OPERATION_DELETE_QUERY = "DELETE FROM operations WHERE operationTypeId=?;";
+	private final static String GETTING_TYPR_ID_QUERY = "SELECT id FROM operation_types WHERE user_Id=? AND operationType=?;";
 
 	
 	
@@ -184,5 +185,29 @@ public class MySQLOperationTypeDAO implements OperationTypeDAO {
 		return false;
 		
 	}
-	
+
+	@Override
+	public int getTypeIdOnUserIdAndOperationType(int userId, String operationType) throws DAOException {
+		
+		int typeId = 0;
+		
+		try (Connection connection = connectionPool.takeConnection(); 
+				PreparedStatement prepareStatement = connection.prepareStatement(GETTING_TYPR_ID_QUERY)){
+					
+					prepareStatement.setInt(1, userId);
+					prepareStatement.setString(2, operationType);
+					
+					try(ResultSet resultSet = prepareStatement.executeQuery()){				
+						if(resultSet.next())	{
+							typeId = resultSet.getInt(1);						
+						}						
+					}
+		} catch (SQLException e) {
+			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationTypeDAO getTypeIdOnUserIdAndOperationType() method", e);
+		} catch (InterruptedException e) {
+			throw new DAOException ("Can`t take connection from ConnectionPool in OperationTypeDAO getTypeIdOnUserIdAndOperationType() method", e);
+		}
+					
+		return typeId;		
+	}	
 }
