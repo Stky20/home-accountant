@@ -351,7 +351,7 @@ public class OperationServiceImpl implements OperationService {
 	@Override
 	public void editOperation(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		// TODO Auto-generated method stub
+		
 		RequestDispatcher dispatcher = null;
 		HttpSession session = request.getSession(true);
 		
@@ -360,7 +360,7 @@ public class OperationServiceImpl implements OperationService {
 		String operationType = request.getParameter(OPERATION_TYPE_PARAM);
 		String operationIdInString = request.getParameter(OPERATION_ID_PARAM);
 		String remark = request.getParameter(OPERATION_REMARK_PARAM);
-		String date = request.getParameter(OPERATION_DATE_PARAM);
+		String dateInString = request.getParameter(OPERATION_DATE_PARAM);
 		String amountInString = request.getParameter(OPERATION_AMOUNT_PARAM);
 		String redirectPage = JSPPath.GO_TO_USER_ACCOUNT_SUCCESS_PAGE;
 		
@@ -368,18 +368,23 @@ public class OperationServiceImpl implements OperationService {
 		double amount = 0;
 		
 		List<String> paramsValidationErrors = new ArrayList<String>();
-		Operation operation = null;		
+		LocalDate date = null;
 		
-	
-		paramsValidationErrors.addAll(validator.validateOperationParams(remark, date, amountInString));
+		System.out.println(operationIdInString);
+		paramsValidationErrors.addAll(validator.validateOperationParams(remark, dateInString, amountInString));
 		
 		if(paramsValidationErrors.isEmpty()) {
 			try {
 				if(validator.validateTypeId(operationIdInString)){
 					operationId = Integer.parseInt(operationIdInString);
-					amount = Double.parseDouble(amountInString);
+					amount = Double.parseDouble(amountInString.replaceAll(",", "."));
+					if(!validator.oneParameterNullEmptyCheck(dateInString)) {
+						date = LocalDate.parse(dateInString);
+					} else {
+						date = LocalDate.now();
+					}
 					try {
-						if(!operationDAO.editOperation(operationId, amount, remark, LocalDate.parse(date))){
+						if(!operationDAO.editOperation(operationId, amount, remark, date)){
 							redirectPage = JSPPath.GO_TO_USER_ACCOUNT_FAIL_PAGE;
 						}
 					} catch (DAOException e) {
@@ -388,7 +393,7 @@ public class OperationServiceImpl implements OperationService {
 					}
 				}
 			} catch (ValidationException e) {
-				logger.warn("operationType, typeIdInString,  operationIdInString didn`t pass validation in editOperation() of OperationServiceImpl");
+				logger.warn("operationIdInString didn`t pass validation in editOperation() of OperationServiceImpl");
 				dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 			}
 		} else {

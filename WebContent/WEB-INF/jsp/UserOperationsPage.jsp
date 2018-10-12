@@ -89,7 +89,10 @@
 					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
 					<button type="submit" class="list-group-item">${requestScope.operationType} - за текущий год</button>
 				</form>
-				<button type="button" class="list-group-item" data-toggle="modal" data-target="#dateChooseModal">Указать период для операции - ${requestScope.operationType}</button>					
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item">Указать период для операции - ${requestScope.operationType}</button>
+				</form>
 				<form action="Controller" method="get">
 					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
 					<button type="submit" class="list-group-item" style="background: #FA8072;">Все операции за период без типо</button>
@@ -232,7 +235,7 @@
 			<input type="hidden" name="command" value="edit_operation">
 			<input type="hidden" name="operationType" value="${requestScope.operationType}">
 			<input type="hidden" name="typeId" value="${requestScope.typeId}">
-			<input type="hidden" name="operationId" value="">				
+			<input type="hidden" name="operationId" id="operationId" value="">				
 		
 			<div class="input-group" style="margin:20px 0 20px 0;; padding-left:100px;">
 				<span class="input-group-addon" id="basic-addon1">Сумма Br:</span>
@@ -294,173 +297,173 @@
 	
 	
 	<!-- Pagination -->
-	<div class="container" style="text-align:center">
-		<c:if test="${requestScope.amountOfPages > 1}" >
-			<nav aria-label="Page navigation">
-				<ul class="pagination">
-					<c:choose>																						
-						<c:when test="${requestScope.amountOfPages == 2}">
-							<c:if test="${requestScope.pageNumber == 1}">
-								<li class="disabled active">
-									<a href="#" aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-								</li>
-								<li>
-									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber + 1}" aria-label="Next">
-										command
-										pageNumber
-										typeId
-										firstDate
-										lastDate
-										<span aria-hidden="true">&raquo;</span>
-									</a>
-								</li>
-							</c:if>
-							<c:if test="${requestScope.pageNumber == 2}">
-								<li>
-									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber - 1}" aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-								</li>
-								<li class="disabled active">
-									<a href="#" aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
-									</a>
-								</li>
-							</c:if>
-						</c:when>
-						<c:when test ="${requestScope.amountOfPages > 2 && requestScope.amountOfPages <= 5}">
-							<c:if test="${requestScope.pageNumber == 1}">
-								<li class="disabled">
-									<a href="#" aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-								</li>								
-							</c:if>
-							<c:if test="${requestScope.pageNumber > 1}">
-								<li>
-									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber-1}" aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-								</li>
-							</c:if>
+<!-- 	<div class="container" style="text-align:center"> -->
+<%-- 		<c:if test="${requestScope.amountOfPages > 1}" > --%>
+<!-- 			<nav aria-label="Page navigation"> -->
+<!-- 				<ul class="pagination"> -->
+<%-- 					<c:choose>																						 --%>
+<%-- 						<c:when test="${requestScope.amountOfPages == 2}"> --%>
+<%-- 							<c:if test="${requestScope.pageNumber == 1}"> --%>
+<!-- 								<li class="disabled active"> -->
+<!-- 									<a href="#" aria-label="Previous"> -->
+<!-- 										<span aria-hidden="true">&laquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+<!-- 								<li> -->
+<%-- 									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber + 1}" aria-label="Next"> --%>
+<!-- 										command -->
+<!-- 										pageNumber -->
+<!-- 										typeId -->
+<!-- 										firstDate -->
+<!-- 										lastDate -->
+<!-- 										<span aria-hidden="true">&raquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+<%-- 							</c:if> --%>
+<%-- 							<c:if test="${requestScope.pageNumber == 2}"> --%>
+<!-- 								<li> -->
+<%-- 									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber - 1}" aria-label="Previous"> --%>
+<!-- 										<span aria-hidden="true">&laquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+<!-- 								<li class="disabled active"> -->
+<!-- 									<a href="#" aria-label="Next"> -->
+<!-- 										<span aria-hidden="true">&raquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+<%-- 							</c:if> --%>
+<%-- 						</c:when> --%>
+<%-- 						<c:when test ="${requestScope.amountOfPages > 2 && requestScope.amountOfPages <= 5}"> --%>
+<%-- 							<c:if test="${requestScope.pageNumber == 1}"> --%>
+<!-- 								<li class="disabled"> -->
+<!-- 									<a href="#" aria-label="Previous"> -->
+<!-- 										<span aria-hidden="true">&laquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li>								 -->
+<%-- 							</c:if> --%>
+<%-- 							<c:if test="${requestScope.pageNumber > 1}"> --%>
+<!-- 								<li> -->
+<%-- 									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber-1}" aria-label="Previous"> --%>
+<!-- 										<span aria-hidden="true">&laquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+<%-- 							</c:if> --%>
 														
-							<c:forEach var="i" begin="${1}" end="${requestScope.amountOfPages}">
-								<c:if test="${requestScope.pageNumber == i}">
-									<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-								</c:if>
-								<c:if test="${requestScope.pageNumber != i}">
-									<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-								</c:if>
-							</c:forEach>
+<%-- 							<c:forEach var="i" begin="${1}" end="${requestScope.amountOfPages}"> --%>
+<%-- 								<c:if test="${requestScope.pageNumber == i}"> --%>
+<%-- 									<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 								</c:if> --%>
+<%-- 								<c:if test="${requestScope.pageNumber != i}"> --%>
+<%-- 									<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 								</c:if> --%>
+<%-- 							</c:forEach> --%>
 							
-							<c:if test="${requestScope.pageNumber == requestScope.amountOfPages}">
-								<li class="disabled">
-									<a href="#" aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
-									</a>
-								</li>
-							</c:if>
+<%-- 							<c:if test="${requestScope.pageNumber == requestScope.amountOfPages}"> --%>
+<!-- 								<li class="disabled"> -->
+<!-- 									<a href="#" aria-label="Next"> -->
+<!-- 										<span aria-hidden="true">&raquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+<%-- 							</c:if> --%>
 							
-							<c:if test="${requestScope.pageNumber < requestScope.amountOfPages}">
-								<li>
-									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber+1}" aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
-									</a>
-								</li>
-							</c:if>
+<%-- 							<c:if test="${requestScope.pageNumber < requestScope.amountOfPages}"> --%>
+<!-- 								<li> -->
+<%-- 									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber+1}" aria-label="Next"> --%>
+<!-- 										<span aria-hidden="true">&raquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+<%-- 							</c:if> --%>
 							
-						</c:when>
+<%-- 						</c:when> --%>
 						
-						<c:when test ="${requestScope.amountOfPages > 5}">
-							<c:if test="${requestScope.pageNumber == 1}">
-								<li class="disabled">
-									<a href="#" aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-								</li>								
-							</c:if>
-							<c:if test="${requestScope.pageNumber > 1}">
-								<li>
-									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber-1}" aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-								</li>
-							</c:if>
+<%-- 						<c:when test ="${requestScope.amountOfPages > 5}"> --%>
+<%-- 							<c:if test="${requestScope.pageNumber == 1}"> --%>
+<!-- 								<li class="disabled"> -->
+<!-- 									<a href="#" aria-label="Previous"> -->
+<!-- 										<span aria-hidden="true">&laquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li>								 -->
+<%-- 							</c:if> --%>
+<%-- 							<c:if test="${requestScope.pageNumber > 1}"> --%>
+<!-- 								<li> -->
+<%-- 									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber-1}" aria-label="Previous"> --%>
+<!-- 										<span aria-hidden="true">&laquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+<%-- 							</c:if> --%>
 						
-							<c:if test="${requestScope.pageNumber==1}">
-								<c:forEach var="i" begin="${requestScope.pageNumber}" end="${requestScope.pageNumber+4}">
-									<c:if test="${requestScope.pageNumber == i}">
-										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-									</c:if>
-									<c:if test="${requestScope.pageNumber != i}">
-										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-									</c:if>
-								</c:forEach>
-							</c:if>
+<%-- 							<c:if test="${requestScope.pageNumber==1}"> --%>
+<%-- 								<c:forEach var="i" begin="${requestScope.pageNumber}" end="${requestScope.pageNumber+4}"> --%>
+<%-- 									<c:if test="${requestScope.pageNumber == i}"> --%>
+<%-- 										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 									</c:if> --%>
+<%-- 									<c:if test="${requestScope.pageNumber != i}"> --%>
+<%-- 										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 									</c:if> --%>
+<%-- 								</c:forEach> --%>
+<%-- 							</c:if> --%>
 							
-							<c:if test="${requestScope.pageNumber==2}">
-								<c:forEach var="i" begin="${requestScope.pageNumber-1}" end="${requestScope.pageNumber+3}">
-									<c:if test="${requestScope.pageNumber == i}">
-										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-									</c:if>
-									<c:if test="${requestScope.pageNumber != i}">
-										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-									</c:if>								</c:forEach>
-							</c:if>							
+<%-- 							<c:if test="${requestScope.pageNumber==2}"> --%>
+<%-- 								<c:forEach var="i" begin="${requestScope.pageNumber-1}" end="${requestScope.pageNumber+3}"> --%>
+<%-- 									<c:if test="${requestScope.pageNumber == i}"> --%>
+<%-- 										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 									</c:if> --%>
+<%-- 									<c:if test="${requestScope.pageNumber != i}"> --%>
+<%-- 										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 									</c:if>								</c:forEach> --%>
+<%-- 							</c:if>							 --%>
 							
-							<c:if test="${requestScope.pageNumber>2 && (requestScope.amountOfPages - requestScope.pageNumber)>=2}">
-								<c:forEach var="i" begin="${requestScope.pageNumber-2}" end="${requestScope.pageNumber+2}">
-									<c:if test="${requestScope.pageNumber == i}">
-										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-									</c:if>
-									<c:if test="${requestScope.pageNumber != i}">
-										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-									</c:if>								</c:forEach>
-							</c:if>													
+<%-- 							<c:if test="${requestScope.pageNumber>2 && (requestScope.amountOfPages - requestScope.pageNumber)>=2}"> --%>
+<%-- 								<c:forEach var="i" begin="${requestScope.pageNumber-2}" end="${requestScope.pageNumber+2}"> --%>
+<%-- 									<c:if test="${requestScope.pageNumber == i}"> --%>
+<%-- 										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 									</c:if> --%>
+<%-- 									<c:if test="${requestScope.pageNumber != i}"> --%>
+<%-- 										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 									</c:if>								</c:forEach> --%>
+<%-- 							</c:if>													 --%>
 							
-							<c:if test="${requestScope.pageNumber>2 && (requestScope.amountOfPages - requestScope.pageNumber)==1}">
-								<c:forEach var="i" begin="${requestScope.pageNumber-3}" end="${requestScope.amountOfPages}">
-									<c:if test="${requestScope.pageNumber == i}">
-										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-									</c:if>
-									<c:if test="${requestScope.pageNumber != i}">
-										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-									</c:if>								</c:forEach>
-							</c:if>
+<%-- 							<c:if test="${requestScope.pageNumber>2 && (requestScope.amountOfPages - requestScope.pageNumber)==1}"> --%>
+<%-- 								<c:forEach var="i" begin="${requestScope.pageNumber-3}" end="${requestScope.amountOfPages}"> --%>
+<%-- 									<c:if test="${requestScope.pageNumber == i}"> --%>
+<%-- 										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 									</c:if> --%>
+<%-- 									<c:if test="${requestScope.pageNumber != i}"> --%>
+<%-- 										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 									</c:if>								</c:forEach> --%>
+<%-- 							</c:if> --%>
 																												
-							<c:if test="${requestScope.pageNumber>2 && requestScope.pageNumber == requestScope.amountOfPages}">
-								<c:forEach var="i" begin="${requestScope.pageNumber-4}" end="${requestScope.amountOfPages}">
-									<c:if test="${requestScope.pageNumber == i}">
-										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-									</c:if>
-									<c:if test="${requestScope.pageNumber != i}">
-										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li>
-									</c:if>								</c:forEach>
-							</c:if>						
+<%-- 							<c:if test="${requestScope.pageNumber>2 && requestScope.pageNumber == requestScope.amountOfPages}"> --%>
+<%-- 								<c:forEach var="i" begin="${requestScope.pageNumber-4}" end="${requestScope.amountOfPages}"> --%>
+<%-- 									<c:if test="${requestScope.pageNumber == i}"> --%>
+<%-- 										<li class="active"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 									</c:if> --%>
+<%-- 									<c:if test="${requestScope.pageNumber != i}"> --%>
+<%-- 										<li class="${i}"><a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${i}">${i}</a></li> --%>
+<%-- 									</c:if>								</c:forEach> --%>
+<%-- 							</c:if>						 --%>
 							
-							<c:if test="${requestScope.pageNumber == requestScope.amountOfPages}">
-								<li class="disabled">
-									<a href="#" aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
-									</a>
-								</li>
-							</c:if>
+<%-- 							<c:if test="${requestScope.pageNumber == requestScope.amountOfPages}"> --%>
+<!-- 								<li class="disabled"> -->
+<!-- 									<a href="#" aria-label="Next"> -->
+<!-- 										<span aria-hidden="true">&raquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+<%-- 							</c:if> --%>
 							
-							<c:if test="${requestScope.pageNumber < requestScope.amountOfPages}">
-								<li>
-									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber+1}" aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
-									</a>
-								</li>
-							</c:if>
-						</c:when>						
-					</c:choose>	
-				</ul>
-			</nav>
-		</c:if>
-	</div>
+<%-- 							<c:if test="${requestScope.pageNumber < requestScope.amountOfPages}"> --%>
+<!-- 								<li> -->
+<%-- 									<a href="/home-accountant-version-00/Controller?command=go_to_user_administration_page&role=${requestScope.usersList[0].role}&pageNumber=${requestScope.pageNumber+1}" aria-label="Next"> --%>
+<!-- 										<span aria-hidden="true">&raquo;</span> -->
+<!-- 									</a> -->
+<!-- 								</li> -->
+<%-- 							</c:if> --%>
+<%-- 						</c:when>						 --%>
+<%-- 					</c:choose>	 --%>
+<!-- 				</ul> -->
+<!-- 			</nav> -->
+<%-- 		</c:if> --%>
+<!-- 	</div> -->
 		</div>
 	</div>
 </div>

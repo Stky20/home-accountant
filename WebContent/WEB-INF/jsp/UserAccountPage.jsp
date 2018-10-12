@@ -451,11 +451,11 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">      
       <div class="modal-body">
-        	<c:if test="${not empty requestScope.imposibleMsg}">
-			   	<font color="red"><c:out value="imposibleMsg" /></font>							     	
+        	<c:if test="${requestScope.message == success}">
+			   	<font color="red"><c:out value="Успешно!" /></font>							     	
 			</c:if>
-			<c:if test="${not empty requestScope.successMsg}">
-			   	<font color="red"><c:out value="successMsg" /></font>							     	
+			<c:if test="${requestScope.message == fail}">
+			   	<font color="red"><c:out value="Операция не выполнена!" /></font>							     	
 			</c:if>
       </div>
       <div class="modal-footer">

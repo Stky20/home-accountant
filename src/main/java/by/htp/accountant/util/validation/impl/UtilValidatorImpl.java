@@ -9,7 +9,7 @@ public class UtilValidatorImpl implements UtilValidator{
 	public final static String DATE_PATTERN = "^((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$";
 	public final static String OPERATION_TYPE_PATTERN = "[\\wА-Яа-я-\\s]{1,20}";
 	public final static String TYPES_ID_PATTERN = "[0-9]+";
-
+	
 	@Override
 	public boolean oneParameterNullEmptyCheck(String parameter) {
 		if (parameter == null ) {

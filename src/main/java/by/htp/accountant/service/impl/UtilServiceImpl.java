@@ -41,6 +41,7 @@ public class UtilServiceImpl implements UtilService {
 	private static final String LOCALIZATION_SESSION_ATTRIBUTE = "local";	
 	private static final String PREVIOS_PAGE_SESSION_PARAM ="previousPage";
 	private static final String MODAL_ATTRIBUTE = "modal";
+	private static final String MESSAGE_ATTRIBUTE = "message";
 	private static final String USER_PARAMETER = "user";
 	private static final String OPERATION_TYPE_PARAMETER = "operationType";
 	private static final String TYPE_ID_PARAMETER = "typeId";
@@ -180,6 +181,14 @@ public class UtilServiceImpl implements UtilService {
 		List<OperationType> spendingTypesList = null;
 		List<OperationType> incomeTypesList = null;
 		List<Operation> operationListDuringPeriod = null;
+		
+		String modal = request.getParameter(MODAL_ATTRIBUTE);
+		
+		if(!validator.oneParameterNullEmptyCheck(modal)) {
+			String message = request.getParameter(MESSAGE_ATTRIBUTE);
+			request.setAttribute(MODAL_ATTRIBUTE, modal);
+			request.setAttribute(MESSAGE_ATTRIBUTE, message);
+		}
 		
 		try {
 			spendingTypesList = typeDAO.getUserOperationTypesDependingOnTypeRole(user.getId(), OperationType.SPENDING_TYPE_ROLE, OperationType.SPENDING_TYPE_UNDELETEBLE_ROLE);

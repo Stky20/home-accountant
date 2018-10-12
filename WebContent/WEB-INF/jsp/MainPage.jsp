@@ -50,8 +50,7 @@
 										<p><font size="4">Кроме учета личных финансов и контроля семейного бюджета, Домашняя бухгалтерия поможет вести финансовый учет индивидуальным предпринимателям и небольшим компаниям.</font></p>
 										<p><font size="4">Программа позволит создать эффективный финансовый план, рассчитать доходы и расходы.</font></p>
 							        	<p><form action="Controller" method="get">
-												<input type="hidden" name="command" value="localization" /> 
-												<input type="hidden" name="localization" value="en" /> 
+												<input type="hidden" name="command" value="go_to_registration_page" />												
 												<input type="submit" class="btn btn-success btn-lg" name="login" value="Приступить!" />
 											</form></p>
 								</div>
@@ -65,7 +64,7 @@
 											<p class="text-danger">Не нужно обладать никакими специальными бухгалтерскими знаниями.</p>
 											<p>Полный набор функций, необходимых для контроля семейного бюджета.</p>
 											<p>
-												<a class="btn btn-primary" href="#" role="button">Подробней
+												<a class="btn btn-primary" href="/home-accountant-version-00/Controller?command=go_to_about_us_page" role="button">Подробней
 													&raquo;</a>
 											</p>
 										</div>
@@ -73,7 +72,7 @@
 											<h4>Польза</h4>
 											<p>Ведение учета домашних финансов поможет в достижении целей.</p>
 											<p>
-												<a class="btn btn-primary" href="#" role="button">View details
+												<a class="btn btn-primary" href="/home-accountant-version-00/Controller?command=go_to_contacts_page" role="button">Свяжись
 													&raquo;</a>
 											</p>
 										</div>
@@ -81,7 +80,7 @@
 											<h4>Выгода</h4>
 											<p>Анализируя свой бюджет, можно избежать излишних расходов.</p>
 											<p>
-												<a class="btn btn-primary" href="#" role="button">View details
+												<a class="btn btn-primary" href="/home-accountant-version-00/Controller?command=go_to_slogan_page" role="button">Думай
 													&raquo;</a>
 											</p>
 										</div>
@@ -89,7 +88,7 @@
 											<h4>Безопасность</h4>
 											<p>Защита записей паролем и функция резервного копирования базы данных.</p>
 											<p>
-												<a class="btn btn-primary" href="#" role="button">View details
+												<a class="btn btn-primary" href="/home-accountant-version-00/Controller?command=go_to_user_account_page" role="button">Запоминай
 													&raquo;</a>
 											</p>
 										</div>
