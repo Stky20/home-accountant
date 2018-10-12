@@ -58,6 +58,7 @@
   </dependencies>
   
   <build>
+  	<finalName>home-accountant-version-00</finalName>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>

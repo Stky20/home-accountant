@@ -7,9 +7,7 @@ import by.htp.accountant.exception.DAOException;
 
 public interface OperationTypeDAO {
 
-	List<OperationType> getUserOperationTypesDependingOnTypeRole(int userId, int operationTypeRole) throws DAOException;
-	
-	OperationType getUserUndeletableOperationTypesDependingOnTypeRole(int userId, int undeletableOperationTypeRole) throws DAOException;
+	List<OperationType> getUserOperationTypesDependingOnTypeRole(int userId, int operationTypeRole, int undelitableTypeRole) throws DAOException;	
 	
 	boolean createOperationType(OperationType type) throws DAOException;
 	

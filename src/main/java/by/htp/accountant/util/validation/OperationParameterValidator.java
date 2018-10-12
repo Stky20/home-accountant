@@ -2,6 +2,8 @@ package by.htp.accountant.util.validation;
 
 import java.util.List;
 
+import by.htp.accountant.exception.ValidationException;
+
 public interface OperationParameterValidator {
 
 	/**
@@ -9,7 +11,7 @@ public interface OperationParameterValidator {
 	 * else returns false
 	 * @param parameter - String
 	 */
-	public boolean oneParameterNullEmptyCheck(String parameter);
+	boolean oneParameterNullEmptyCheck(String parameter);
 	
 	
 	/**
@@ -17,14 +19,20 @@ public interface OperationParameterValidator {
 	 * else if all params not null and not empty it returns false.
 	 * @param params - String... params
 	 */
-	public boolean ifSomeOfParamsNullEmptyCheck(String... params);	
+	boolean ifSomeOfParamsNullEmptyCheck(String... params);	
 	
-	public String validateOperationRemark(String remark);
+	String validateOperationRemark(String remark);
 	
-	public String validateOperationDate(String date);
+	String validateOperationDate(String date);
 	
-	public String validateOperationAmount(String amount);
+	String validateOperationAmount(String amount);
 	
-	public List<String> validateOperationParams( String remark, String date, String amount);
+	boolean validateTypeRole(String typeRoleInString) throws ValidationException;
+	
+	boolean validateOperationType(String operationType) throws ValidationException;
+	
+	boolean validateTypeId(String typeId) throws ValidationException;
+	
+	List<String> validateOperationParams( String remark, String date, String amount);	
 	
 }

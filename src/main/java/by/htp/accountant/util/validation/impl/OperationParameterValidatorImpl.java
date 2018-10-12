@@ -12,8 +12,7 @@ public class OperationParameterValidatorImpl implements OperationParameterValida
 	
 	public final static String OPERATION_REMARK_PATTERN = "[\\wА-Яа-я-_\\.,:;\\(\\)\\s]{1,60}";	
 	public final static String OPERATION_DATE_PATTERN = "^((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$";
-	public final static String OPERATION_AMOUNT_PATTERN = "\\d+([,.]\\d{1,2})?";
-	public final static String OPERATION_TYPE_PATTERN = "[\\wА-Яа-я-\\s]{1,20}";
+	public final static String OPERATION_AMOUNT_PATTERN = "\\d+([,.]\\d{1,2})?";	
 	
 
 	@Override
@@ -68,6 +67,42 @@ public class OperationParameterValidatorImpl implements OperationParameterValida
 		return null;
 	}
 	
+	@Override
+	public boolean validateTypeRole(String typeRoleInString) throws ValidationException {
+		if(oneParameterNullEmptyCheck(typeRoleInString)) {
+			throw new ValidationException("typeRoleInString came null or empty in validateTypeRole() of OperationParameterValidatorImpl");
+		} else {
+			if(!typeRoleInString.matches(TypeParametersValidatorImpl.TYPES_ROLE_PATTERN)) {
+				throw new ValidationException("typeRoleInString don`t matches to pattern in validateTypeRole() of OperationParameterValidatorImpl");
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean validateOperationType(String operationType) throws ValidationException {
+		if(oneParameterNullEmptyCheck(operationType)) {
+			throw new ValidationException("operationType came null or empty in validateOperationType() of OperationParameterValidatorImpl");
+		} else {
+			if(!operationType.matches(TypeParametersValidatorImpl.OPERATION_TYPE_PATTERN)) {
+				throw new ValidationException("operationType don`t matches to pattern in validateOperationType() of OperationParameterValidatorImpl");
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean validateTypeId(String typeId) throws ValidationException {
+		if(oneParameterNullEmptyCheck(typeId)) {
+			throw new ValidationException("Somehow typeId came empty for validation");
+		} else {
+			if(!typeId.matches(TypeParametersValidatorImpl.TYPES_ID_PATTERN)) {
+				throw new ValidationException("Somehow typeId wich came for validation don`t matches to the pattern");
+			}
+		}
+		return true;
+	}
+	
 
 	@Override
 	public List<String> validateOperationParams(String remark, String date, String amount) {
@@ -90,7 +125,6 @@ public class OperationParameterValidatorImpl implements OperationParameterValida
 		
 		return errorMsgs;
 	}
-
 	
 
 }

@@ -28,25 +28,76 @@
 
 <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
 <link rel="stylesheet" href="css/main.css">
+<script type="text/javascript">	
+			
+		function setOperationIdInDeleteModal(id){		
+			
+			if(id != "") $("#operationId").attr('value', id);				
+			openOperationDeleteModal();
+		}
+
+		function openOperationDeleteModal(){		
+			$('#deleteOperationModal').modal();				
+		}
+		
+		function setParamsInOperationEditModal(id, amount, remark){
+			if(id != "") $("#operationId").attr('value', id);
+			if(amount != "") $("#amount").attr('placeholder', amount);
+			if(remark != "") $("#remark").attr('placeholder', remark);
+			openOperationEditModal();
+		}
+		
+		function openOperationEditModal(){		
+			$('#operationEditModal').modal();				
+		}
+</script>
 
 </head>
 <body>
 <%@ include file="inclusion/NavigationBar.jsp"%> 
 <div class="container" style="margin-top:100px; text-align: center;">
-
-	<div>
-		<a href="/home-accountant-version-00/Controller?command=go_to_user_account_page" class="btn btn-default btn-lg"><<= Назад</a>
+	
+	<div class="row" style="margin-bottom: 20px;">
+		<div class="col-md-1">
+			<a href="/home-accountant-version-00/Controller?command=go_to_user_account_page" class="btn btn-default btn-lg"><<= Назад</a>
+		</div>
+		
+		<div class="col-md-11">
+			<!-- Button trigger operationCreateModalmodal -->
+			<button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#operationCreateModal">
+				Добавить расходы/доходы
+			</button>		
+		</div>
 	</div>
 		
 	<div class="row">
 		<div class="col-md-2">
 			<div class="list-group">
-				<button type="submit" class="list-group-item">${requestScope.operationType} - за текущий день</button>
-				<button type="submit" class="list-group-item">${requestScope.operationType} - за текущую неделю</button>
-				<button type="submit" class="list-group-item">${requestScope.operationType} -за текущий месяц</button>
-				<button type="button" class="list-group-item">${requestScope.operationType} - за текущий год</button>				
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item">${requestScope.operationType} - за текущий день</button>
+				</form>
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item">${requestScope.operationType} - за текущую неделю</button>
+				</form>
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item">${requestScope.operationType} -за текущий месяц</button>
+				</form>
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item">${requestScope.operationType} - за текущий год</button>
+				</form>
 				<button type="button" class="list-group-item" data-toggle="modal" data-target="#dateChooseModal">Указать период для операции - ${requestScope.operationType}</button>					
-				<button type="submit" class="list-group-item" style="background: #FA8072;">В диаграммах</button>				
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item" style="background: #FA8072;">Все операции за период без типо</button>
+				</form>
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item" style="background: #FA8072;">В диаграммах</button>
+				</form>							
 			</div>	
 		</div>
 		<div class="col-md-10" style="text-align: center;">
@@ -86,11 +137,15 @@
 									<td>${oneOperation.date}</td>
 									<td>${oneOperation.remark}</td>
 									<td>
-										<button type="button" class="btn btn-link btn-xs" onclick="setParamsInTypeEditModal('${oneSpending.id}','${oneSpending.operationType}','${oneSpending.role}')">										
+										<button type="button" class="btn btn-link btn-xs" onclick="setParamsInOperationEditModal('${oneOperation.id}', '${oneOperation.amount}', '${oneOperation.remark}')">										
 											Редактировать
 										</button>
 									</td>	
-									<th>Удалить</th>								
+									<th>
+										<button type="button" class="btn btn-link btn-xs" onclick="setOperationIdInDeleteModal('${oneOperation.id}')">
+  											Удалить
+										</button>
+									</th>								
 								</tr>
 							</c:forEach>		
 						</table>
@@ -100,7 +155,142 @@
 					</c:if>
 	
 	
-	
+<!-- operationCreateModal -->
+<div class="modal fade" id="operationCreateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <h4 class="modal-title" id="myModalLabel">
+        	<form action="Controller" method="post">
+	        	<input type="hidden" name="command" value="go_to_user_operations_page">
+	        	<input type="hidden" name="operationType" value="${requestScope.operationType}">
+				<input type="hidden" name="typeId" value="${requestScope.typeId}">
+				<input type="hidden" name="firstDate" value="${requestScope.firstDate}">
+				<input type="hidden" name="lastDate" value="${requestScope.lastDate}">	        	
+        		Создайте Новую Операцию!!! <input type="submit" class="btn-link" style="float:right;  text-decoration: none;" value="&times;">
+        	</form>
+        </h4>
+      </div>
+      <form action="Controller" method="post">
+      	<div class="modal-body">
+			<input type="hidden" name="command" value="create_operation">
+			<input type="hidden" name="typeId" value="${requestScope.typeId}">		
+		
+			<div class="input-group" style="margin:20px 0 20px 0; padding-left:100px;">
+				<span class="input-group-addon" id="basic-addon1">Сумма Br:</span>
+				<input type="text" class="form-control" name="amount" placeholder="123,25" aria-describedby="basic-addon1" pattern="\d+([,.]{1}\d{1,2})?" style="width: 200px;">
+			</div>
+				<c:if test="${not empty requestScope.emptyOperationAmount}">
+				   	<font color="red"><c:out value="emptyOperationAmount" /></font>							     	
+				</c:if>
+				<c:if test="${not empty requestScope.wrongOperationAmount}">
+				   	<font color="red"><c:out value="wrongOperationAmount" /></font>							     	
+				</c:if>
+				
+			<p>Вы можете ввести пояснения:</p>
+			<textarea class="form-control" rows="3" placeholder="Пояснения" name="remark"></textarea>
+				<c:if test="${not empty requestScope.wrongOperationRemark}">
+				   	<font color="red"><c:out value="wrongOperationRemark" /></font>							     	
+				</c:if>
+				
+			<div style="margin:10px 0 10px 0;">
+				Выберите дату операции: <input type="date" name="date" max="${sessionScope.date}">
+			</div>	
+				<c:if test="${not empty requestScope.wrongOperationDate}">
+				   	<font color="red"><c:out value="wrongOperationDate" /></font>							     	
+				</c:if>
+				
+      	</div>
+      	<div class="modal-footer">
+      		<button type="submit" class="btn btn-primary">Сохранить</button>
+      	</div>
+      </form>      
+    </div>
+  </div>
+</div>
+
+<!-- operationEditModal -->
+<div class="modal fade" id="operationEditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <h4 class="modal-title" id="myModalLabel">
+        	<form action="Controller" method="post">
+	        	<input type="hidden" name="command" value="go_to_user_operations_page">
+	        	<input type="hidden" name="operationType" value="${requestScope.operationType}">
+				<input type="hidden" name="typeId" value="${requestScope.typeId}">
+				<input type="hidden" name="firstDate" value="${requestScope.firstDate}">
+				<input type="hidden" name="lastDate" value="${requestScope.lastDate}">	        	
+        		Редактировать операцию!!! <input type="submit" class="btn-link" style="float:right;  text-decoration: none;" value="&times;">
+        	</form>
+        </h4>
+      </div>
+      <form action="Controller" method="post">
+      	<div class="modal-body">
+			<input type="hidden" name="command" value="edit_operation">
+			<input type="hidden" name="operationType" value="${requestScope.operationType}">
+			<input type="hidden" name="typeId" value="${requestScope.typeId}">
+			<input type="hidden" name="operationId" value="">				
+		
+			<div class="input-group" style="margin:20px 0 20px 0;; padding-left:100px;">
+				<span class="input-group-addon" id="basic-addon1">Сумма Br:</span>
+				<input type="text" class="form-control" name="amount" id="amount" placeholder="123,25" aria-describedby="basic-addon1" pattern="\d+([,.]{1}\d{1,2})?" style="width: 200px;">
+			</div>
+				<c:if test="${not empty requestScope.emptyOperationAmount}">
+				   	<font color="red"><c:out value="emptyOperationAmount" /></font>							     	
+				</c:if>
+				<c:if test="${not empty requestScope.wrongOperationAmount}">
+				   	<font color="red"><c:out value="wrongOperationAmount" /></font>							     	
+				</c:if>
+				
+			<p>Вы можете ввести пояснения:</p>
+			<textarea class="form-control" rows="3" placeholder="Пояснения" name="remark" id="remark"></textarea>
+				<c:if test="${not empty requestScope.wrongOperationRemark}">
+				   	<font color="red"><c:out value="wrongOperationRemark" /></font>							     	
+				</c:if>
+				
+			<div style="margin:10px 0 10px 0;">
+				Выберите дату операции: <input type="date" name="date" max="${sessionScope.date}">
+			</div>	
+				<c:if test="${not empty requestScope.wrongOperationDate}">
+				   	<font color="red"><c:out value="wrongOperationDate" /></font>							     	
+				</c:if>
+				
+      	</div>
+      	<div class="modal-footer">
+      		<button type="submit" class="btn btn-primary">Сохранить</button>
+      	</div>
+      </form>      
+    </div>
+  </div>
+</div>
+
+
+
+<!-- deleteOperationModal -->
+<div class="modal fade" id="deleteOperationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Удаление операции</h4>
+      </div>
+      <div class="modal-body">
+        <h1>Вы уверены, что хотите удалить данную операцию?</h1>
+      </div>
+      <div class="modal-footer">        
+        <form action="Controller" method="post">
+        	<input type="hidden" name="command" value="delete_operation">
+	    	<input type="hidden" name="operationId" id="operationId">
+	    	<button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Нет</button>
+	    	<button type="submit" class="btn btn-danger btn-lg">Да</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 	
 	
 	<!-- Pagination -->

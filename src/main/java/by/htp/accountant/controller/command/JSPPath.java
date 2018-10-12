@@ -7,7 +7,11 @@ public class JSPPath {
 	public final static String GO_TO_USER_PROFILE_PAGE = "Controller?command=go_to_profile&modal=true";
 	public final static String GO_TO_USER_ADMINISTRATION_PAGE = "Controller?command=go_to_user_administration_page&modal=true";
 	public final static String GO_TO_USER_ACCOUNT_PAGE = "Controller?command=go_to_user_account_page";
-	public final static String GO_TO_USER_ACCOUNT_SUCCESS_PAGE = "Controller?command=go_to_user_account_page&modal=messageModal&successMsg=true";
+	public final static String GO_TO_USER_OPERATIONS_PAGE = "Controller?command=go_to_user_operations_page";
+	public final static String GO_TO_USER_ACCOUNT_SUCCESS_PAGE = "Controller?command=go_to_user_account_page&modal=messageModal&message=success";
+	public final static String GO_TO_USER_ACCOUNT_FAIL_PAGE = "Controller?command=go_to_user_account_page&modal=messageModal&message=fail";
+	public final static String GO_TO_USER_OPERATIONS_SUCCESS_PAGE = "Controller?command=go_to_user_operations_page&modal=messageModal&message=success";
+	public final static String GO_TO_USER_OPERATIONS_FAIL_PAGE = "Controller?command=go_to_user_operations_page&modal=messageModal&message=fail";
 	
 	
 	
@@ -23,9 +27,11 @@ public class JSPPath {
 	public final static String USER_ACCOUNT_PAGE = "/WEB-INF/jsp/UserAccountPage.jsp";
 	public final static String OPERATION_FORM_PAGE = "/WEB-INF/jsp/OperationCreateFormPage.jsp";
 	public final static String USER_OPERATIONS_PAGE = "/WEB-INF/jsp/UserOperationsPage.jsp";
-		
+	public final static String RESOURCE_NOT_READY_PAGE = "/WEB-INF/jsp/ResourceNotReady.jsp";	
+	
 	public final static String COMMAND_ERROR_PAGE = "/WEB-INF/jsp/CommandError.jsp";	
 	public final static String APPLICATION_ERROR_PAGE = "/WEB-INF/jsp/ApplicationError.jsp";	
 	public final static String TECHNICAL_ERROR_PAGE = "/WEB-INF/jsp/TechnicalProblemError.jsp";
+	
 
 }

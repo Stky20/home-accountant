@@ -8,9 +8,11 @@ import by.htp.accountant.controller.command.ChangePasswordCommand;
 import by.htp.accountant.controller.command.ChangeUserInfoCommand;
 import by.htp.accountant.controller.command.CreateOperationCommand;
 import by.htp.accountant.controller.command.CreateTypeCommand;
+import by.htp.accountant.controller.command.DeleteOperationCommand;
 import by.htp.accountant.controller.command.DeleteTypeCommand;
 import by.htp.accountant.controller.command.DeleteUserCommand;
 import by.htp.accountant.controller.command.DiactivateUserCommand;
+import by.htp.accountant.controller.command.EditOperationCommand;
 import by.htp.accountant.controller.command.EditTypeCommand;
 import by.htp.accountant.controller.command.GoToAboutUsPageCommand;
 import by.htp.accountant.controller.command.GoToContactsPageCommand;
@@ -19,6 +21,7 @@ import by.htp.accountant.controller.command.GoToMainPageCommand;
 import by.htp.accountant.controller.command.GoToOperationFormCommand;
 import by.htp.accountant.controller.command.GoToProfile;
 import by.htp.accountant.controller.command.GoToRegistrationPageCommand;
+import by.htp.accountant.controller.command.GoToResourceNotReadyPageCommand;
 import by.htp.accountant.controller.command.GoToSloganPageCommand;
 import by.htp.accountant.controller.command.GoToSorryPageCommand;
 import by.htp.accountant.controller.command.GoToUserAccountPageCommand;
@@ -63,6 +66,9 @@ private Map<CommandName, Command> commands = new HashMap<CommandName, Command>()
 		commands.put(CommandName.EDIT_TYPE, new EditTypeCommand());
 		commands.put(CommandName.DELETE_TYPE, new DeleteTypeCommand());
 		commands.put(CommandName.GO_TO_USER_OPERATIONS_PAGE, new GoToUserOperationsPageCommand());
+		commands.put(CommandName.DELETE_OPERATION, new DeleteOperationCommand());
+		commands.put(CommandName.GO_TO_RESOURCE_NOT_READY_PAGE, new GoToResourceNotReadyPageCommand());
+		commands.put(CommandName.EDIT_OPERATION, new EditOperationCommand());
 	}
 
 	public Command getCommand(String commandName) {

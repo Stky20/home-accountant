@@ -171,21 +171,24 @@ public class UtilServiceImpl implements UtilService {
 		HttpSession session = request.getSession();
 		
 		User user = (User)session.getAttribute(USER_PARAMETER);
+		String firstDateInString = request.getParameter(FIRST_DATE_ATTRIBUTE);
+		String lastDateInString = request.getParameter(LAST_DATE_ATTRIBUTE);
 		
-		LocalDate currentDate = LocalDate.now();
-		LocalDate firstDateOfCurrentMonth = LocalDate.of(currentDate.getYear(), currentDate.getMonthValue(), FIRST_DAY_OF_MONTH_OR_WEEK_VALUE);
+		LocalDate currentDate = determinLastDate(firstDateInString, lastDateInString);
+		LocalDate firstDateOfCurrentMonth = determinFirstDate(firstDateInString, lastDateInString);
 		
 		List<OperationType> spendingTypesList = null;
 		List<OperationType> incomeTypesList = null;
 		List<Operation> operationListDuringPeriod = null;
 		
 		try {
-			spendingTypesList = typeDAO.getUserOperationTypesDependingOnTypeRole(user.getId(), OperationType.SPENDING_TYPE_ROLE);
-			incomeTypesList = typeDAO.getUserOperationTypesDependingOnTypeRole(user.getId(), OperationType.INCOME_TYPE_ROLE);
+			spendingTypesList = typeDAO.getUserOperationTypesDependingOnTypeRole(user.getId(), OperationType.SPENDING_TYPE_ROLE, OperationType.SPENDING_TYPE_UNDELETEBLE_ROLE);
+			incomeTypesList = typeDAO.getUserOperationTypesDependingOnTypeRole(user.getId(), OperationType.INCOME_TYPE_ROLE, OperationType.INCOME_TYPE_UNDELETEBLE_ROLE);
 		} catch (DAOException e) {
 			logger.warn("DAOException while geting operationTypesLists", e);
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);			
 		}	
+		
 		
 		try {
 			operationListDuringPeriod = getOperationListDuringPeriod(user.getId(), currentDate, firstDateOfCurrentMonth);
@@ -242,7 +245,9 @@ public class UtilServiceImpl implements UtilService {
 		if(currentDate.equals(firstDateOfMonth)) {
 			request.setAttribute(FIRST_DATE_ATTRIBUTE, firstDateOfMonth.toString());
 		} else {
-			request.setAttribute(FIRST_DATE_ATTRIBUTE, firstDateOfMonth.toString());
+			if(firstDateOfMonth != null) {
+				request.setAttribute(FIRST_DATE_ATTRIBUTE, firstDateOfMonth.toString());
+			}
 			request.setAttribute(LAST_DATE_ATTRIBUTE, currentDate.toString());
 		}		
 		request.setAttribute(BALANCE_ATTRIBUTE, balance);
@@ -348,7 +353,7 @@ public class UtilServiceImpl implements UtilService {
 	@Override
 	public void goToUserOperationsPage(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		//TODO
+		
 		RequestDispatcher dispatcher = null;		
 		
 		String firstDateInString = request.getParameter(FIRST_DATE_ATTRIBUTE);
@@ -413,6 +418,10 @@ public class UtilServiceImpl implements UtilService {
 		LocalDate firstDate = null;
 		LocalDate currentDate = LocalDate.now();
 		
+		if(validator.oneParameterNullEmptyCheck(firstDateInString)&&validator.oneParameterNullEmptyCheck(lastDateInString)) {
+			return currentDate;
+		}
+		
 		try {
 			if(validator.validateDate(lastDateInString)) {
 				lastDate = LocalDate.parse(lastDateInString);
@@ -436,15 +445,16 @@ public class UtilServiceImpl implements UtilService {
 		}
 		
 		LocalDate spareDate = null;
+		if(firstDate == null) {
+			return lastDate;
+		}
 		
 		if(firstDate.isAfter(lastDate)) {
 			spareDate = firstDate;
 			firstDate = lastDate;
 			lastDate = spareDate;
 		}
-		if(firstDate.equals(lastDate)) {
-			firstDate = null;
-		}	
+		
 		
 		return lastDate;
 	}
@@ -454,22 +464,26 @@ public class UtilServiceImpl implements UtilService {
 		LocalDate firstDate = null;
 		LocalDate currentDate = LocalDate.now();
 		
+		if(validator.oneParameterNullEmptyCheck(firstDateInString)&&validator.oneParameterNullEmptyCheck(lastDateInString)) {
+			return LocalDate.of(currentDate.getYear(), currentDate.getMonthValue(), FIRST_DAY_OF_MONTH_OR_WEEK_VALUE);
+		}
+		
 		try {
 			if(validator.validateDate(lastDateInString)) {
 				lastDate = LocalDate.parse(lastDateInString);
 			} else {
-				lastDate = LocalDate.now();
+				lastDate = currentDate;
 			}
 		} catch (ValidationException e) {
 			logger.info("ValidationException while validating date to execute goToUserOperationsPage()", e);
-			lastDate = LocalDate.now();
+			lastDate = currentDate;
 		}
 		
 		try {
 			if(validator.validateDate(firstDateInString)) {
 				firstDate = LocalDate.parse(firstDateInString);
 			} else {
-				firstDate = null;
+				return null;
 			}
 		} catch (ValidationException e) {
 			logger.info("ValidationException while validating date to execute goToUserOperationsPage()", e);
@@ -477,6 +491,9 @@ public class UtilServiceImpl implements UtilService {
 		}
 		
 		LocalDate spareDate = null;
+		if(firstDate == null) {
+			return null;
+		}
 		
 		if(firstDate.isAfter(lastDate)) {
 			spareDate = firstDate;
@@ -535,41 +552,15 @@ public class UtilServiceImpl implements UtilService {
 		}
 		return operationsList;
 	}
-	
-	
-	/**
-	 * Private method of UtilServiceImpl which do forward or redirect depends on RequestDispatcher value. 
-	 * Also method makes log if forward or sendRedirect throw exception.
-	 * @param request - HttpServletRequest
-	 * @param response - HttpServletResponse
-	 * @param dispatcher - RequestDispatcher
-	 * @param redirectPage - String
-	 * @throws IOException 
-	 * @throws ServletException 
-	 */
-	private void doSendRedirectOrForward(HttpServletRequest request, HttpServletResponse response, RequestDispatcher dispatcher, String redirectPage) 
-					throws IOException, ServletException {
-		
-		if(dispatcher == null) {		
-			try {
-				response.sendRedirect(redirectPage);
-			} catch (IOException e) {
-				logger.warn("IOException while doing sendRedirect in UtilServiceImpl", e);
-				throw e;
-			}	
-		}else {	
-			try {
-				dispatcher.forward(request, response);
-			} catch (ServletException e) {
-				logger.warn("ServletException while doing forward in UtilServiceImpl", e);
-				throw e;
-			} catch (IOException e) {
-				logger.warn("IOException while doing forward in UtilServiceImpl", e);
-				throw e;
-			}				
-		}
-	}
 
+
+	@Override
+	public void goToResourceNotReadyPage(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(JSPPath.RESOURCE_NOT_READY_PAGE);
+		doForwardWithLog(dispatcher, request, response);	
+	}
 
 	
 }

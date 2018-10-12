@@ -5,7 +5,7 @@ import java.util.List;
 import by.htp.accountant.bean.OperationType;
 import by.htp.accountant.bean.User;
 import by.htp.accountant.exception.DAOException;
-import by.htp.accountant.exception.SQLUserDAOException;
+
 
 public interface UserDAO {
 		
@@ -13,7 +13,7 @@ public interface UserDAO {
 	
 	User authorizeUser(String login, String hashPasswordFromUser) throws DAOException;
 	
-	List<User> showUsers(int role, int usersAmount, int startingFrom) throws SQLUserDAOException;
+	List<User> showUsers(int role, int usersAmount, int startingFrom) throws DAOException;
 	
 	boolean editUser (int userId, String name, String surname, String email) throws DAOException;
 	
@@ -23,9 +23,9 @@ public interface UserDAO {
 	
 	boolean changePassword(int userId, String newHashPasswordFromUser) throws DAOException;
 	
-	boolean changeUsersRole(int userId, int role) throws SQLUserDAOException;		
+	boolean changeUsersRole(int userId, int role) throws DAOException;		
 	
-	int countAmountOfPages(int role, int recordingsAmountInTable) throws SQLUserDAOException;	
+	int countAmountOfPages(int role, int recordingsAmountInTable) throws DAOException;	
 	
 	/**
 	 * If login exist returns true

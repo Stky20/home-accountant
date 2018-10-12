@@ -22,7 +22,7 @@ public class MySQLOperationTypeDAO implements OperationTypeDAO {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MySQLOperationTypeDAO.class);
 	
-	private final static String GET_USER_OPERATION_TYPES_ON_ROLE_QUERY = "SELECT * FROM operation_types WHERE (user_Id = ?) AND (role = ?);"; 
+	private final static String GET_USER_OPERATION_TYPES_ON_ROLE_QUERY = "SELECT * FROM operation_types WHERE (user_Id = ?) AND role IN (?, ?);"; 
 	private final static String TYPE_CREATE_QUERY = "INSERT INTO operation_types (operationType, user_Id, role) VALUES (?, ?, ?);";
 	private final static String TYPE_EDIT_QUERY = "UPDATE operation_types SET operationType=? WHERE id=?;";
 	private final static String TYPE_DELETE_QUERY = "DELETE FROM operation_types WHERE id=?;";
@@ -37,7 +37,7 @@ public class MySQLOperationTypeDAO implements OperationTypeDAO {
 	}
 	
 	@Override
-	public List<OperationType> getUserOperationTypesDependingOnTypeRole(int userId, int typeRole) throws DAOException {
+	public List<OperationType> getUserOperationTypesDependingOnTypeRole(int userId, int typeRole, int undelitableTypeRole) throws DAOException {
 		List<OperationType> spendingTypeList = new ArrayList<OperationType>();
 		
 		try (Connection connection = connectionPool.takeConnection(); 
@@ -45,6 +45,7 @@ public class MySQLOperationTypeDAO implements OperationTypeDAO {
 				
 				prepareStatement.setInt(1, userId);
 				prepareStatement.setInt(2, typeRole);
+				prepareStatement.setInt(3, undelitableTypeRole);
 				
 				try(ResultSet resultSet = prepareStatement.executeQuery()){				
 					while(resultSet.next())	{
@@ -55,13 +56,9 @@ public class MySQLOperationTypeDAO implements OperationTypeDAO {
 						type.setRole(resultSet.getInt(4)); 
 					
 						spendingTypeList.add(type);
-					}
-					if(typeRole == OperationType.SPENDING_TYPE_ROLE) {
-						spendingTypeList.add(getUserUndeletableOperationTypesDependingOnTypeRole(userId, OperationType.SPENDING_TYPE_UNDELETEBLE_ROLE));
-					} else {
-						spendingTypeList.add(getUserUndeletableOperationTypesDependingOnTypeRole(userId, OperationType.INCOME_TYPE_UNDELETEBLE_ROLE));
-					}
+					}					
 				}
+				
 		} catch (SQLException e) {
 			throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationTypeDAO getUserOperationTypesDependingOnTypeRole() method", e);
 		} catch (InterruptedException e) {
@@ -70,34 +67,7 @@ public class MySQLOperationTypeDAO implements OperationTypeDAO {
 				
 		return spendingTypeList;		
 	}
-
-	@Override
-	public OperationType getUserUndeletableOperationTypesDependingOnTypeRole(int userId,
-			int undeletableOperationTypeRole) throws DAOException {
-
-		OperationType operationType = new OperationType();
-		
-		try (Connection connection = connectionPool.takeConnection(); 
-				PreparedStatement prepareStatement = connection.prepareStatement(GET_USER_OPERATION_TYPES_ON_ROLE_QUERY)){
-					
-					prepareStatement.setInt(1, userId);
-					prepareStatement.setInt(2, undeletableOperationTypeRole);
-					
-					try(ResultSet resultSet = prepareStatement.executeQuery()){				
-						if(resultSet.next())	{							
-							operationType.setId(resultSet.getInt(1));  		
-							operationType.setOperationType(resultSet.getString(2)); 
-							operationType.setUserId(resultSet.getInt(3)); 
-							operationType.setRole(resultSet.getInt(4));					
-						}
-					}
-			} catch (SQLException e) {
-				throw new DAOException ("Can`t take Prepeared Statement or Result Set in OperationTypeDAO getUserUndeletableOperationTypesDependingOnTypeRole() method", e);
-			} catch (InterruptedException e) {
-				throw new DAOException ("Can`t take connection from ConnectionPool in OperationTypeDAO getUserUndeletableOperationTypesDependingOnTypeRole() method", e);
-			}
-		return operationType;
-	}
+	
 
 	@Override
 	public boolean createOperationType(OperationType type) throws DAOException   {

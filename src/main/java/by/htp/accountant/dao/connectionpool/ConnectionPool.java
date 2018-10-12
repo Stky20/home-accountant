@@ -33,7 +33,7 @@ import by.htp.accountant.exception.ConnectionPoolRuntimeException;
 
 public class ConnectionPool {
 	
-	public static final ConnectionPool instance = new ConnectionPool();
+	private static final ConnectionPool instance = new ConnectionPool();
 	
 	private static final Logger logger = LoggerFactory.getLogger(ConnectionPool.class);
 	
@@ -51,7 +51,7 @@ public class ConnectionPool {
 	}
 	
 	
-	private BlockingQueue<Connection> connectionQueue;
+	private BlockingQueue<Connection> availableConnectionQueue;
 	private BlockingQueue<Connection> givenAwayConQueue;
 	
 	private String driverName;
@@ -82,21 +82,21 @@ public class ConnectionPool {
 		Class.forName(driverName);
 		
 		givenAwayConQueue = new ArrayBlockingQueue<Connection>(poolSize);
-		connectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
+		availableConnectionQueue = new ArrayBlockingQueue<Connection>(poolSize);
 
 		for (int i = 0; i < poolSize; i++) {
 			Connection connection = DriverManager.getConnection(url, user, password);
 			
 			PooledConnection pooledConnection = new PooledConnection(connection);
 			
-			connectionQueue.add(pooledConnection);
+			availableConnectionQueue.add(pooledConnection);
 		}
 	}
 	
 	public Connection takeConnection() throws InterruptedException {
 		Connection connection = null;
 
-		connection = connectionQueue.take();
+		connection = availableConnectionQueue.take();
 		givenAwayConQueue.add(connection);
 
 		return connection;
@@ -110,8 +110,8 @@ public class ConnectionPool {
 		
 		ArrayList<Connection> deletedConnectoions = new ArrayList<Connection>();
 		
-		deletedConnectoions.addAll(connectionQueue);
-		connectionQueue.clear();
+		deletedConnectoions.addAll(availableConnectionQueue);
+		availableConnectionQueue.clear();
 		deletedConnectoions.addAll(givenAwayConQueue);
 		givenAwayConQueue.clear();
 		
@@ -134,13 +134,13 @@ public class ConnectionPool {
 	private class PooledConnection implements Connection {
 		private Connection connection;
 
-		public PooledConnection(Connection c) throws SQLException {
+		private PooledConnection(Connection c) throws SQLException {
 			this.connection = c;
 			this.connection.setAutoCommit(true);
 		}
 		
 		
-		public void reallyClose() throws SQLException {
+		private void reallyClose() throws SQLException {
 			connection.close();
 		}
 		
@@ -160,7 +160,7 @@ public class ConnectionPool {
 				throw new SQLException("Error deleting connection from the given away connections pool.");
 			}
 
-			if (!connectionQueue.offer(this)) {
+			if (!availableConnectionQueue.offer(this)) {
 				throw new SQLException("Error allocating connection in the pool.");
 			}
 		}

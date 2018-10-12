@@ -26,8 +26,7 @@ import by.htp.accountant.dao.OperationTypeDAO;
 import by.htp.accountant.dao.UserDAO;
 import by.htp.accountant.exception.DAOException;
 import by.htp.accountant.exception.PasswordClassUtilException;
-import by.htp.accountant.exception.SQLUserDAOException;
-import by.htp.accountant.exception.UserServiceException;
+import by.htp.accountant.exception.ServiceException;
 import by.htp.accountant.service.UserService;
 import by.htp.accountant.util.DefaultOperationTypeManager;
 import by.htp.accountant.util.HashPasswordMaker;
@@ -98,7 +97,7 @@ public class UserServiceImplTwo implements UserService {
 					request.setAttribute(errorMessage, errorMessage);
 					dispatcher = request.getRequestDispatcher(JSPPath.LOGIN_PAGE);
 				}
-			} catch (UserServiceException e) {				
+			} catch (ServiceException e) {				
 				dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 			}
 		}		
@@ -111,38 +110,12 @@ public class UserServiceImplTwo implements UserService {
 			}
 		}		
 		if(user != null) {			
-			try {
-				session = setInSessionUserOperationTypesLists(user.getId(), session);
-				
-				session.setAttribute(ATTRIBUTE_USER, user);
-				session.setAttribute(ATTRIBUTE_DATE, LocalDate.now().format(formatter));
-			} catch (UserServiceException e) {	
-				logger.warn("UserServiceException in setInSessionUserOperationTypesLists() method of UserServiceImpl", e);			
-				dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);			
-			}			
+			session.setAttribute(ATTRIBUTE_USER, user);
+			session.setAttribute(ATTRIBUTE_DATE, LocalDate.now().format(formatter));			
 		}		
 		doSendRedirectOrForward(request, response, dispatcher, JSPPath.GO_TO_MAIN_PAGE);		
-	}
+	}	
 	
-	/**
-	 * 
-	 * @param userId
-	 * @param session
-	 * @return
-	 * @throws UserServiceException
-	 */
-	private HttpSession setInSessionUserOperationTypesLists(int userId, HttpSession session) throws UserServiceException {
-		try {
-			session.setAttribute(SPENDING_TYPES_LIST_ATTRIBUTE, 
-				typeDAO.getUserOperationTypesDependingOnTypeRole(userId, OperationType.SPENDING_TYPE_ROLE));
-			session.setAttribute(INCOME_TYPES_LIST_ATTRIBUTE, 
-				typeDAO.getUserOperationTypesDependingOnTypeRole(userId, OperationType.INCOME_TYPE_ROLE));
-		} catch (DAOException e) {			
-			throw new UserServiceException("DAOException while trying to get user`s spending or "
-					+ "income types with getUserOperationTypesDependingOnTypeRole() of OperationTypeDAO ", e);
-		}
-		return session;
-	}
 
 	
 	@Override
@@ -165,7 +138,7 @@ public class UserServiceImplTwo implements UserService {
 		
 		try {
 			validationErrors.addAll(allParamsRegistrationCheck(login, passwordFromUser, name, surname, email));
-		} catch (UserServiceException e2) {
+		} catch (ServiceException e2) {
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 		}		
 		if(!validationErrors.isEmpty() && dispatcher == null) {
@@ -228,7 +201,7 @@ public class UserServiceImplTwo implements UserService {
 		
 		try {
 			amountOfPages = userDAO.countAmountOfPages(role, DEFAULT_RECORDINGS_AMOUNT);			
-		} catch (SQLUserDAOException e) {
+		} catch (DAOException e) {
 			logger.warn("Cant show Users beacorse of Exception in showUsers() method", e);
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 		} 
@@ -243,7 +216,7 @@ public class UserServiceImplTwo implements UserService {
 				request.setAttribute(PAGE_NUMBER_PARAM, pageNumber);
 				request.setAttribute(AMOUNT_OF_PAGES_PARAM, amountOfPages);
 				request.setAttribute(USERS_LIST_PARAM, usersList);
-			} catch (SQLUserDAOException e) {
+			} catch (DAOException e) {
 				logger.warn("Cant show Users beacorse of Exception in showUsers() method", e);
 				dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 			}			
@@ -273,7 +246,7 @@ public class UserServiceImplTwo implements UserService {
 					session.setAttribute(ATTRIBUTE_USER, user);
 				}				
 			}
-		} catch (SQLUserDAOException e) {
+		} catch (DAOException e) {
 			logger.warn("Can`t make user activ in restoreUserMethod()", e);
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 		}
@@ -298,7 +271,7 @@ public class UserServiceImplTwo implements UserService {
 				session.removeAttribute(ATTRIBUTE_USER);
 				session.setAttribute(ATTRIBUTE_USER, user);
 			}
-		} catch (SQLUserDAOException e) {
+		} catch (DAOException e) {
 			logger.warn("Can`t make user unactiv in diactivateUserMethod()", e);
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 		}
@@ -316,7 +289,7 @@ public class UserServiceImplTwo implements UserService {
 				
 		try {
 			userDAO.changeUsersRole(userId, ADMIN_ROLE);
-		} catch (SQLUserDAOException e) {
+		} catch (DAOException e) {
 			logger.warn("Can`t change user`s role to administrator in makeAdmin()", e);
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 		}
@@ -374,7 +347,7 @@ public class UserServiceImplTwo implements UserService {
 		
 		try {
 			validationErrors.addAll(passwordChangingValidationCheck(user.getNickName(), oldPassword, newPassword, newHashPassword));
-		} catch (UserServiceException e) {			
+		} catch (ServiceException e) {			
 			dispatcher = request.getRequestDispatcher(JSPPath.TECHNICAL_ERROR_PAGE);
 		}		
 		
@@ -492,7 +465,7 @@ public class UserServiceImplTwo implements UserService {
 	 * @return errorMessage - String, constant String which describes not fulfilled conditions, or null if conditions are met.
 	 * @throws UserServiceException - when there is an exception in database.
 	 */
-	private String authorizationLoginPasswordCheck(String login, String hashPassword) throws UserServiceException{
+	private String authorizationLoginPasswordCheck(String login, String hashPassword) throws ServiceException{
 		String errorMessages = null;
 		
 		if (validator.ifSomeOfParamsNullEmptyCheck(login, hashPassword)){   															
@@ -508,7 +481,7 @@ public class UserServiceImplTwo implements UserService {
 			} 					
 		} catch (DAOException e) {				
 				logger.warn("Can`t check login or password during authorization", e);
-				throw new UserServiceException("Couldn`t execute login or password check in DB", e);
+				throw new ServiceException("Couldn`t execute login or password check in DB", e);
 		}		
 		return errorMessages;
 	}
@@ -523,7 +496,7 @@ public class UserServiceImplTwo implements UserService {
 	 * @return errorMessages - String - constant String which describes not fulfilled conditions, or null if conditions are met.
 	 * @throws UserServiceException - when there is an exception in database.
 	 */
-	private String loginCheckForRegistration(String login) throws UserServiceException {
+	private String loginCheckForRegistration(String login) throws ServiceException {
 		String errorMessages = null;
 		
 		if (validator.oneParameterNullEmptyCheck(login)){   															
@@ -536,7 +509,7 @@ public class UserServiceImplTwo implements UserService {
 			}
 		} catch (DAOException e) {				
 			logger.warn("Can`t check login during registration", e);
-			throw new UserServiceException("Couldn`t execute login in DB", e);
+			throw new ServiceException("Couldn`t execute login in DB", e);
 		}
 		return errorMessages;
 	}
@@ -553,7 +526,7 @@ public class UserServiceImplTwo implements UserService {
 	 * @return errorMsgs - List<String> - if all Requirements match method returns empty List.
 	 * @throws UserServiceException  - when there is an exception in database.
 	 */
-	private List<String> allParamsRegistrationCheck(String login, String password, String name, String surname, String email) throws UserServiceException{
+	private List<String> allParamsRegistrationCheck(String login, String password, String name, String surname, String email) throws ServiceException{
 		List<String> errorMsgs = new ArrayList<String>();
 		
 		errorMsgs.addAll(validator.validateLogin(login));
@@ -565,7 +538,7 @@ public class UserServiceImplTwo implements UserService {
 			
 			try {
 				messageAfterLoginDBCheck = loginCheckForRegistration(login);				
-			} catch (UserServiceException e) {
+			} catch (ServiceException e) {
 				throw e;
 			}
 			
@@ -589,7 +562,7 @@ public class UserServiceImplTwo implements UserService {
 	 * @throws UserServiceException
 	 */
 	private List<String> passwordChangingValidationCheck(String login, String oldPassword, String newPassword, String newPasswordAgain) 
-			throws UserServiceException{
+			throws ServiceException{
 		
 		List<String> errorMsgs = new ArrayList<String>();
 		String passwordDBCheckErrorMSG = null;
@@ -615,7 +588,7 @@ public class UserServiceImplTwo implements UserService {
 	 * @return
 	 * @throws UserServiceException
 	 */
-	private String passwordDBCheckForChanging(String login, String password) throws UserServiceException {
+	private String passwordDBCheckForChanging(String login, String password) throws ServiceException {
 		String errorMsg = null;
 		String hashPassword = null;
 		
@@ -623,7 +596,7 @@ public class UserServiceImplTwo implements UserService {
 			hashPassword = hashPasswordMaker.getHashPassword(password);
 		} catch (PasswordClassUtilException e) {
 			logger.warn("Can`t mace hashPassword during passwordCheckForChanging", e);
-			throw new UserServiceException("PasswordClassUtilException during passwordCheckForChanging", e);
+			throw new ServiceException("PasswordClassUtilException during passwordCheckForChanging", e);
 		}
 		
 		if (validator.oneParameterNullEmptyCheck(hashPassword)){   															
@@ -636,7 +609,7 @@ public class UserServiceImplTwo implements UserService {
 			}
 		} catch (DAOException e) {				
 			logger.warn("Can`t check password during passwordCheckForChanging", e);
-			throw new UserServiceException("Couldn`t execute passwordCheck in DB", e);
+			throw new ServiceException("Couldn`t execute passwordCheck in DB", e);
 		}
 		
 		return errorMsg;

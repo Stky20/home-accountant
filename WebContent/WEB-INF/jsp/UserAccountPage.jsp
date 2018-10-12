@@ -100,14 +100,35 @@
 	<div class="row">
 		<div class="col-md-2">
 			<div class="list-group">
-				<button type="submit" class="list-group-item">За текущий день</button>
-				<button type="submit" class="list-group-item">За текущую неделю</button>
-				<button type="submit" class="list-group-item">За текущий месяц</button>
-				<button type="button" class="list-group-item">За текущий год</button>				
-				<button type="button" class="list-group-item" data-toggle="modal" data-target="#dateChooseModal">Указать период</button>					
-				<button type="submit" class="list-group-item">Все операции за период без типов</button>
-				<button type="submit" class="list-group-item" style="background: #FA8072;">В диаграммах</button>
-				<button type="submit" class="list-group-item" style="background: #FA8072;">Долговые обязателства</button>				
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item">За текущий день</button>
+				</form>
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item">За текущую неделю</button>
+				</form>
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item">За текущий месяц</button>
+				</form>
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item">За текущий год</button>
+				</form>
+				<button type="button" class="list-group-item" data-toggle="modal" data-target="#dateChooseModal">Указать период</button>
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item" style="background: #FA8072;">Все операции за период без типо</button>
+				</form>
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item" style="background: #FA8072;">В диаграммах</button>
+				</form>
+				<form action="Controller" method="get">
+					<input type="hidden" name="command" value="go_to_resource_not_ready_page">
+					<button type="submit" class="list-group-item" style="background: #FA8072;">Долговые обязателства</button>
+				</form>							
 			</div>	
 		</div>
 		
@@ -397,13 +418,13 @@
   	 <div class="modal-content">
   	 	<div style="text-align: center;">
   	 		<h2>Выберите даты!</h2>
-    		<fotm action="Controller" method="post">
+    		<form action="Controller" method="get">
 	    		<input type="hidden" name="command" value="go_to_user_account_page">
-    			<p>C:<input type="date" name="fromDate" max="${sessionScope.date}"></p>
-    			<p>По:<input type="date" name="tillDate" max="${sessionScope.date}"></p><br/>
-    			<button type="button" class="btn btn-default btn-xs" data-dismiss="modal" style="margin-bottom: 10px;">Close</button>
-    			<button type="submit" class="btn btn-primary btn-xs" style="margin-bottom: 10px;">Сохранить</button>
-    		</fotm>
+    			<p>C:<input type="date" name="firstDate" max="${sessionScope.date}"></p>
+    			<p>По:<input type="date" name="lastDate" max="${sessionScope.date}"></p><br/>
+    			<button type="button" class="btn btn-default btn-xs" data-dismiss="modal" style="margin-bottom: 10px;">Закрыть</button>
+    			<button type="submit" class="btn btn-primary btn-xs" style="margin-bottom: 10px;">Перейти</button>
+    		</form>
     	</div>
     </div>
   </div>

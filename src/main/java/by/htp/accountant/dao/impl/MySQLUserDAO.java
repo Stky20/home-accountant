@@ -14,7 +14,8 @@ import by.htp.accountant.bean.OperationType;
 import by.htp.accountant.bean.User;
 import by.htp.accountant.dao.UserDAO;
 import by.htp.accountant.dao.connectionpool.ConnectionPool;
-import by.htp.accountant.exception.SQLUserDAOException;
+import by.htp.accountant.exception.DAOException;
+
 
 public class MySQLUserDAO implements UserDAO{
 	
@@ -45,7 +46,7 @@ public class MySQLUserDAO implements UserDAO{
 	
 	
 	@Override
-	public boolean createUser(User user, List<OperationType> defaultOperationTypeList) throws SQLUserDAOException {
+	public boolean createUser(User user, List<OperationType> defaultOperationTypeList) throws DAOException {
 		
 		int addedRowsInBase = 0;		
 		int userId = 0;		
@@ -91,11 +92,11 @@ public class MySQLUserDAO implements UserDAO{
 			
 		} catch (InterruptedException e) {
 			logger.warn("InterruptedException in createUser() method of MySQLUserDAO while taking connection from ConnectionPool", e);
-			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in MySQLUserDAO to create user", e);
+			throw new DAOException ("Can`t take connection from ConnectionPool in MySQLUserDAO to create user", e);
 		} catch (SQLException e) {
 			logger.warn("SQLException in createUser() method of MySQLUserDAO while taking connection from ConnectionPool or while doing "
 					+ "rollback or setAutoCommit(true) on connection", e);
-			throw new SQLUserDAOException ("Can`t do rollback or setAutoCommit(true) on connection in MySQLUserDAO createUser() method", e);
+			throw new DAOException ("Can`t do rollback or setAutoCommit(true) on connection in MySQLUserDAO createUser() method", e);
 		}	
 		
 		if(addedRowsInBase == 1) return true;
@@ -104,7 +105,7 @@ public class MySQLUserDAO implements UserDAO{
 	
 	
 	@Override
-	public User authorizeUser(String login, String hashPasswordFromUser) throws SQLUserDAOException {
+	public User authorizeUser(String login, String hashPasswordFromUser) throws DAOException {
 			
 		User loggedUser = new User();			
 			
@@ -128,9 +129,9 @@ public class MySQLUserDAO implements UserDAO{
 					}
 				}
 			} catch (InterruptedException e) {
-				throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO to login", e);
+				throw new DAOException("Can`t take connection from ConnectionPool in UserDAO to login", e);
 			} catch (SQLException e) {
-				throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO logination() method", e);
+				throw new DAOException("Can`t create statement or execute query in UserDAO logination() method", e);
 			}	
 			
 			return null;		
@@ -138,7 +139,7 @@ public class MySQLUserDAO implements UserDAO{
 	
 	
 	@Override
-	public List<User> showUsers(int role, int usersAmount, int startingFrom) throws SQLUserDAOException {
+	public List<User> showUsers(int role, int usersAmount, int startingFrom) throws DAOException {
 		
 		List<User> usersList = new ArrayList<User>();
 		
@@ -163,9 +164,9 @@ public class MySQLUserDAO implements UserDAO{
 					}
 				}
 		} catch (SQLException e) {
-			throw new SQLUserDAOException ("Can`t take Prepeared Statement or Result Set in UserDAO showUsers() method", e);
+			throw new DAOException ("Can`t take Prepeared Statement or Result Set in UserDAO showUsers() method", e);
 		} catch (InterruptedException e) {
-			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO showUsers() method", e);			
+			throw new DAOException ("Can`t take connection from ConnectionPool in UserDAO showUsers() method", e);			
 		}
 				
 		return usersList;
@@ -173,7 +174,7 @@ public class MySQLUserDAO implements UserDAO{
 	
 	
 	@Override
-	public boolean editUser(int userId, String name, String surname, String email) throws SQLUserDAOException {				
+	public boolean editUser(int userId, String name, String surname, String email) throws DAOException {				
 				
 		try (Connection connection = connectionPool.takeConnection();				
 			PreparedStatement preparedStatement = connection.prepareStatement(USER_CHANGING_QUERY)){						
@@ -186,16 +187,16 @@ public class MySQLUserDAO implements UserDAO{
 			if(preparedStatement.executeUpdate() != 1) return false;
 			else return true;
 		} catch (InterruptedException e) {
-			throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO to edit user", e);
+			throw new DAOException("Can`t take connection from ConnectionPool in UserDAO to edit user", e);
 		} catch (SQLException e) {
-			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO editUser() method", e);
+			throw new DAOException("Can`t create statement or execute query in UserDAO editUser() method", e);
 		}				
 		
 	}
 	
 	
 	@Override
-	public boolean removeUser(int userId) throws SQLUserDAOException {
+	public boolean removeUser(int userId) throws DAOException {
 		
 		int deletedRowsUsers = 0;		
 		
@@ -237,10 +238,10 @@ public class MySQLUserDAO implements UserDAO{
 			
 		} catch (InterruptedException e) {
 			logger.warn("InterruptedException while taking connection from connectionpool in MySQLUserDAO to delete user");
-			throw new SQLUserDAOException ("Can`t take connection from connectionpool in MySQLUserDAO to delete user", e);			
+			throw new DAOException ("Can`t take connection from connectionpool in MySQLUserDAO to delete user", e);			
 		} catch (SQLException e) {			
 			logger.warn("SQLException while doing rollback() or setting AutoCommit true in userDelete() method of MySQLUserDAO", e);
-			throw new SQLUserDAOException ("SQLException in UserDAO deleteUser() method", e);
+			throw new DAOException ("SQLException in UserDAO deleteUser() method", e);
 		}
 		
 		return false;
@@ -248,7 +249,7 @@ public class MySQLUserDAO implements UserDAO{
 
 	
 	@Override
-	public boolean changeLogin(int userId, String newLogin) throws SQLUserDAOException {		
+	public boolean changeLogin(int userId, String newLogin) throws DAOException {		
 		
 		int updatedRows = 0;
 		
@@ -262,18 +263,18 @@ public class MySQLUserDAO implements UserDAO{
 			if(updatedRows == 1) {
 				return true;
 			} else {
-				throw new SQLUserDAOException("executeUpdate() updated " + updatedRows + " rows while changing user`s(ID- " + userId +") login");
+				throw new DAOException("executeUpdate() updated " + updatedRows + " rows while changing user`s(ID- " + userId +") login");
 			}			
 		}catch (InterruptedException e) {
-			throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO, can`t update user login", e);
+			throw new DAOException("Can`t take connection from ConnectionPool in UserDAO, can`t update user login", e);
 		} catch (SQLException e) {
-			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO, can`t update user login", e);
+			throw new DAOException("Can`t create statement or execute query in UserDAO, can`t update user login", e);
 		}			
 	}
 	
 
 	@Override
-	public boolean changePassword(int userId, String newHashPasswordFromUser) throws SQLUserDAOException {
+	public boolean changePassword(int userId, String newHashPasswordFromUser) throws DAOException {
 		
 		int updatedRows = 0;
 		
@@ -287,9 +288,9 @@ public class MySQLUserDAO implements UserDAO{
 			if(updatedRows == 1) return true;
 			
 		}catch (InterruptedException e) {
-			throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO, can`t update user password", e);
+			throw new DAOException("Can`t take connection from ConnectionPool in UserDAO, can`t update user password", e);
 		} catch (SQLException e) {
-			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO, can`t update user password", e);
+			throw new DAOException("Can`t create statement or execute query in UserDAO, can`t update user password", e);
 		}	
 		
 		return false;
@@ -297,7 +298,7 @@ public class MySQLUserDAO implements UserDAO{
 	
 	
 	@Override
-	public boolean changeUsersRole(int userId, int role) throws SQLUserDAOException {
+	public boolean changeUsersRole(int userId, int role) throws DAOException {
 		
 		int updatedRows = 0;
 		try (Connection connection = connectionPool.takeConnection(); 
@@ -310,19 +311,19 @@ public class MySQLUserDAO implements UserDAO{
 				if(updatedRows == 1) {
 					return true;
 				} else {
-					throw new SQLUserDAOException("executeUpdate() updated " + updatedRows + " rows while changing user`s(ID- " + userId +") role");
+					throw new DAOException("executeUpdate() updated " + updatedRows + " rows while changing user`s(ID- " + userId +") role");
 				}
 		} catch (SQLException e) {
-			throw new SQLUserDAOException ("Can`t take Prepeared Statement or Result Set in UserDAO amountOfPages() method", e);
+			throw new DAOException ("Can`t take Prepeared Statement or Result Set in UserDAO amountOfPages() method", e);
 		} catch (InterruptedException e) {
-			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO amountOfPages() method", e);
+			throw new DAOException ("Can`t take connection from ConnectionPool in UserDAO amountOfPages() method", e);
 		}
 		
 	}	
 	
 	
 	@Override
-	public int countAmountOfPages(int role, int recordingsAmountInTable) throws SQLUserDAOException {
+	public int countAmountOfPages(int role, int recordingsAmountInTable) throws DAOException {
 		
 		int amountOfAllUsers = 0;
 		
@@ -338,9 +339,9 @@ public class MySQLUserDAO implements UserDAO{
 			}
 			
 		} catch (SQLException e) {
-			throw new SQLUserDAOException ("Can`t take Prepeared Statement or Result Set in UserDAO amountOfPages() method", e);
+			throw new DAOException ("Can`t take Prepeared Statement or Result Set in UserDAO amountOfPages() method", e);
 		} catch (InterruptedException e) {
-			throw new SQLUserDAOException ("Can`t take connection from ConnectionPool in UserDAO amountOfPages() method", e);
+			throw new DAOException ("Can`t take connection from ConnectionPool in UserDAO amountOfPages() method", e);
 		}
 		
 		int amountOfPages = amountOfAllUsers/recordingsAmountInTable;
@@ -355,7 +356,7 @@ public class MySQLUserDAO implements UserDAO{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean checkLogin(String login) throws SQLUserDAOException {   																	
+	public boolean checkLogin(String login) throws DAOException {   																	
 				
 		try (Connection connection = connectionPool.takeConnection();
 				PreparedStatement prepareStatement = connection.prepareStatement(CHECK_LOGIN_QUERY)) {
@@ -369,9 +370,9 @@ public class MySQLUserDAO implements UserDAO{
 				}
 			}
 		} catch (InterruptedException e) {
-			throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO to check login", e);
+			throw new DAOException("Can`t take connection from ConnectionPool in UserDAO to check login", e);
 		} catch (SQLException e) {
-			throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO checkLogin() method", e);
+			throw new DAOException("Can`t create statement or execute query in UserDAO checkLogin() method", e);
 		}
 			
 		return false;                                                                                        
@@ -382,7 +383,7 @@ public class MySQLUserDAO implements UserDAO{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean checkPassword(String login, String hashPasswordFromUser) throws SQLUserDAOException {
+	public boolean checkPassword(String login, String hashPasswordFromUser) throws DAOException {
 				
 		String hashPasswordFromDB;
 				
@@ -402,9 +403,9 @@ public class MySQLUserDAO implements UserDAO{
 				}
 				
 			} catch (InterruptedException e) {
-				throw new SQLUserDAOException("Can`t take connection from ConnectionPool in UserDAO to check password", e);
+				throw new DAOException("Can`t take connection from ConnectionPool in UserDAO to check password", e);
 			} catch (SQLException e) {
-				throw new SQLUserDAOException("Can`t create statement or execute query in UserDAO checkPassword() method", e);
+				throw new DAOException("Can`t create statement or execute query in UserDAO checkPassword() method", e);
 			}	
 		
 		return false;                                                                                             
@@ -415,7 +416,7 @@ public class MySQLUserDAO implements UserDAO{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean checkLoginAndPassword(String login, String hashPasswordFromUser) throws SQLUserDAOException {
+	public boolean checkLoginAndPassword(String login, String hashPasswordFromUser) throws DAOException {
 		if(checkLogin(login) && checkPassword(login, hashPasswordFromUser)) return true;
 		else return false;
 	}
